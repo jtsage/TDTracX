@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -11,6 +12,10 @@ use App\Controller\AppController;
 class UsersController extends AppController
 {
 
+    public function beforeFilter(\Cake\Event\Event $event)
+    {
+        $this->Auth->allow(['logout']);
+    }
     /**
      * Index method
      *
@@ -20,6 +25,32 @@ class UsersController extends AppController
     {
         $this->set('users', $this->paginate($this->Users));
         $this->set('_serialize', ['users']);
+    }
+
+
+
+    public function login()
+    {
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+                
+                $goodUser = $this->Users->get($this->Auth->user('id'));
+                
+                $this->Users->touch($goodUser, 'Users.afterLogin');
+                $this->Users->save($goodUser);
+
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            $this->Flash->error('Your username or password is incorrect.');
+        }
+    }
+
+    public function logout()
+    {
+        $this->Flash->success('You are now logged out.');
+        return $this->redirect($this->Auth->logout());
     }
 
     /**

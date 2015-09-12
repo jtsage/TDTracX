@@ -46,11 +46,22 @@ class UsersTable extends Table
                 'Model.beforeSave' => [
                     'created_at' => 'new',
                     'updated_at' => 'always',
+                ],
+                'Users.afterLogin' => [
+                    'last_login_at' => 'always'
                 ]
             ]
         ]);
     }
 
+    public function findAuth(\Cake\ORM\Query $query, array $options)
+    {
+        $query
+            ->select(['id', 'username', 'password'])
+            ->where(['Users.active' => 1]);
+
+        return $query;
+    }
     /**
      * Default validation rules.
      *
