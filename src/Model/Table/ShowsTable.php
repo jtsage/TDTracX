@@ -40,6 +40,15 @@ class ShowsTable extends Table
         $this->hasMany('ShowUserPerms', [
             'foreignKey' => 'show_id'
         ]);
+
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always',
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -71,14 +80,6 @@ class ShowsTable extends Table
             ->add('is_active', 'valid', ['rule' => 'boolean'])
             ->requirePresence('is_active', 'create')
             ->notEmpty('is_active');
-
-        $validator
-            ->requirePresence('created_at', 'create')
-            ->notEmpty('created_at');
-
-        $validator
-            ->requirePresence('updated_at', 'create')
-            ->notEmpty('updated_at');
 
         return $validator;
     }

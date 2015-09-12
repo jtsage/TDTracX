@@ -38,6 +38,15 @@ class PayrollsTable extends Table
             'foreignKey' => 'show_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always',
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -75,13 +84,6 @@ class PayrollsTable extends Table
         $validator
             ->allowEmpty('notes');
 
-        $validator
-            ->requirePresence('created_at', 'create')
-            ->notEmpty('created_at');
-
-        $validator
-            ->requirePresence('updated_at', 'create')
-            ->notEmpty('updated_at');
 
         return $validator;
     }

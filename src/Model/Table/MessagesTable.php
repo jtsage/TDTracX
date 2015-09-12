@@ -33,6 +33,15 @@ class MessagesTable extends Table
             'foreignKey' => 'user_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always',
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -50,14 +59,6 @@ class MessagesTable extends Table
         $validator
             ->requirePresence('note', 'create')
             ->notEmpty('note');
-
-        $validator
-            ->requirePresence('created_at', 'create')
-            ->notEmpty('created_at');
-
-        $validator
-            ->requirePresence('updated_at', 'create')
-            ->notEmpty('updated_at');
 
         return $validator;
     }

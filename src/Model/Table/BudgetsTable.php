@@ -33,6 +33,15 @@ class BudgetsTable extends Table
             'foreignKey' => 'show_id',
             'joinType' => 'INNER'
         ]);
+
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always',
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -68,14 +77,6 @@ class BudgetsTable extends Table
             ->add('price', 'valid', ['rule' => 'numeric'])
             ->requirePresence('price', 'create')
             ->notEmpty('price');
-
-        $validator
-            ->requirePresence('created_at', 'create')
-            ->notEmpty('created_at');
-
-        $validator
-            ->requirePresence('updated_at', 'create')
-            ->notEmpty('updated_at');
 
         return $validator;
     }

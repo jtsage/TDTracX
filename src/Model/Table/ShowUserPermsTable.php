@@ -47,19 +47,13 @@ class ShowUserPermsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->add('is_pay_admin', 'valid', ['rule' => 'boolean'])
-            ->requirePresence('is_pay_admin', 'create')
-            ->notEmpty('is_pay_admin');
+            ->add('is_pay_admin', 'valid', ['rule' => 'boolean']);
 
         $validator
-            ->add('is_paid', 'valid', ['rule' => 'boolean'])
-            ->requirePresence('is_paid', 'create')
-            ->notEmpty('is_paid');
+            ->add('is_paid', 'valid', ['rule' => 'boolean']);
 
         $validator
-            ->add('is_budget', 'valid', ['rule' => 'boolean'])
-            ->requirePresence('is_budget', 'create')
-            ->notEmpty('is_budget');
+            ->add('is_budget', 'valid', ['rule' => 'boolean']);
 
         return $validator;
     }

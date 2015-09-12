@@ -132,7 +132,7 @@
     <?php endif; ?>
     </div>
 </div>
-<?php /*
+
 <div class="related">
     <div class="column large-12">
     <h4 class="subheader"><?= __('Related Show User Perms') ?></h4>
@@ -146,7 +146,7 @@
             <th><?= __('Is Budget') ?></th>
             <th class="actions"><?= __('Actions') ?></th>
         </tr>
-        <?php foreach ($user->show_user_perms as $showUserPerms): ?>
+        <?php /* foreach ($user->show_user_perms as $showUserPerms): ?>
         <tr>
             <td><?= h($showUserPerms->user_id) ?></td>
             <td><?= h($showUserPerms->show_id) ?></td>
@@ -164,8 +164,8 @@
             </td>
         </tr>
 
-        <?php endforeach; ?>
+        <?php endforeach; */ ?>
     </table>
     <?php endif; ?>
     </div>
-</div> /* ?>
+</div> 
