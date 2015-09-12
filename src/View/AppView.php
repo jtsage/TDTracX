@@ -29,10 +29,15 @@ class AppView extends View
      *
      * @return void
      */
+
     public function initialize()
     {
         parent::initialize();
         $this->loadHelper('Bool');
         $this->loadHelper('Pretty');
+        $this->loadHelper('Html', ['className' => 'BootstrapUI.Html']);
+        $this->loadHelper('Form', ['className' => 'BootstrapUI.Form']);
+        $this->loadHelper('Flash', ['className' => 'BootstrapUI.Flash']);
+        $this->loadHelper('Paginator', ['className' => 'BootstrapUI.Paginator']);
     }
 }
