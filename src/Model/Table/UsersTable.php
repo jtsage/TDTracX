@@ -1,0 +1,114 @@
+<?php
+namespace App\Model\Table;
+
+use App\Model\Entity\User;
+use Cake\ORM\Query;
+use Cake\ORM\RulesChecker;
+use Cake\ORM\Table;
+use Cake\Validation\Validator;
+
+/**
+ * Users Model
+ *
+ * @property \Cake\ORM\Association\HasMany $Messages
+ * @property \Cake\ORM\Association\HasMany $Payrolls
+ * @property \Cake\ORM\Association\HasMany $ShowUserPerms
+ */
+class UsersTable extends Table
+{
+
+    /**
+     * Initialize method
+     *
+     * @param array $config The configuration for the Table.
+     * @return void
+     */
+    public function initialize(array $config)
+    {
+        parent::initialize($config);
+
+        $this->table('users');
+        $this->displayField('id');
+        $this->primaryKey('id');
+
+        $this->hasMany('Messages', [
+            'foreignKey' => 'user_id'
+        ]);
+        $this->hasMany('Payrolls', [
+            'foreignKey' => 'user_id'
+        ]);
+        $this->hasMany('ShowUserPerms', [
+            'foreignKey' => 'user_id'
+        ]);
+
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'created_at' => 'new',
+                    'updated_at' => 'always',
+                ]
+            ]
+        ]);
+    }
+
+    /**
+     * Default validation rules.
+     *
+     * @param \Cake\Validation\Validator $validator Validator instance.
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->add('id', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('id', 'create');
+
+        $validator
+            ->requirePresence('username', 'create')
+            ->notEmpty('username')
+            ->add('username', 'unique', ['rule' => 'validateUnique', 'provider' => 'table']);
+
+        $validator
+            ->requirePresence('password', 'create')
+            ->notEmpty('password');
+
+        $validator
+            ->requirePresence('first', 'create')
+            ->notEmpty('first');
+
+        $validator
+            ->requirePresence('last', 'create')
+            ->notEmpty('last');
+
+        $validator
+            ->allowEmpty('phone');
+
+        $validator
+            ->add('is_active', 'valid', ['rule' => 'boolean']);
+
+        $validator
+            ->add('is_password_expired', 'valid', ['rule' => 'boolean']);
+
+        $validator
+            ->add('is_notified', 'valid', ['rule' => 'boolean']);
+
+        $validator
+            ->add('is_admin', 'valid', ['rule' => 'boolean']);
+
+        return $validator;
+    }
+
+    /**
+     * Returns a rules checker object that will be used for validating
+     * application integrity.
+     *
+     * @param \Cake\ORM\RulesChecker $rules The rules object to be modified.
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['username']));
+        return $rules;
+    }
+
+}
