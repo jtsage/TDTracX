@@ -1,3 +1,5 @@
+
+<!-- 
 <div class="actions columns large-2 medium-3">
     <h3><?= __('Actions') ?></h3>
     <ul class="side-nav">
@@ -9,35 +11,47 @@
         <li><?= $this->Html->link(__('List Show User Perms'), ['controller' => 'ShowUserPerms', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Show User Perm'), ['controller' => 'ShowUserPerms', 'action' => 'add']) ?></li>
     </ul>
-</div>
+</div> -->
 <div class="users index large-10 medium-9 columns">
-    <table cellpadding="0" cellspacing="0">
+    <table class="table table-striped">
     <thead>
         <tr>
-            <th><?= $this->Paginator->sort('id') ?></th>
-            <th><?= $this->Paginator->sort('username') ?></th>
-            <th><?= $this->Paginator->sort('first') ?></th>
-            <th><?= $this->Paginator->sort('last') ?></th>
+            <th><?= $this->Paginator->sort('username', __("E-Mail")) ?></th>
+            <th><?= $this->Paginator->sort('first', __("First Name")) ?></th>
+            <th><?= $this->Paginator->sort('last', __("Last Name")) ?></th>
             <th><?= $this->Paginator->sort('phone') ?></th>
-            <th><?= $this->Paginator->sort('is_active') ?></th>
-            <th><?= $this->Paginator->sort('is_admin') ?></th>
+            <th><?= $this->Paginator->sort('is_active', __("Active User")) ?></th>
+            <th><?= $this->Paginator->sort('is_admin', __("Administrator")) ?></th>
+            <th><?= $this->Paginator->sort('last_login_at', __("Last Login")) ?></th>
             <th class="actions"><?= __('Actions') ?></th>
         </tr>
     </thead>
     <tbody>
     <?php foreach ($users as $user): ?>
         <tr>
-            <td><?= $this->Number->format($user->id) ?></td>
             <td><?= h($user->username) ?></td>
             <td><?= h($user->first) ?></td>
             <td><?= h($user->last) ?></td>
             <td><?= $this->Pretty->phone($user->phone) ?></td>
             <td><?= $this->Bool->prefYes($user->is_active) ?></td>
             <td><?= $this->Bool->prefNo($user->is_admin) ?></td>
+            <td><?= $user->last_login_at->i18nFormat(null, $tz); ?></td>
             <td class="actions">
-                <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
-                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                <?= $this->Html->link(
+                    $this->Pretty->iconView($user->username),
+                    ['action' => 'view', $user->id],
+                    ['escape' => false]
+                ) ?>
+                <?= $this->Html->link(
+                    $this->Pretty->iconEdit($user->username),
+                    ['action' => 'edit', $user->id],
+                    ['escape' => false]
+                ) ?>
+                <?= $this->Form->postLink(
+                    $this->Pretty->iconDelete($user->username),
+                    ['action' => 'delete', $user->id],
+                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $user->id)]
+                ) ?>
             </td>
         </tr>
 

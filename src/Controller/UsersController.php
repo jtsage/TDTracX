@@ -25,6 +25,7 @@ class UsersController extends AppController
     {
         $this->set('users', $this->paginate($this->Users));
         $this->set('_serialize', ['users']);
+        $this->set('tz', $this->Auth->user('time_zone')); 
     }
 
 
