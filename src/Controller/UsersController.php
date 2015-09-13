@@ -45,6 +45,21 @@ class UsersController extends AppController
                 $this->Users->touch($goodUser, 'Users.afterLogin');
                 $this->Users->save($goodUser);
 
+                $this->loadModel('Messages');
+
+                $waitingmessage = $this->Messages->find()
+                    ->where(['user_id' => $this->Auth->user('id')])
+                    ->count();
+
+                if ( $waitingmessage > 0 ) {
+                    $this->Flash->success("You have waiting messages. View them in your account details.");
+                }
+
+                if ( $this->Auth->user('is_password_expired')) {
+                    $this->Flash->error("Your password has expired, please change it!");
+                    return $this->redirect(['controller' => 'Users', 'action' => 'changepass', $this->Auth->user('id')]); 
+                }
+
                 return $this->redirect($this->Auth->redirectUrl());
             }
             $this->Flash->error('Your username or password is incorrect.');
@@ -73,6 +88,7 @@ class UsersController extends AppController
         $user = $this->Users->get($id, [
             'contain' => ['Messages', 'ShowUserPerms' => ['Shows']]
         ]);
+
         $this->set('user', $user);
         $this->set('_serialize', ['user']);
         $this->set('tz', $this->Auth->user('time_zone'));
