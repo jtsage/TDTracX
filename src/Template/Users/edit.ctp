@@ -3,10 +3,10 @@
     <fieldset>
         <legend><?= __('Edit User') ?></legend>
         <?php
-            echo $this->Form->input('username');
-            echo $this->Form->input('first');
-            echo $this->Form->input('last');
-            echo $this->Form->input('phone');
+            echo $this->Form->input('username', ['label' => __("E-Mail Address")]);
+            echo $this->Form->input('first', ['label' => __("First Name")]);
+            echo $this->Form->input('last', ['label' => __("Last Name")]);
+            echo $this->Form->input('phone', ['label' => __("Phone Number")]);
         ?>
         <div class="form-group"><label class="control-label">Time Zone</label>
         <?php

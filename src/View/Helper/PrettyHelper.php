@@ -25,5 +25,9 @@ class PrettyHelper extends Helper
     {
     	return "<span class='sr-only'>" . __('Delete') . " {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Delete') . " {$name}' class='glyphicon glyphicon-trash' aria-hidden='true'></span>";
     }
+     public function iconAdd($name)
+    {
+        return "<span class='sr-only'>" . __('Add') . " {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Add') . " {$name}' class='glyphicon glyphicon-plus' aria-hidden='true'></span>";
+    }
 }
 ?>

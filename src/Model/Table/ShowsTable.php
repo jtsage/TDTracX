@@ -77,9 +77,7 @@ class ShowsTable extends Table
             ->notEmpty('end_date');
 
         $validator
-            ->add('is_active', 'valid', ['rule' => 'boolean'])
-            ->requirePresence('is_active', 'create')
-            ->notEmpty('is_active');
+            ->add('is_active', 'valid', ['rule' => 'boolean']);
 
         return $validator;
     }
