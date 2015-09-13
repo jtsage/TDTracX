@@ -18,6 +18,8 @@ class ShowUserPermsController extends AppController
      */
     public function index()
     {
+        $this->Flash->error('This controller is restriced');
+        return $this->redirect('/users/');
         $this->paginate = [
             'contain' => ['Users', 'Shows']
         ];
@@ -34,6 +36,8 @@ class ShowUserPermsController extends AppController
      */
     public function view($id = null)
     {
+        $this->Flash->error('This controller is restriced');
+        return $this->redirect('/users/');
         $showUserPerm = $this->ShowUserPerms->get($id, [
             'contain' => ['Users', 'Shows']
         ]);
@@ -48,6 +52,8 @@ class ShowUserPermsController extends AppController
      */
     public function add()
     {
+        $this->Flash->error('This controller is restriced');
+        return $this->redirect('/users/');
         $showUserPerm = $this->ShowUserPerms->newEntity();
         if ($this->request->is('post')) {
             $showUserPerm = $this->ShowUserPerms->patchEntity($showUserPerm, $this->request->data);
@@ -73,6 +79,8 @@ class ShowUserPermsController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Flash->error('This controller is restriced');
+        return $this->redirect('/users/');
         $showUserPerm = $this->ShowUserPerms->get($id, [
             'contain' => []
         ]);
@@ -100,6 +108,8 @@ class ShowUserPermsController extends AppController
      */
     public function delete($id = null)
     {
+        $this->Flash->error('This controller is restriced');
+        return $this->redirect('/users/');
         $this->request->allowMethod(['post', 'delete']);
         $showUserPerm = $this->ShowUserPerms->get($id);
         if ($this->ShowUserPerms->delete($showUserPerm)) {
