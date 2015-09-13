@@ -52,7 +52,6 @@ class BudgetsController extends AppController
 
         $this->set('shows', $shows);
         $this->set('budget', $budget);
-        //$this->set('budgets', $this->paginate($this->Budgets));
         $this->set('_serialize', ['budgets']);
     }
 
@@ -65,10 +64,37 @@ class BudgetsController extends AppController
      */
     public function view($id = null)
     {
-        $budget = $this->Budgets->get($id, [
-            'contain' => ['Shows']
-        ]);
-        $this->set('budget', $budget);
+
+        $this->loadModel('ShowUserPerms');
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->get($id);
+
+        $perms = $this->ShowUserPerms->find()
+            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
+            ->where(['ShowUserPerms.show_id' => $id])
+            ->select([
+                'user_id' => 'ShowUserPerms.user_id',
+                'show_id' => 'ShowUserPerms.show_id',
+                'access' => 'ShowUserPerms.is_budget'
+                ])
+            ->first();
+
+        if ( $perms->access < 1 ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+        if ( $show->is_active < 1 ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
+        $budgets = $this->Budgets->find('all')
+            ->where(['show_id' => $id])
+            ->order(['category' => 'ASC', 'date' => 'ASC']);
+
+        $this->set('show', $show);
+        $this->set('budgets', $budgets);
         $this->set('_serialize', ['budget']);
     }
 

@@ -1,16 +1,68 @@
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('Edit Budget'), ['action' => 'edit', $budget->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Budget'), ['action' => 'delete', $budget->id], ['confirm' => __('Are you sure you want to delete # {0}?', $budget->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Budgets'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Budget'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Shows'), ['controller' => 'Shows', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Show'), ['controller' => 'Shows', 'action' => 'add']) ?> </li>
-    </ul>
-</div>
+
 <div class="budgets view large-10 medium-9 columns">
-    <h2><?= h($budget->id) ?></h2>
+    <h3>
+        <?= h($show->name) ?>
+        <?= $this->Html->link(
+            $this->Pretty->iconAdd($show->name . " " . _("Budget Item")),
+            ['action' => 'add', $show->id],
+            ['escape' => false]
+        ) ?>
+    </h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><?= __('Date') ?></th>
+                <th><?= __('Vendor') ?></th>
+                <th><?= __('Price') ?></th>
+                <th><?= __('Actions') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+        <?php
+            $lastcat = "";
+            $total = 0;
+            $subtotal = 0;
+
+            foreach ( $budgets as $item ) {
+                if ( $item->category <> $lastcat ) {
+                    if ( $subtotal > 0 ) {
+                        echo "<tr class='success'><td colspan='2'><strong>";
+                        echo __('Category Sub-Total') . ": " . $lastcat;
+                        echo "</td><td class='text-right'>";
+                        echo $this->Number->currency($subtotal);
+                        echo "</td><td></td></tr>";    
+                    }
+                    echo "<tr class='info'><td colspan='4'><strong>";
+                    echo __('Category') . ": " . $item->category;
+                    echo "</td></tr>";
+                    $subtotal = 0;
+                    $lastcat = $item->category;
+                }
+                echo "<tr><td>";
+                echo $item->date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC');
+                echo "</td><td>" . $item->vendor;
+                echo "</td><td class='text-right'>" . $this->Number->currency($item->price);
+                echo "</td><td>";
+                echo "</td></tr>";
+
+                $subtotal += $item->price;
+                $total += $item->price;
+            }
+            echo "<tr class='success'><td colspan='2'><strong>";
+            echo __('Category Sub-Total') . ": " . $lastcat;
+            echo "</td><td class='text-right'>";
+            echo $this->Number->currency($subtotal);
+            echo "</td><td></td></tr>";
+
+            echo "<tr class='danger'><td colspan='2'><strong>";
+            echo __('Total Expenditure');
+            echo "</td><td class='text-right'>";
+            echo $this->Number->currency($total);
+            echo "</td><td></td></tr>";
+        ?>
+        </tbody>
+    </table>
+    <?php /*
     <div class="row">
         <div class="large-5 columns strings">
             <h6 class="subheader"><?= __('Category') ?></h6>
@@ -36,5 +88,5 @@
             <h6 class="subheader"><?= __('Updated At') ?></h6>
             <p><?= h($budget->updated_at) ?></p>
         </div>
-    </div>
+    </div>*/ ?>
 </div>
