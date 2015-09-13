@@ -32,9 +32,31 @@ class ShowsController extends AppController
     public function view($id = null)
     {
         $show = $this->Shows->get($id, [
-            'contain' => ['Budgets', 'Payrolls', 'ShowUserPerms']
+            'contain' => ['ShowUserPerms' => ['Users']]
         ]);
         $this->set('show', $show);
+        $this->set('_serialize', ['show']);
+        $this->set('tz', $this->Auth->user('time_zone'));
+    }
+
+    public function editperm($id = null)
+    {
+        $show = $this->Shows->get($id, [
+            'contain' => ['ShowUserPerms']
+        ]);
+
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            /*
+            $show = $this->Shows->patchEntity($show, $this->request->data);
+            if ($this->Shows->save($show)) {
+                $this->Flash->success(__('The show has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The show could not be saved. Please, try again.'));
+            }*/
+        }
+        $this->set(compact('show'));
+
         $this->set('_serialize', ['show']);
     }
 

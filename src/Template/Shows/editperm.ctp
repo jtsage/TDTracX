@@ -1,16 +1,6 @@
 <div class="shows view large-10 medium-9 columns">
     <h3>
-        <?= h($show->name) ?>
-        <?= $this->Html->link(
-            $this->Pretty->iconEdit($show->name),
-            ['action' => 'edit', $show->id],
-            ['escape' => false]
-        ) ?>
-        <?= $this->Html->link(
-            $this->Pretty->iconPerm($show->name),
-            ['action' => 'editperm', $show->id],
-            ['escape' => false]
-        ) ?>
+        <?= h($show->name) . " " . __("Permissions") ?>
     </h3>
     <div class="row">
         <div class="col-md-6">
@@ -18,16 +8,12 @@
             <p><?= h($show->name) ?></p>
             <h4><span class="label label-primary"><?= __('Location') ?></span></h4>
             <p><?= h($show->location) ?></p>
-            <h4><span class="label label-success"><?= __('Active Show?') ?></span></h4>
-            <p><?= $this->Bool->prefYes($show->is_active) ?></p>
         </div>
         <div class="col-md-6">
+            <h4><span class="label label-success"><?= __('Active Show?') ?></span></h4>
+            <p><?= $this->Bool->prefYes($show->is_active) ?></p>
             <h4><span class="label label-success"><?= __('End Date') ?></span></h4>
             <p><?= $show->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'); ?></p>
-            <h4><span class="label label-warning"><?= __('User Created At') ?></span></h4>
-            <p><?= $show->created_at->i18nFormat(null, $tz); ?></p>
-            <h4><span class="label label-warning"><?= __('Last Update At') ?></span></h4>
-            <p><?= $show->updated_at->i18nFormat(null, $tz); ?></p>
         </div>
     </div>
 </div>

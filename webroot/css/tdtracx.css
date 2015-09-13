@@ -22,3 +22,28 @@ select[name*="date"] {
     -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
     transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
+
+.list-group-item.label-warning { 
+	background-color: #f0ad4e;
+	color: #fff;
+	font-weight: 700;
+	font-size: 20px;
+}
+.list-group-item.label-danger { 
+	background-color: #d9534f;
+	color: #fff;
+	font-weight: 700;
+	font-size: 20px;
+}
+.list-group-item.label-success { 
+	background-color: #5cb85c;
+	color: #fff;
+	font-weight: 700;
+	font-size: 20px;
+}
+.list-group-item.label-primart { 
+	background-color: #337ab7;
+	color: #fff;
+	font-weight: 700;
+	font-size: 20px;
+}
