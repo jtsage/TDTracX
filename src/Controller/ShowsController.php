@@ -56,14 +56,32 @@ class ShowsController extends AppController
         $show = $this->Shows->get($id);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            /*
-            $show = $this->Shows->patchEntity($show, $this->request->data);
-            if ($this->Shows->save($show)) {
-                $this->Flash->success(__('The show has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The show could not be saved. Please, try again.'));
-            }*/
+            $insertCol = [ "user_id", "show_id", "is_pay_admin", "is_paid", "is_budget" ];
+            $removeSql = $this->ShowUserPerms->query();
+            $removeSql->delete()
+                ->where(['show_id' => $id])
+                ->execute();
+
+            $insertRow = array();
+            foreach ( $this->request->data['users'] as $user ) {
+                $insertRow[] = [
+                    'user_id' => $user,
+                    'show_id' => $id,
+                    'is_pay_admin' => ((isset($this->request->data['padmin'][$user]) && $this->request->data['padmin'][$user]) ? 1 : 0 ),
+                    'is_paid' => ((isset($this->request->data['paid'][$user]) && $this->request->data['paid'][$user]) ? 1 : 0 ),
+                    'is_budget' => ((isset($this->request->data['budget'][$user]) && $this->request->data['budget'][$user]) ? 1 : 0 ),
+                ];
+            }
+
+            $insertQuery = $this->ShowUserPerms->query();
+
+            $insertQuery->insert($insertCol);
+            $insertQuery->clause('values')->values($insertRow);
+            $insertQuery->execute();
+            
+            $this->Flash->success(__('The show has been saved.'));
+            return $this->redirect(['action' => 'view', $id]);
+            
         }
         $this->set(compact('show'));
 

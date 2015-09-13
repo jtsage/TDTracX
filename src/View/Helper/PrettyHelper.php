@@ -37,7 +37,7 @@ class PrettyHelper extends Helper
     public function onoff($name, $check=false)
     {
         $outtie  = '<div class="onoffswitch">';
-        $outtie .= '<input type="checkbox" name="' . $name . '" class="onoffswitch-checkbox" id="' . $name . '" ' . ($check?"checked":"") . '>';
+        $outtie .= '<input value="true" type="checkbox" name="' . $name . '" class="onoffswitch-checkbox" id="' . $name . '" ' . ($check?"checked":"") . '>';
         $outtie .= '<label class="onoffswitch-label" for="' . $name . '">';
         $outtie .= '<span class="onoffswitch-inner"></span>';
         $outtie .= '<span class="onoffswitch-switch"></span>';

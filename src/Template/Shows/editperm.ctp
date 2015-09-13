@@ -36,9 +36,9 @@
             foreach ( $users as $user ) {
                 echo "<tr>";
                 echo "<td><input type='hidden' name='users[]' value='" . $user->id . "'>" . $user->first . " " . $user->last . "</td>";
-                echo "<td>" . $this->Pretty->onoff('budget-' . $user->id, $user->perms['is_budget']) . "</td>";
-                echo "<td>" . $this->Pretty->onoff('padmin-' . $user->id, $user->perms['is_pay_admin']) . "</td>";
-                echo "<td>" . $this->Pretty->onoff('paid-' . $user->id, $user->perms['is_paid']) . "</td>";
+                echo "<td>" . $this->Pretty->onoff('budget[' . $user->id . ']', $user->perms['is_budget']) . "</td>";
+                echo "<td>" . $this->Pretty->onoff('padmin[' . $user->id . ']', $user->perms['is_pay_admin']) . "</td>";
+                echo "<td>" . $this->Pretty->onoff('paid[' . $user->id . ']', $user->perms['is_paid']) . "</td>";
                 echo "</tr>\n";
             }
         ?>
