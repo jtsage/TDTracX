@@ -17,6 +17,10 @@ class PrettyHelper extends Helper
     {
     	return "<span class='sr-only'>" . __('Edit') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Edit') . ": {$name}' class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
     }
+    public function iconLock($name)
+    {
+        return "<span class='sr-only'>" . __('Change Password') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Change Password') . ": {$name}' class='glyphicon glyphicon-lock' aria-hidden='true'></span>";
+    }
     public function iconView($name)
     {
     	return "<span class='sr-only'>" . __('View') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('View') . ": {$name}' class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>";

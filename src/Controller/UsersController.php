@@ -23,6 +23,9 @@ class UsersController extends AppController
      */
     public function index()
     {
+        if ( ! $this->Auth->user('is_admin')) {
+            return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
+        }
         $this->set('users', $this->paginate($this->Users));
         $this->set('_serialize', ['users']);
         $this->set('tz', $this->Auth->user('time_zone'));
@@ -63,6 +66,10 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
+        if ( !$this->Auth->user('is_admin') && $id <> $this->Auth->user('id') ) {
+            $this->Flash->error('You may only view and edit your own user record. (Loaded)');
+            return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
+        }
         $user = $this->Users->get($id, [
             'contain' => ['Messages', 'Payrolls', 'ShowUserPerms']
         ]);
@@ -78,6 +85,10 @@ class UsersController extends AppController
      */
     public function add()
     {
+        if ( ! $this->Auth->user('is_admin')) {
+            $this->Flash->error('You may not add users');
+            return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
+        }
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
@@ -101,6 +112,12 @@ class UsersController extends AppController
      */
     public function edit($id = null)
     {
+        if ( ! $this->Auth->user('is_admin') ) {
+            if ( $id <> $this->Auth->user('id') ) {
+                $this->Flash->error('You may only change your own user record. (Loaded)');    
+            }
+            return $this->redirect(['action' => 'safeedit', $this->Auth->user('id')]);
+        }
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
@@ -117,13 +134,41 @@ class UsersController extends AppController
         $this->set('_serialize', ['user']);
     }
 
-    public function changepass($id = null)
+    public function safeedit($id = null)
     {
+        if ( !$this->Auth->user('is_admin') && $id <> $this->Auth->user('id') ) {
+            $this->Flash->error('You may edit your own user record. (Loaded)');
+            return $this->redirect(['action' => 'safeedit', $this->Auth->user('id')]);
+        }
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->data);
+            $user = $this->Users->patchEntity($user, $this->request->data, [
+                'fieldlist' => ['first', 'last', 'phone', 'time_zone']
+            ]);
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
+    }
+
+    public function changepass($id = null)
+    {
+        if ( !$this->Auth->user('is_admin') && $id <> $this->Auth->user('id') ) {
+            $this->Flash->error('You may only change your own password. (Loaded)');
+            return $this->redirect(['action' => 'changepass', $this->Auth->user('id')]);
+        }
+        $user = $this->Users->get($id, [
+            'contain' => []
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->data, ['fieldList' => ['password', 'is_password_expired']]);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -144,6 +189,10 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
+        if ( ! $this->Auth->user('is_admin')) {
+            $this->Flash->error('You may not delete users');
+            return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
+        }
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
         if ($this->Users->delete($user)) {

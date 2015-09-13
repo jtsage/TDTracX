@@ -37,6 +37,11 @@
                     ['escape' => false]
                 ) ?>
                 <?= $this->Html->link(
+                    $this->Pretty->iconLock($user->username),
+                    ['action' => 'changepass', $user->id],
+                    ['escape' => false]
+                ) ?>
+                <?= $this->Html->link(
                     $this->Pretty->iconEdit($user->username),
                     ['action' => 'edit', $user->id],
                     ['escape' => false]

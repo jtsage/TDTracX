@@ -5,17 +5,22 @@
         ['action' => 'edit', $user->id],
         ['escape' => false]
     ) ?>
+    <?= $this->Html->link(
+        $this->Pretty->iconLock($user->username),
+        ['action' => 'changepass', $user->id],
+        ['escape' => false]
+    ) ?>
     </h3>
     <div class="row">
         <div class="col-md-4">
             <h4><span class="label label-primary"><?= __('Username') ?></span></h4>
             <p><?= h($user->username) ?></p>
-            <h4><span class="label label-primary"><?= __('First Name') ?></span></h4>
-            <p><?= h($user->first) ?></p>
-            <h4><span class="label label-primary"><?= __('Last Name') ?></span></h4>
-            <p><?= h($user->last) ?></p>
+            <h4><span class="label label-primary"><?= __('Full Name') ?></span></h4>
+            <p><?= h($user->first) ?> <?= h($user->last) ?></p>
             <h4><span class="label label-info"><?= __('Phone Number') ?></span></h4>
             <p><?= $this->Pretty->phone($user->phone) ?></p>
+            <h4><span class="label label-info"><?= __('Time Zone') ?></span></h4>
+            <p><?= h($user->time_zone) ?></p>
         </div>
         <div class="col-md-4">
             <h4><span class="label label-warning"><?= __('Last Login At') ?></span></h4>
@@ -29,7 +34,7 @@
             <h4><span class="label label-success"><?= __('Active User?') ?></span></h4>
             <p><?= $this->Bool->prefYes($user->is_active) ?></p>
             <h4><span class="label label-success"><?= __('Expired Password?') ?></span></h4>
-            <p><?= $this->Bool->prefYes($user->is_password_expired); ?></p>
+            <p><?= $this->Bool->prefNo($user->is_password_expired); ?></p>
             <h4><span class="label label-success"><?= __('Notifications Active?') ?></span></h4>
             <p><?= $this->Bool->prefYes($user->is_notified); ?></p>
             <h4><span class="label label-success"><?= __('Administrator?') ?></span></h4>
