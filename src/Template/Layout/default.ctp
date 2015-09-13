@@ -69,12 +69,6 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
 
   <div class="container" role="main">
 
-    <!-- Main jumbotron for a primary marketing message or call to action >
-    <div class="jumbotron">
-      <h1>Theme example</h1>
-      <p>This is a template showcasing the optional theme stylesheet included in Bootstrap. Use it as a starting point to create something more unique by building on or modifying it.</p>
-    </div-->
-
     <?= $this->Flash->render() ?>
 
     <div class="page-header">
@@ -85,10 +79,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
   
   </div>
 
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
   
   

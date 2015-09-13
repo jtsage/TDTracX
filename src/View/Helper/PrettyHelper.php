@@ -33,5 +33,16 @@ class PrettyHelper extends Helper
     {
         return "<span class='sr-only'>" . __('User Permissions') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('User Permissions') . ": {$name}' class='glyphicon glyphicon-user' aria-hidden='true'></span>";
     }
+
+    public function onoff($name, $check=false)
+    {
+        $outtie  = '<div class="onoffswitch">';
+        $outtie .= '<input type="checkbox" name="' . $name . '" class="onoffswitch-checkbox" id="' . $name . '" ' . ($check?"checked":"") . '>';
+        $outtie .= '<label class="onoffswitch-label" for="' . $name . '">';
+        $outtie .= '<span class="onoffswitch-inner"></span>';
+        $outtie .= '<span class="onoffswitch-switch"></span>';
+        $outtie .= '</label></div>';
+        return $outtie;
+    }
 }
 ?>

@@ -41,9 +41,19 @@ class ShowsController extends AppController
 
     public function editperm($id = null)
     {
-        $show = $this->Shows->get($id, [
-            'contain' => ['ShowUserPerms']
+        
+        $this->loadModel('Users');
+        $this->loadModel('ShowUserPerms');
+
+        $users = $this->Users->find('all', [
+            'conditions' => ['Users.is_active' => 1 ],
+            'fields' => ['Users.id', 'Users.last', 'Users.first'],
+            'order' => ['Users.last' => 'ASC', 'Users.first' => 'ASC']
         ]);
+        $perms = $this->ShowUserPerms->find('all', [
+            'conditions' => ['ShowUserPerms.show_id' => $id]
+        ]);
+        $show = $this->Shows->get($id);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
             /*
@@ -56,6 +66,29 @@ class ShowsController extends AppController
             }*/
         }
         $this->set(compact('show'));
+
+        foreach ( $users as $user ) {
+            $foundit = false;
+            foreach ( $perms as $perm ) {
+                if ( $user->id == $perm->user_id ) {
+                    $foundit = true;
+                    $user['perms'] = array(
+                        'is_pay_admin' => $perm->is_pay_admin,
+                        'is_budget' => $perm->is_budget,
+                        'is_paid' => $perm->is_paid
+                    );
+                }
+            }
+            if ( $foundit == false ) {
+                $user['perms'] = array(
+                    'is_pay_admin' => false,
+                    'is_budget' => false,
+                    'is_paid' => false
+                );
+            }
+        }
+
+        $this->set('users', $users);
 
         $this->set('_serialize', ['show']);
     }

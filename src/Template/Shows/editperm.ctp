@@ -17,10 +17,38 @@
         </div>
     </div>
 </div>
+
 <div class="related">
     <div class="column large-12">
     <h4 class="subheader"><?= __('User Permissions') ?></h4>
-    <?php if (!empty($show->show_user_perms)): ?>
+    
+    <?= $this->Form->create($show) ?>
+
+    <table class="table table-bordered">
+        <thead><tr>
+            <th><?= __("Full Name") ?></th>
+            <th class="info"><?= __("Budget User") ?></th>
+            <th class="danger"><?= __("Payroll Admin") ?></th>
+            <th class="success"><?= __("Payroll User") ?></th>
+        </tr></thead>
+        <tbody>
+        <?php
+            foreach ( $users as $user ) {
+                echo "<tr>";
+                echo "<td><input type='hidden' name='users[]' value='" . $user->id . "'>" . $user->first . " " . $user->last . "</td>";
+                echo "<td>" . $this->Pretty->onoff('budget-' . $user->id, $user->perms['is_budget']) . "</td>";
+                echo "<td>" . $this->Pretty->onoff('padmin-' . $user->id, $user->perms['is_pay_admin']) . "</td>";
+                echo "<td>" . $this->Pretty->onoff('paid-' . $user->id, $user->perms['is_paid']) . "</td>";
+                echo "</tr>\n";
+            }
+        ?>
+        </tbody>
+    </table>
+
+    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->end() ?>
+
+    <?php /*if (!empty($show->show_user_perms)): ?>
     <div class="row">
         <div class="col-md-4">
             <ul class="list-group">
@@ -63,6 +91,6 @@
    
 
 
-    <?php endif; ?>
+    <?php endif; */ ?>
     </div>
 </div>

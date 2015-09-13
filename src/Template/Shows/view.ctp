@@ -38,7 +38,7 @@
     <div class="row">
         <div class="col-md-4">
             <ul class="list-group">
-            <li class="list-group-item label-primart">Budget Users</li>
+            <li class="list-group-item label-info"><?= __("Budget Users") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_budget) { 
                     echo "<li class='list-group-item'>";
@@ -50,7 +50,7 @@
         </div>
         <div class="col-md-4">
             <ul class="list-group">
-            <li class="list-group-item label-danger">Payroll Admins</li>
+            <li class="list-group-item label-danger"><?= __("Payroll Admins") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_pay_admin) { 
                     echo "<li class='list-group-item'>";
@@ -62,7 +62,7 @@
         </div>
         <div class="col-md-4">
             <ul class="list-group">
-            <li class="list-group-item label-success">Payroll Users</li>
+            <li class="list-group-item label-success"><?= __("Payroll Users") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_paid) { 
                     echo "<li class='list-group-item'>";
