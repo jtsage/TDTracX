@@ -11,6 +11,13 @@ use App\Controller\AppController;
 class ShowsController extends AppController
 {
 
+    public $paginate = [
+        'limit' => 50,
+        'order' => [
+            'Shows.is_active' => 'DESC',
+            'Shows.end_date' => 'ASC'
+        ]
+    ];
     /**
      * Index method
      *
@@ -18,7 +25,26 @@ class ShowsController extends AppController
      */
     public function index()
     {
-        $this->set('shows', $this->paginate($this->Shows));
+        if ( $this->Auth->user('is_admin') ) {
+            $query = $this->Shows->find('all');
+        } else {
+            $this->loadModel('ShowUserPerms');
+
+            $perms = $this->ShowUserPerms->find('list', [
+                'keyField' => 'id',
+                'valueField' => 'show_id',
+                'conditions' => ['ShowUserPerms.user_id' => $this->Auth->user('id')]
+            ]);
+
+            $plist = $perms->toArray();
+            
+            $query = $this->Shows->find('all')
+                ->where(['Shows.is_active' => 1])
+                ->where(['id' => $plist], ['id' => 'integer[]']);
+        }
+
+
+        $this->set('shows', $this->paginate($query));
         $this->set('_serialize', ['shows']);
     }
 
@@ -34,6 +60,30 @@ class ShowsController extends AppController
         $show = $this->Shows->get($id, [
             'contain' => ['ShowUserPerms' => ['Users']]
         ]);
+
+        if ( ! $this->Auth->user('is_admin') ) {
+            $this->loadModel('ShowUserPerms');
+
+            $perms = $this->ShowUserPerms->find()
+                ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
+                ->where(['ShowUserPerms.show_id' => $id])
+                ->select([
+                    'user_id' => 'ShowUserPerms.user_id',
+                    'show_id' => 'ShowUserPerms.show_id',
+                    'access' => 'ShowUserPerms.is_pay_admin + ShowUserPerms.is_paid + ShowUserPerms.is_budget'
+                    ])
+                ->first();
+
+            if ( $perms->access < 1 ) {
+                $this->Flash->error('You do not have access to this show');
+                return $this->redirect(['action' => 'index']);
+            }
+            if ( $show->is_active < 1 ) {
+                $this->Flash->error('Sorry, this show is now closed.');
+                return $this->redirect(['action' => 'index']);   
+            }
+        }
+
         $this->set('show', $show);
         $this->set('_serialize', ['show']);
         $this->set('tz', $this->Auth->user('time_zone'));
@@ -41,7 +91,10 @@ class ShowsController extends AppController
 
     public function editperm($id = null)
     {
-        
+        if ( ! $this->Auth->user('is_admin')) {
+            $this->Flash->error('You may not edit show permissions');
+            return $this->redirect(['action' => 'index']);
+        }
         $this->loadModel('Users');
         $this->loadModel('ShowUserPerms');
 
@@ -118,6 +171,10 @@ class ShowsController extends AppController
      */
     public function add()
     {
+        if ( ! $this->Auth->user('is_admin')) {
+            $this->Flash->error('You may not add shows');
+            return $this->redirect(['action' => 'index']);
+        }
         $show = $this->Shows->newEntity();
         if ($this->request->is('post')) {
             $show = $this->Shows->patchEntity($show, $this->request->data);
@@ -141,6 +198,10 @@ class ShowsController extends AppController
      */
     public function edit($id = null)
     {
+        if ( ! $this->Auth->user('is_admin')) {
+            $this->Flash->error('You may not edit shows');
+            return $this->redirect(['action' => 'index']);
+        }
         $show = $this->Shows->get($id, [
             'contain' => []
         ]);
@@ -166,6 +227,10 @@ class ShowsController extends AppController
      */
     public function delete($id = null)
     {
+        if ( ! $this->Auth->user('is_admin')) {
+            $this->Flash->error('You may not delete shows');
+            return $this->redirect(['action' => 'index']);
+        }
         $this->request->allowMethod(['post', 'delete']);
         $show = $this->Shows->get($id);
         if ($this->Shows->delete($show)) {
