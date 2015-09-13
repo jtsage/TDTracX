@@ -14,7 +14,7 @@ as open source.
 
 ### TDTracX
 
-This is the new version of TDTrac, completely refactored in node.js - it doesn't even almost
+This is the new version of TDTrac, completely refactored in CakePHP3 - it doesn't even almost
 run correctly yet.
 
 ## LICENSE:
