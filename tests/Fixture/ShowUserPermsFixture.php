@@ -17,6 +17,7 @@ class ShowUserPermsFixture extends TestFixture
      */
     // @codingStandardsIgnoreStart
     public $fields = [
+        'id' => ['type' => 'integer', 'length' => 10, 'unsigned' => true, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'user_id' => ['type' => 'integer', 'length' => 10, 'unsigned' => true, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'show_id' => ['type' => 'integer', 'length' => 10, 'unsigned' => true, 'null' => false, 'default' => null, 'comment' => '', 'precision' => null, 'autoIncrement' => null],
         'is_pay_admin' => ['type' => 'boolean', 'length' => null, 'null' => false, 'default' => '0', 'comment' => '', 'precision' => null],
@@ -27,6 +28,7 @@ class ShowUserPermsFixture extends TestFixture
             'user_id' => ['type' => 'index', 'columns' => ['user_id'], 'length' => []],
         ],
         '_constraints' => [
+            'primary' => ['type' => 'primary', 'columns' => ['id'], 'length' => []],
             'perm_user_id' => ['type' => 'foreign', 'columns' => ['user_id'], 'references' => ['users', 'id'], 'update' => 'restrict', 'delete' => 'restrict', 'length' => []],
             'show_user_id' => ['type' => 'foreign', 'columns' => ['show_id'], 'references' => ['shows', 'id'], 'update' => 'restrict', 'delete' => 'cascade', 'length' => []],
         ],
@@ -44,6 +46,7 @@ class ShowUserPermsFixture extends TestFixture
      */
     public $records = [
         [
+            'id' => 1,
             'user_id' => 1,
             'show_id' => 1,
             'is_pay_admin' => 1,

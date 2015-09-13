@@ -27,6 +27,8 @@ class ShowUserPermsTable extends Table
         parent::initialize($config);
 
         $this->table('show_user_perms');
+        $this->displayField('id');
+        $this->primaryKey('id');
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
@@ -47,13 +49,23 @@ class ShowUserPermsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->add('is_pay_admin', 'valid', ['rule' => 'boolean']);
+            ->add('id', 'valid', ['rule' => 'numeric'])
+            ->allowEmpty('id', 'create');
 
         $validator
-            ->add('is_paid', 'valid', ['rule' => 'boolean']);
+            ->add('is_pay_admin', 'valid', ['rule' => 'boolean'])
+            ->requirePresence('is_pay_admin', 'create')
+            ->notEmpty('is_pay_admin');
 
         $validator
-            ->add('is_budget', 'valid', ['rule' => 'boolean']);
+            ->add('is_paid', 'valid', ['rule' => 'boolean'])
+            ->requirePresence('is_paid', 'create')
+            ->notEmpty('is_paid');
+
+        $validator
+            ->add('is_budget', 'valid', ['rule' => 'boolean'])
+            ->requirePresence('is_budget', 'create')
+            ->notEmpty('is_budget');
 
         return $validator;
     }
