@@ -42,6 +42,56 @@
         </div>
     </div>
 </div>
+
+<div class="related">
+    <div class="column large-12">
+    <h4 class="subheader"><?= __('Show Permissions') ?></h4>
+    <?php if (!empty($user->show_user_perms)): ?>
+    <div class="row">
+        <div class="col-md-4">
+            <ul class="list-group">
+            <li class="list-group-item label-info"><?= __("Budget User") ?></li>
+            <?php foreach ($user->show_user_perms as $showUserPerms) {
+                if ($showUserPerms->is_budget) { 
+                    echo "<li class='list-group-item'>";
+                    echo h($showUserPerms->show->name);
+                    echo "</li>";
+                }
+            } ?>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <ul class="list-group">
+            <li class="list-group-item label-danger"><?= __("Payroll Admin") ?></li>
+            <?php foreach ($user->show_user_perms as $showUserPerms) {
+                if ($showUserPerms->is_pay_admin) { 
+                    echo "<li class='list-group-item'>";
+                    echo h($showUserPerms->show->name);
+                    echo "</li>";
+                }
+            } ?>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <ul class="list-group">
+            <li class="list-group-item label-success"><?= __("Payroll User") ?></li>
+            <?php foreach ($user->show_user_perms as $showUserPerms) {
+                if ($showUserPerms->is_paid) { 
+                    echo "<li class='list-group-item'>";
+                    echo h($showUserPerms->show->name);
+                    echo "</li>";
+                }
+            } ?>
+            </ul>
+        </div>
+
+    </div>
+
+    <?php endif; ?>
+    </div>
+</div>
+
+
 <div class="related">
     <div class="column large-12">
     <h4 class="subheader"><?= __('Related Messages') ?></h4>
@@ -78,39 +128,3 @@
     <?php endif; ?>
     </div>
 </div>
-
-
-<div class="related">
-    <div class="column large-12">
-    <h4 class="subheader"><?= __('Related Show User Perms') ?></h4>
-    <?php if (!empty($user->show_user_perms)): ?>
-    <table cellpadding="0" cellspacing="0">
-        <tr>
-            <th><?= __('User Id') ?></th>
-            <th><?= __('Show Id') ?></th>
-            <th><?= __('Is Pay Admin') ?></th>
-            <th><?= __('Is Paid') ?></th>
-            <th><?= __('Is Budget') ?></th>
-            <th class="actions"><?= __('Actions') ?></th>
-        </tr>
-        <?php  foreach ($user->show_user_perms as $showUserPerms): ?>
-        <tr>
-            <td><?= h($showUserPerms->user_id) ?></td>
-            <td><?= h($showUserPerms->show_id) ?></td>
-            <td><?= h($showUserPerms->is_pay_admin) ?></td>
-            <td><?= h($showUserPerms->is_paid) ?></td>
-            <td><?= h($showUserPerms->is_budget) ?></td>
-
-            <td class="actions">
-                <?= $this->Html->link(__('View'), ['controller' => 'Shows', 'action' => 'view', $showUserPerms->show_id]) ?>
-
-                <?= $this->Html->link(__('Edit'), ['controller' => 'Shows', 'action' => 'edit', $showUserPerms->show_id]) ?>
-
-            </td>
-        </tr>
-
-        <?php endforeach;  ?>
-    </table>
-    <?php endif; ?>
-    </div>
-</div> 

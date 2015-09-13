@@ -71,7 +71,7 @@ class UsersController extends AppController
             return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
         }
         $user = $this->Users->get($id, [
-            'contain' => ['Messages', 'Payrolls', 'ShowUserPerms']
+            'contain' => ['Messages', 'ShowUserPerms' => ['Shows']]
         ]);
         $this->set('user', $user);
         $this->set('_serialize', ['user']);
