@@ -1,53 +1,59 @@
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('New Budget'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Shows'), ['controller' => 'Shows', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Show'), ['controller' => 'Shows', 'action' => 'add']) ?></li>
-    </ul>
-</div>
-<div class="budgets index large-10 medium-9 columns">
-    <table cellpadding="0" cellspacing="0">
-    <thead>
-        <tr>
-            <th><?= $this->Paginator->sort('id') ?></th>
-            <th><?= $this->Paginator->sort('category') ?></th>
-            <th><?= $this->Paginator->sort('vendor') ?></th>
-            <th><?= $this->Paginator->sort('description') ?></th>
-            <th><?= $this->Paginator->sort('date') ?></th>
-            <th><?= $this->Paginator->sort('price') ?></th>
-            <th><?= $this->Paginator->sort('show_id') ?></th>
-            <th class="actions"><?= __('Actions') ?></th>
-        </tr>
-    </thead>
-    <tbody>
-    <?php foreach ($budgets as $budget): ?>
-        <tr>
-            <td><?= $this->Number->format($budget->id) ?></td>
-            <td><?= h($budget->category) ?></td>
-            <td><?= h($budget->vendor) ?></td>
-            <td><?= h($budget->description) ?></td>
-            <td><?= h($budget->date) ?></td>
-            <td><?= $this->Number->format($budget->price) ?></td>
-            <td>
-                <?= $budget->has('show') ? $this->Html->link($budget->show->name, ['controller' => 'Shows', 'action' => 'view', $budget->show->id]) : '' ?>
-            </td>
-            <td class="actions">
-                <?= $this->Html->link(__('View'), ['action' => 'view', $budget->id]) ?>
-                <?= $this->Html->link(__('Edit'), ['action' => 'edit', $budget->id]) ?>
-                <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $budget->id], ['confirm' => __('Are you sure you want to delete # {0}?', $budget->id)]) ?>
-            </td>
-        </tr>
+<h3><?= __("Show Budgets"); ?></h3>
 
-    <?php endforeach; ?>
-    </tbody>
-    </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-        </ul>
-        <p><?= $this->Paginator->counter() ?></p>
+<?php foreach ($shows as $show): ?>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            <?= $show->name ?>
+            <?= $this->Html->link(
+                $this->Pretty->iconView($show->name . " " . _("Budget")),
+                ['action' => 'view', $show->id],
+                ['escape' => false]
+            ) ?>
+            <?= $this->Html->link(
+                $this->Pretty->iconAdd($show->name . " " . _("Budget Item")),
+                ['action' => 'add', $show->id],
+                ['escape' => false]
+            ) ?>
+        </h3>
+    </div>
+    <div class="panel-body">
+        <?php
+            $total = 0;
+            $each = [];
+            foreach ( $budget as $budgetitem ) {
+                if ( $budgetitem->show_id == $show->id ) {
+                    $total += $budgetitem->total;
+                    $each[] = ['name' => $budgetitem->category, 'total' => $budgetitem->total];
+                }
+            }
+        ?>
+        <p>
+            <strong><?= $show->name ?></strong>
+            <?= _(" taking place at ") ?>
+            <strong><?=$show->location ?></strong>
+            <?= _(" ending on ") ?>
+            <strong><?= $show->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'); ?></strong>
+        </p>
+
+        <table class="table table-condensed">
+            <thead>
+                <tr class="info"><th><?= _('Category') ?></th><th class='text-right'><?= _('Amount') ?></th></tr>
+            </thead>
+            
+            <tbody>
+            <?php
+                foreach ( $each as $row ) {
+                    echo "<tr><td>{$row['name']}</td><td class='text-right'>" . $this->Number->currency($row['total']) . "</td></tr>";
+                }
+            ?>
+                <tr class="success">
+                    <td><strong><?= __("Total Expenditure") ?></strong></td>
+                    <td class='text-right'><strong><?= $this->Number->currency($total); ?></strong></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+<?php endforeach; ?>

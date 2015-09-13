@@ -101,3 +101,7 @@ select[name*="date"] {
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px; 
 }
+
+.table-striped>tbody>tr:nth-of-type(odd) {
+    background-color: rgb(235,235,235);
+}

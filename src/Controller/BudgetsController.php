@@ -18,10 +18,41 @@ class BudgetsController extends AppController
      */
     public function index()
     {
+
+        $this->loadModel('ShowUserPerms');
+        $this->loadModel('Shows');
+
+        $perms = $this->ShowUserPerms->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'show_id',
+            'conditions' => ['ShowUserPerms.user_id' => $this->Auth->user('id'), 'ShowUserPerms.is_budget' => 1]
+        ]);
+
+        $plist = $perms->toArray();
+        
+        $shows = $this->Shows->find('all')
+            ->where(['Shows.is_active' => 1])
+            ->where(['id' => $plist], ['id' => 'integer[]'])
+            ->order(['end_date' => 'ASC']);
+
         $this->paginate = [
             'contain' => ['Shows']
         ];
-        $this->set('budgets', $this->paginate($this->Budgets));
+
+        $budget = $this->Budgets->find('all')
+            ->where(['show_id' => $plist], ['show_id' => 'integer[]'])
+            ->select([
+                'category' => 'Budgets.category',
+                'total' => 'sum(Budgets.price)',
+                'show_id' => 'Budgets.show_id'
+            ])
+            ->group('show_id')
+            ->group('category')
+            ->order(['category' => 'ASC']);
+
+        $this->set('shows', $shows);
+        $this->set('budget', $budget);
+        //$this->set('budgets', $this->paginate($this->Budgets));
         $this->set('_serialize', ['budgets']);
     }
 
