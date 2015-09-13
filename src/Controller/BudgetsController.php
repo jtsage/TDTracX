@@ -98,6 +98,58 @@ class BudgetsController extends AppController
         $this->set('_serialize', ['budget']);
     }
 
+    public function viewcsv($id = null)
+    {
+
+        $this->loadModel('ShowUserPerms');
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->get($id);
+
+        $perms = $this->ShowUserPerms->find()
+            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
+            ->where(['ShowUserPerms.show_id' => $id])
+            ->select([
+                'user_id' => 'ShowUserPerms.user_id',
+                'show_id' => 'ShowUserPerms.show_id',
+                'access' => 'ShowUserPerms.is_budget'
+                ])
+            ->first();
+
+        if ( $perms->access < 1 ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+        if ( $show->is_active < 1 ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
+        $budgets = $this->Budgets->find('all')
+            ->where(['show_id' => $id])
+            ->order(['category' => 'ASC', 'date' => 'ASC']);
+
+        $csvdata = [];
+        foreach ( $budgets as $item ) {
+            $csvdata[] = [
+                $item->date,
+                $show->name,
+                $item->category,
+                $item->vendor,
+                $item->price
+            ];
+        }
+        $headers = [];
+
+        $_serialize = 'csvdata';
+        $_header = ['Date', 'Show', 'Cetegory', 'Vendor', 'Price'];
+
+        $filename = "budget-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
+        $this->response->download($filename);
+        $this->viewClass = 'CsvView.Csv';
+        $this->set(compact('csvdata', '_serialize', '_header'));
+    }
+
     /**
      * Add method
      *

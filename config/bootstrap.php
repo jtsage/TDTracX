@@ -203,4 +203,5 @@ DispatcherFactory::add('ControllerFactory');
 Type::build('date')->useLocaleParser();
 Type::build('datetime')->useLocaleParser();
 
-\Cake\Core\Plugin::load('BootstrapUI');
+Plugin::load('BootstrapUI');
+Plugin::load('CsvView');

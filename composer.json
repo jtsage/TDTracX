@@ -11,7 +11,8 @@
         "cakephp/migrations": "~1.0",
         "cakephp/plugin-installer": "*",
         "twbs/bootstrap": "^3.3@dev",
-        "friendsofcake/bootstrap-ui": "~0.3"
+        "friendsofcake/bootstrap-ui": "~0.3",
+        "friendsofcake/cakephp-csvview": "~2.0"
     },
     "require-dev": {
         "psy/psysh": "@stable",

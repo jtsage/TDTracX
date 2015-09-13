@@ -7,6 +7,11 @@
             ['action' => 'add', $show->id],
             ['escape' => false]
         ) ?>
+        <?= $this->Html->link(
+            $this->Pretty->iconDL($show->name . " " . _("Budget")),
+            ['action' => 'viewcsv', $show->id],
+            ['escape' => false]
+        ) ?>
     </h3>
     <table class="table table-striped">
         <thead>

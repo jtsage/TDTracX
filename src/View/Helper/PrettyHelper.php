@@ -37,6 +37,10 @@ class PrettyHelper extends Helper
     {
         return "<span class='sr-only'>" . __('User Permissions') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('User Permissions') . ": {$name}' class='glyphicon glyphicon-user' aria-hidden='true'></span>";
     }
+    public function iconDL($name)
+    {
+        return "<span class='sr-only'>" . __('Download') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Download') . ": {$name}' class='glyphicon glyphicon-download' aria-hidden='true'></span>";
+    }
 
     public function onoff($name, $check=false)
     {
