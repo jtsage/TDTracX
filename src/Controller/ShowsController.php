@@ -75,11 +75,11 @@ class ShowsController extends AppController
                 ->first();
 
             if ( $perms->access < 1 ) {
-                $this->Flash->error('You do not have access to this show');
+                $this->Flash->error(__('You do not have access to this show'));
                 return $this->redirect(['action' => 'index']);
             }
             if ( $show->is_active < 1 ) {
-                $this->Flash->error('Sorry, this show is now closed.');
+                $this->Flash->error(__('Sorry, this show is now closed.'));
                 return $this->redirect(['action' => 'index']);   
             }
         }
@@ -92,7 +92,7 @@ class ShowsController extends AppController
     public function editperm($id = null)
     {
         if ( ! $this->Auth->user('is_admin')) {
-            $this->Flash->error('You may not edit show permissions');
+            $this->Flash->error(__('You may not edit show permissions'));
             return $this->redirect(['action' => 'index']);
         }
         $this->loadModel('Users');
@@ -132,7 +132,7 @@ class ShowsController extends AppController
             $insertQuery->clause('values')->values($insertRow);
             $insertQuery->execute();
             
-            $this->Flash->success(__('The show has been saved.'));
+            $this->Flash->success(__('The show permissions have been saved.'));
             return $this->redirect(['action' => 'view', $id]);
             
         }
@@ -172,7 +172,7 @@ class ShowsController extends AppController
     public function add()
     {
         if ( ! $this->Auth->user('is_admin')) {
-            $this->Flash->error('You may not add shows');
+            $this->Flash->error(__('You may not add shows'));
             return $this->redirect(['action' => 'index']);
         }
         $show = $this->Shows->newEntity();
@@ -199,7 +199,7 @@ class ShowsController extends AppController
     public function edit($id = null)
     {
         if ( ! $this->Auth->user('is_admin')) {
-            $this->Flash->error('You may not edit shows');
+            $this->Flash->error(__('You may not edit shows'));
             return $this->redirect(['action' => 'index']);
         }
         $show = $this->Shows->get($id, [
@@ -228,7 +228,7 @@ class ShowsController extends AppController
     public function delete($id = null)
     {
         if ( ! $this->Auth->user('is_admin')) {
-            $this->Flash->error('You may not delete shows');
+            $this->Flash->error(__('You may not delete shows'));
             return $this->redirect(['action' => 'index']);
         }
         $this->request->allowMethod(['post', 'delete']);

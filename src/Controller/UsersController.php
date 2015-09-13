@@ -52,11 +52,11 @@ class UsersController extends AppController
                     ->count();
 
                 if ( $waitingmessage > 0 ) {
-                    $this->Flash->success("You have waiting messages. View them in your account details.");
+                    $this->Flash->success(__("You have waiting messages. View them in your account details."));
                 }
 
                 if ( $this->Auth->user('is_password_expired')) {
-                    $this->Flash->error("Your password has expired, please change it!");
+                    $this->Flash->error(__("Your password has expired, please change it!"));
                     return $this->redirect(['controller' => 'Users', 'action' => 'changepass', $this->Auth->user('id')]); 
                 }
 
@@ -68,7 +68,7 @@ class UsersController extends AppController
 
     public function logout()
     {
-        $this->Flash->success('You are now logged out.');
+        $this->Flash->success(__('You are now logged out.'));
         return $this->redirect($this->Auth->logout());
     }
 
@@ -82,7 +82,7 @@ class UsersController extends AppController
     public function view($id = null)
     {
         if ( !$this->Auth->user('is_admin') && $id <> $this->Auth->user('id') ) {
-            $this->Flash->error('You may only view and edit your own user record. (Loaded)');
+            $this->Flash->error(__('You may only view and edit your own user record. (Loaded)'));
             return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
         }
         $user = $this->Users->get($id, [
@@ -102,7 +102,7 @@ class UsersController extends AppController
     public function add()
     {
         if ( ! $this->Auth->user('is_admin')) {
-            $this->Flash->error('You may not add users');
+            $this->Flash->error(__('You may not add users'));
             return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
         }
         $user = $this->Users->newEntity();
@@ -130,7 +130,7 @@ class UsersController extends AppController
     {
         if ( ! $this->Auth->user('is_admin') ) {
             if ( $id <> $this->Auth->user('id') ) {
-                $this->Flash->error('You may only change your own user record. (Loaded)');    
+                $this->Flash->error(__('You may only change your own user record. (Loaded)'));
             }
             return $this->redirect(['action' => 'safeedit', $this->Auth->user('id')]);
         }
@@ -153,7 +153,7 @@ class UsersController extends AppController
     public function safeedit($id = null)
     {
         if ( !$this->Auth->user('is_admin') && $id <> $this->Auth->user('id') ) {
-            $this->Flash->error('You may edit your own user record. (Loaded)');
+            $this->Flash->error(__('You may edit your own user record. (Loaded)'));
             return $this->redirect(['action' => 'safeedit', $this->Auth->user('id')]);
         }
         $user = $this->Users->get($id, [
@@ -177,7 +177,7 @@ class UsersController extends AppController
     public function changepass($id = null)
     {
         if ( !$this->Auth->user('is_admin') && $id <> $this->Auth->user('id') ) {
-            $this->Flash->error('You may only change your own password. (Loaded)');
+            $this->Flash->error(__('You may only change your own password. (Loaded)'));
             return $this->redirect(['action' => 'changepass', $this->Auth->user('id')]);
         }
         $user = $this->Users->get($id, [
@@ -206,7 +206,7 @@ class UsersController extends AppController
     public function delete($id = null)
     {
         if ( ! $this->Auth->user('is_admin')) {
-            $this->Flash->error('You may not delete users');
+            $this->Flash->error(__('You may not delete users'));
             return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
         }
         $this->request->allowMethod(['post', 'delete']);
