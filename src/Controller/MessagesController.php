@@ -18,6 +18,8 @@ class MessagesController extends AppController
      */
     public function index()
     {
+        $this->Flash->error(__('This action is not allowed'));
+        return $this->redirect('/users/');
         $this->paginate = [
             'contain' => ['Users']
         ];
@@ -34,6 +36,8 @@ class MessagesController extends AppController
      */
     public function view($id = null)
     {
+        $this->Flash->error(__('This action is not allowed'));
+        return $this->redirect('/users/');
         $message = $this->Messages->get($id, [
             'contain' => ['Users']
         ]);
@@ -48,6 +52,8 @@ class MessagesController extends AppController
      */
     public function add()
     {
+        $this->Flash->error(__('This action is not allowed'));
+        return $this->redirect('/users/');
         $message = $this->Messages->newEntity();
         if ($this->request->is('post')) {
             $message = $this->Messages->patchEntity($message, $this->request->data);
@@ -72,6 +78,8 @@ class MessagesController extends AppController
      */
     public function edit($id = null)
     {
+        $this->Flash->error(__('This action is not allowed'));
+        return $this->redirect('/users/');
         $message = $this->Messages->get($id, [
             'contain' => []
         ]);
@@ -98,13 +106,20 @@ class MessagesController extends AppController
      */
     public function delete($id = null)
     {
+
         $this->request->allowMethod(['post', 'delete']);
         $message = $this->Messages->get($id);
-        if ($this->Messages->delete($message)) {
-            $this->Flash->success(__('The message has been deleted.'));
+
+        if ( $message->user_id == $this->Auth->user('id') ) {
+            if ($this->Messages->delete($message)) {
+                $this->Flash->success(__('The message has been deleted.'));
+            } else {
+                $this->Flash->error(__('The message could not be deleted. Please, try again.'));
+            }
         } else {
-            $this->Flash->error(__('The message could not be deleted. Please, try again.'));
+            $this->Flash->error(__("You cannont delete messages not addressed to you."));
         }
-        return $this->redirect(['action' => 'index']);
+        
+        return $this->redirect(['controller' => 'Users', 'action' => 'view', $this->Auth->user('id')]);
     }
 }

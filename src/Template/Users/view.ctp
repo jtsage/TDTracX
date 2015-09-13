@@ -93,33 +93,29 @@
 
 
 <div class="related">
+    <a name="messages"></a>
     <div class="column large-12">
-    <h4 class="subheader"><?= __('Related Messages') ?></h4>
+    <h4 class="subheader"><?= __('Waiting Messages') ?></h4>
     <?php if (!empty($user->messages)): ?>
-    <table cellpadding="0" cellspacing="0">
+    <table class="table table-striped">
         <tr>
-            <th><?= __('Id') ?></th>
-            <th><?= __('User Id') ?></th>
-            <th><?= __('Note') ?></th>
             <th><?= __('Created At') ?></th>
-            <th><?= __('Updated At') ?></th>
+            <th><?= __('Message') ?></th>
+            
             <th class="actions"><?= __('Actions') ?></th>
         </tr>
         <?php foreach ($user->messages as $messages): ?>
         <tr>
-            <td><?= h($messages->id) ?></td>
-            <td><?= h($messages->user_id) ?></td>
+            <td><?= $messages->created_at->i18nFormat(null, $tz); ?></td>
             <td><?= h($messages->note) ?></td>
-            <td><?= h($messages->created_at) ?></td>
-            <td><?= h($messages->updated_at) ?></td>
+            
 
             <td class="actions">
-                <?= $this->Html->link(__('View'), ['controller' => 'Messages', 'action' => 'view', $messages->id]) ?>
-
-                <?= $this->Html->link(__('Edit'), ['controller' => 'Messages', 'action' => 'edit', $messages->id]) ?>
-
-                <?= $this->Form->postLink(__('Delete'), ['controller' => 'Messages', 'action' => 'delete', $messages->id], ['confirm' => __('Are you sure you want to delete # {0}?', $messages->id)]) ?>
-
+                 <?= $this->Form->postLink(
+                    $this->Pretty->iconDelete($messages->id),
+                    ['controller' => 'Messages', 'action' => 'delete', $messages->id],
+                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $messages->id)]
+                ) ?>
             </td>
         </tr>
 
