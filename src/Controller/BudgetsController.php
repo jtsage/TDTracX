@@ -58,7 +58,7 @@ class BudgetsController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Budget id.
+     * @param string|null $id Show id.
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
@@ -98,6 +98,13 @@ class BudgetsController extends AppController
         $this->set('_serialize', ['budget']);
     }
 
+    /**
+     * View method - CSV Download
+     *
+     * @param string|null $id Show id.
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
     public function viewcsv($id = null)
     {
 
@@ -136,13 +143,14 @@ class BudgetsController extends AppController
                 $show->name,
                 $item->category,
                 $item->vendor,
+                $item->description,
                 $item->price
             ];
         }
         $headers = [];
 
         $_serialize = 'csvdata';
-        $_header = ['Date', 'Show', 'Cetegory', 'Vendor', 'Price'];
+        $_header = ['Date', 'Show', 'Category', 'Vendor', 'Description', 'Price'];
 
         $filename = "budget-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
         $this->response->download($filename);
@@ -153,22 +161,65 @@ class BudgetsController extends AppController
     /**
      * Add method
      *
+     * @param string $id Show id.
      * @return void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function add($id = null)
     {
+        $this->loadModel('ShowUserPerms');
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->get($id);
+
+        $perms = $this->ShowUserPerms->find()
+            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
+            ->where(['ShowUserPerms.show_id' => $id])
+            ->select([
+                'user_id' => 'ShowUserPerms.user_id',
+                'show_id' => 'ShowUserPerms.show_id',
+                'access' => 'ShowUserPerms.is_budget'
+                ])
+            ->first();
+
+        if ( $perms->access < 1 ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+        if ( $show->is_active < 1 ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
+
         $budget = $this->Budgets->newEntity();
         if ($this->request->is('post')) {
             $budget = $this->Budgets->patchEntity($budget, $this->request->data);
             if ($this->Budgets->save($budget)) {
                 $this->Flash->success(__('The budget has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'view', $id]);
             } else {
                 $this->Flash->error(__('The budget could not be saved. Please, try again.'));
             }
         }
-        $shows = $this->Budgets->Shows->find('list', ['limit' => 200]);
-        $this->set(compact('budget', 'shows'));
+
+        $vendq = $this->Budgets->find()
+            ->select(['vendor'])
+            ->distinct(['vendor'])
+            ->order(['vendor' => 'ASC']);
+        $venda = [];
+        foreach ( $vendq as $v ) { $venda[] = $v->vendor; }
+        $vend = json_encode($venda);
+
+        $catq = $this->Budgets->find()
+            ->select(['category'])
+            ->distinct(['category'])
+            ->order(['category' => 'ASC']);
+        $cata = [];
+        foreach ( $catq as $c ) { $cata[] = $c->category; }
+        $cat = json_encode($cata);
+
+        $shows = [$show->id => $show->name];
+        $this->set(compact('budget', 'shows', 'vend', 'cat'));
         $this->set('_serialize', ['budget']);
     }
 
@@ -184,17 +235,61 @@ class BudgetsController extends AppController
         $budget = $this->Budgets->get($id, [
             'contain' => []
         ]);
+
+        $this->loadModel('ShowUserPerms');
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->get($budget->show_id);
+
+        $perms = $this->ShowUserPerms->find()
+            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
+            ->where(['ShowUserPerms.show_id' => $budget->show_id])
+            ->select([
+                'user_id' => 'ShowUserPerms.user_id',
+                'show_id' => 'ShowUserPerms.show_id',
+                'access' => 'ShowUserPerms.is_budget'
+                ])
+            ->first();
+
+        if ( $perms->access < 1 ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+        if ( $show->is_active < 1 ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $budget = $this->Budgets->patchEntity($budget, $this->request->data);
+            $budget = $this->Budgets->patchEntity($budget, $this->request->data, [
+                'fieldList' => ['vendor', 'category', 'description', 'price', 'date']
+            ]);
             if ($this->Budgets->save($budget)) {
                 $this->Flash->success(__('The budget has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'view', $show->id]);
             } else {
                 $this->Flash->error(__('The budget could not be saved. Please, try again.'));
             }
         }
-        $shows = $this->Budgets->Shows->find('list', ['limit' => 200]);
-        $this->set(compact('budget', 'shows'));
+
+        $vendq = $this->Budgets->find()
+            ->select(['vendor'])
+            ->distinct(['vendor'])
+            ->order(['vendor' => 'ASC']);
+        $venda = [];
+        foreach ( $vendq as $v ) { $venda[] = $v->vendor; }
+        $vend = json_encode($venda);
+
+        $catq = $this->Budgets->find()
+            ->select(['category'])
+            ->distinct(['category'])
+            ->order(['category' => 'ASC']);
+        $cata = [];
+        foreach ( $catq as $c ) { $cata[] = $c->category; }
+        $cat = json_encode($cata);
+
+        $shows = [$show->id => $show->name];
+        $this->set(compact('budget', 'shows', 'cat', 'vend'));
         $this->set('_serialize', ['budget']);
     }
 
@@ -209,11 +304,36 @@ class BudgetsController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $budget = $this->Budgets->get($id);
+
+        $this->loadModel('ShowUserPerms');
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->get($budget->show_id);
+
+        $perms = $this->ShowUserPerms->find()
+            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
+            ->where(['ShowUserPerms.show_id' => $budget->show_id])
+            ->select([
+                'user_id' => 'ShowUserPerms.user_id',
+                'show_id' => 'ShowUserPerms.show_id',
+                'access' => 'ShowUserPerms.is_budget'
+                ])
+            ->first();
+
+        if ( $perms->access < 1 ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+        if ( $show->is_active < 1 ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
         if ($this->Budgets->delete($budget)) {
             $this->Flash->success(__('The budget has been deleted.'));
         } else {
             $this->Flash->error(__('The budget could not be deleted. Please, try again.'));
         }
-        return $this->redirect(['action' => 'index']);
+        return $this->redirect(['action' => 'view', $show->id]);
     }
 }

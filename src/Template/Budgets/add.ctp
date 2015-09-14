@@ -1,24 +1,14 @@
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('List Budgets'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Shows'), ['controller' => 'Shows', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Show'), ['controller' => 'Shows', 'action' => 'add']) ?></li>
-    </ul>
-</div>
 <div class="budgets form large-10 medium-9 columns">
     <?= $this->Form->create($budget) ?>
     <fieldset>
-        <legend><?= __('Add Budget') ?></legend>
+        <legend><?= __('Add Budget Item') ?></legend>
         <?php
-            echo $this->Form->input('category');
-            echo $this->Form->input('vendor');
-            echo $this->Form->input('description');
-            echo $this->Form->input('date');
-            echo $this->Form->input('price');
             echo $this->Form->input('show_id', ['options' => $shows]);
-            echo $this->Form->input('created_at');
-            echo $this->Form->input('updated_at');
+            echo $this->Form->input('category', ['autocomplete' => 'off', 'data-provide' => 'typeahead', 'data-source' => $cat]);
+            echo $this->Form->input('vendor', ['autocomplete' => 'off', 'data-provide' => 'typeahead', 'data-source' => $vend]);
+            echo $this->Form->input('description');
+            echo $this->Form->input('price');
+            echo $this->Form->input('date');
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
