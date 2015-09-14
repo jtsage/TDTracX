@@ -56,7 +56,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#">Home</a></li>
+            <li><a href="/">Home</a></li>
             <li><a href="/payrolls/">Payroll</a></li>
             <li><a href="/budgets/">Budget</a></li>
             <li><a href="/shows/">Shows</a></li>
