@@ -40,13 +40,13 @@
         </p>
         <table class="table table-condensed">
             <tbody>
-                <tr class="success">
-                    <td><strong><?= __("Paid Hours") ?></strong></td>
-                    <td class='text-right'><strong><?= number_format($worked_paid, 2) ?></strong></td>
-                </tr>
                 <tr class="danger">
-                    <td><strong><?= __("Owed Hours") ?></strong></td>
+                    <td><strong><?= __("Your Owed Hours") ?></strong></td>
                     <td class='text-right'><strong><?= number_format($worked_owed, 2) ?></strong></td>
+                </tr>            
+                <tr class="success">
+                    <td><strong><?= __("Your Paid Hours") ?></strong></td>
+                    <td class='text-right'><strong><?= number_format($worked_paid, 2) ?></strong></td>
                 </tr>
             </tbody>
         </table>
@@ -97,13 +97,13 @@
         </p>
         <table class="table table-condensed">
             <tbody>
-                <tr class="success">
-                    <td><strong><?= __("Paid Hours") ?></strong></td>
-                    <td class='text-right'><strong><?= number_format($worked_paid, 2) ?></strong></td>
-                </tr>
                 <tr class="danger">
-                    <td><strong><?= __("Owed Hours") ?></strong></td>
+                    <td><strong><?= __("Total Owed Hours") ?></strong></td>
                     <td class='text-right'><strong><?= number_format($worked_owed, 2) ?></strong></td>
+                </tr>            
+                <tr class="success">
+                    <td><strong><?= __("Total Paid Hours") ?></strong></td>
+                    <td class='text-right'><strong><?= number_format($worked_paid, 2) ?></strong></td>
                 </tr>
             </tbody>
         </table>
@@ -149,13 +149,13 @@
             </p>
             <table class="table table-condensed">
                 <tbody>
-                    <tr class="success">
-                        <td><strong><?= __("Paid Hours") ?></strong></td>
-                        <td class='text-right'><strong><?= number_format($worked_paid, 2) ?></strong></td>
-                    </tr>
                     <tr class="danger">
-                        <td><strong><?= __("Owed Hours") ?></strong></td>
+                        <td><strong><?= __("Total Owed Hours") ?></strong></td>
                         <td class='text-right'><strong><?= number_format($worked_owed, 2) ?></strong></td>
+                    </tr>                    
+                    <tr class="success">
+                        <td><strong><?= __("Total Paid Hours") ?></strong></td>
+                        <td class='text-right'><strong><?= number_format($worked_paid, 2) ?></strong></td>
                     </tr>
                 </tbody>
             </table>
