@@ -88,7 +88,18 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     <?= $this->fetch('content') ?>
   
   </div>
-
+  <footer style="padding-top: 20px; margin-top: 20px; border-top: 1px solid #e5e5e5;">
+    <p class="text-center text-muted">TDTracX: the quick time and budget tracking tool</p>
+    <ul class="text-center list-inline text-muted">
+      <li>Currently v0.0.9</li>
+      <li>·</li>
+      <li><a href="https://github.com/jtsage/TDTracX">GitHub</a></li>
+      <li>·</li>
+      <li><a href="http://tdtrac.com/">Home Page</a></li>
+      <li>·</li>
+      <li><a href="http://demox.tdtrac.com">Demo Application</a></li>
+    </ul>
+  </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap3-typeahead.min.js"></script>
