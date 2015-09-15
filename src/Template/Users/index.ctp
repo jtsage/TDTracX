@@ -67,7 +67,7 @@
     </div>
 </div>
 
-<?= $this->Pretty->helpMeStart('View Budgets'); ?>
+<?= $this->Pretty->helpMeStart('User List'); ?>
 <p>This system administrator only display shows users associated with this system. "Administrators" are users with super user privledges.  "Active" users can login and be assigned permission roles.</p>
 <p>For each user, you will see four buttons:</p>
 <ul class="list-group">
