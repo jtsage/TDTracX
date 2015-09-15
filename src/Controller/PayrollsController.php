@@ -65,9 +65,8 @@ class PayrollsController extends AppController
             $permListExclude = array_merge($permListPaid, $permListPadmin);
 
             $showsAdmin = $this->Shows->find('all')
-                ->where(['Shows.is_active' => 1])
                 ->where(['id NOT IN' => $permListExclude])
-                ->order(['end_date' => 'ASC']);
+                ->order(['is_active' => 'DESC', 'end_date' => 'ASC']);
 
             $payAdmin = $this->Payrolls->find('all')
                 ->where(['show_id NOT IN' => $permListExclude])
@@ -105,6 +104,56 @@ class PayrollsController extends AppController
         $this->set('_serialize', ['payroll']);
     }
 
+    public function viewbyshow($id = null)
+    {
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->findById($id)->first();
+
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
+
+        $auth = false;
+        if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_paid') ) {
+            $auth = true;
+            $this->set('edit_all', false);
+            $userlist = [ $this->Auth->user('id') ];
+        }
+        if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_pay_admin') ) {
+            $auth = true;
+            $this->set('show_add', true);
+            $this->set('edit_all', true);
+            $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
+        }
+
+        if ( ! $auth ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ( $show->is_active < 1 && ! $this->Auth->user('is_admin') ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
+        $this->set('show', $show);
+
+        $payrolls = $this->Payrolls->find('all')
+            ->contain(['Users'])
+            ->select([
+                'id', 'date_worked', 'start_time', 'end_time', 'worked', 'is_paid', 'notes', 
+                'fullname' => 'concat(Users.first, " ", Users.last)'
+            ])
+            ->where(['user_id IN' => $userlist])
+            ->where(['show_id' => $id])
+            ->order(['Users.last' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
+
+        $this->set('payrolls', $payrolls);
+
+        $this->render('view');
+    }
     /**
      * Add method - by show
      *

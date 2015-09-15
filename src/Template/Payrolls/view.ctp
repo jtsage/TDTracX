@@ -1,46 +1,94 @@
-<div class="actions columns large-2 medium-3">
-    <h3><?= __('Actions') ?></h3>
-    <ul class="side-nav">
-        <li><?= $this->Html->link(__('Edit Payroll'), ['action' => 'edit', $payroll->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Payroll'), ['action' => 'delete', $payroll->id], ['confirm' => __('Are you sure you want to delete # {0}?', $payroll->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Payrolls'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Payroll'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Shows'), ['controller' => 'Shows', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Show'), ['controller' => 'Shows', 'action' => 'add']) ?> </li>
-    </ul>
+<div class="shows view large-10 medium-9 columns">
+    <h3>
+        <?= h($show->name) . _(" Payroll Expenditure") ?>
+        <?= ( isset($show_add) && $show_add ) ? $this->Html->link(
+                $this->Pretty->iconAdd($show->name . " " . _("Payroll Item")),
+                ['action' => 'addtoshow', $show->id],
+                ['escape' => false]
+            ) : "" ?>
+    </h3>
 </div>
-<div class="payrolls view large-10 medium-9 columns">
-    <h2><?= h($payroll->id) ?></h2>
-    <div class="row">
-        <div class="large-5 columns strings">
-            <h6 class="subheader"><?= __('Notes') ?></h6>
-            <p><?= h($payroll->notes) ?></p>
-            <h6 class="subheader"><?= __('User') ?></h6>
-            <p><?= $payroll->has('user') ? $this->Html->link($payroll->user->id, ['controller' => 'Users', 'action' => 'view', $payroll->user->id]) : '' ?></p>
-            <h6 class="subheader"><?= __('Show') ?></h6>
-            <p><?= $payroll->has('show') ? $this->Html->link($payroll->show->name, ['controller' => 'Shows', 'action' => 'view', $payroll->show->id]) : '' ?></p>
-        </div>
-        <div class="large-2 columns numbers end">
-            <h6 class="subheader"><?= __('Id') ?></h6>
-            <p><?= $this->Number->format($payroll->id) ?></p>
-        </div>
-        <div class="large-2 columns dates end">
-            <h6 class="subheader"><?= __('Date Worked') ?></h6>
-            <p><?= h($payroll->date_worked) ?></p>
-            <h6 class="subheader"><?= __('Start Time') ?></h6>
-            <p><?= h($payroll->start_time) ?></p>
-            <h6 class="subheader"><?= __('End Time') ?></h6>
-            <p><?= h($payroll->end_time) ?></p>
-            <h6 class="subheader"><?= __('Created At') ?></h6>
-            <p><?= h($payroll->created_at) ?></p>
-            <h6 class="subheader"><?= __('Updated At') ?></h6>
-            <p><?= h($payroll->updated_at) ?></p>
-        </div>
-        <div class="large-2 columns booleans end">
-            <h6 class="subheader"><?= __('Is Paid') ?></h6>
-            <p><?= $payroll->is_paid ? __('Yes') : __('No'); ?></p>
-        </div>
-    </div>
-</div>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th><?= _("Date Worked") ?></th>
+            <th><?= _("Note") ?></th>
+            <th><?= _("Start Time") ?></th>
+            <th><?= _("End Time") ?></th>
+            <th class="text-right"><?= _("Hours Worked") ?></th>
+            <th class="text-center"><?= _("Is Paid?") ?></th>
+            <th class="text-center"><?= _("Actions") ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php 
+
+        $total = 0;
+        $subtotal = 0;
+        $lastuser = "";
+
+        foreach ( $payrolls as $item ) {
+            if ( $item->fullname <> $lastuser ) {
+                if ( $subtotal > 0 ) {
+                    echo "<tr class='success'><td colspan='4'><strong>";
+                    echo __('User Sub-Total') . ": " . $lastuser;
+                    echo "</td><td class='text-right'>";
+                    echo number_format($subtotal,2);
+                    echo "</td><td></td><td></td></tr>";    
+                }
+                echo "<tr class='info'><td colspan='7'><strong>";
+                echo __('User') . ": " . $item->fullname;
+                echo "</td></tr>";
+                $subtotal = 0;
+                $lastuser = $item->fullname;
+            }
+
+            echo "<tr".(( !$item->is_paid ) ? " title='"._('Unpaid')."'":"")."><td>";
+            echo $item->date_worked->i18nFormat('EEE, MMM dd, yyyy', 'UTC');
+            echo "</td><td>" . $item->notes;
+            echo "</td><td>" . $item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC');
+            echo "</td><td>" . $item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC');
+            echo "</td><td class='text-right'>" . number_format($item->worked, 2);
+            echo "</td><td class='text-center'>";
+            if ( isset($show_add) && $show_add && !$item->is_paid ) {
+                echo $this->Form->postLink(
+                    $this->Pretty->iconMark($item->notes),
+                    ['action' => 'markpaid', $item->id],
+                    ['escape' => false, 'confirm' => __('Are you sure you want to mark paid # {0}?', $item->id)]);
+                echo " ";
+            }
+            echo $this->Bool->prefYes($item->is_paid);
+            echo "</td><td class='text-center'>";
+            
+            if ( (isset($show_add) && $show_add) || !$item->is_paid ) {
+                echo $this->Html->link(
+                    $this->Pretty->iconEdit($item->notes),
+                    ['action' => 'edit', $item->id],
+                    ['escape' => false]);
+
+                echo $this->Form->postLink(
+                    $this->Pretty->iconDelete($item->notes),
+                    ['action' => 'delete', $item->id],
+                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id)]);
+            }
+            echo "</td></tr>";
+
+            $subtotal += $item->worked;
+            $total += $item->worked;
+        }
+        echo "<tr class='success'><td colspan='4'><strong>";
+        echo __('User Sub-Total') . ": " . $lastuser;
+        echo "</td><td class='text-right'>";
+        echo number_format($subtotal,2);
+        echo "</td><td></td><td></td></tr>";
+
+        echo "<tr class='danger'><td colspan='4'><strong>";
+        echo __('Total Hours');
+        echo "</td><td class='text-right'>";
+        echo number_format($total,2);
+        echo "</td><td></td><td></td></tr>";
+
+        ?>
+    </tbody>
+</table>

@@ -70,6 +70,11 @@
                 ['escape' => false]
             ) ?>
             <?= $this->Html->link(
+                $this->Pretty->iconUnpaid($item->name),
+                ['action' => 'unpaidbyshow', $item->id],
+                ['escape' => false]
+            ) ?>
+            <?= $this->Html->link(
                 $this->Pretty->iconAdd($item->name . " " . _("Payroll Item")),
                 ['action' => 'addtoshow', $item->id],
                 ['escape' => false]
@@ -124,6 +129,11 @@
                 <?= $this->Html->link(
                     $this->Pretty->iconView($item->name . " " . __("Payroll")),
                     ['action' => 'viewbyshow', $item->id],
+                    ['escape' => false]
+                ) ?>
+                <?= $this->Html->link(
+                    $this->Pretty->iconUnpaid($item->name),
+                    ['action' => 'unpaidbyshow', $item->id],
                     ['escape' => false]
                 ) ?>
             </h3>
