@@ -6,6 +6,15 @@ use Cake\ORM\TableRegistry;
 
 class UserPermComponent extends Component
 {
+	/**
+     * getAllPerms
+     *
+     * Grab a simple list of shows that a user is allowed to perfom an action in.
+     *
+     * @param string|null $id User Id.
+     * @param string|null $perm Named permission (is_budget, is_pay_admin, is_paid).
+     * @return Array of shows that $id has $perm in.
+     */
 	public function getAllPerm($id, $perm) {
 		$this->ShowUserPerms = TableRegistry::get('ShowUserPerms');
 
@@ -17,6 +26,16 @@ class UserPermComponent extends Component
 
         return $perms->toArray();
 	}
+	/**
+     * checkShow
+     *
+     * Check if a user is allowed to perform an action in the specified show.
+     *
+     * @param string|null $userId User Id.
+     * @param string|null $showId Show Id.
+     * @param string|null $perm Named permission (is_budget, is_pay_admin, is_paid).
+     * @return Bool $userId is allowed to $perm in $showId.
+     */
 	public function checkShow($userId, $showId, $perm) {
 		$this->ShowUserPerms = TableRegistry::get('ShowUserPerms');
 		
