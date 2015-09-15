@@ -10,3 +10,7 @@
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+
+<?= $this->Pretty->helpMeStart('Change Password'); ?>
+<p>This display allows you change your password. If you forget your password, please contact your system administrator to have it reset.</p>
+<?= $this->Pretty->helpMeEnd(); ?>

@@ -17,7 +17,7 @@
             <th><?= $this->Paginator->sort('is_active', __("Active User")) ?></th>
             <th><?= $this->Paginator->sort('is_admin', __("Administrator")) ?></th>
             <th><?= $this->Paginator->sort('last_login_at', __("Last Login")) ?></th>
-            <th class="actions"><?= __('Actions') ?></th>
+            <th class="text-center"><?= __('Actions') ?></th>
         </tr>
     </thead>
     <tbody>
@@ -30,7 +30,7 @@
             <td><?= $this->Bool->prefYes($user->is_active) ?></td>
             <td><?= $this->Bool->prefNo($user->is_admin) ?></td>
             <td><?= $user->last_login_at->i18nFormat(null, $tz); ?></td>
-            <td class="actions">
+            <td class="text-center">
                 <?= $this->Html->link(
                     $this->Pretty->iconView($user->username),
                     ['action' => 'view', $user->id],
@@ -66,3 +66,18 @@
         <p><?= $this->Paginator->counter() ?></p>
     </div>
 </div>
+
+<?= $this->Pretty->helpMeStart('View Budgets'); ?>
+<p>This system administrator only display shows users associated with this system. "Administrators" are users with super user privledges.  "Active" users can login and be assigned permission roles.</p>
+<p>For each user, you will see four buttons:</p>
+<ul class="list-group">
+    <li class="list-group-item"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <strong>Eye Button</strong>: View a detailed user record.</li>
+
+    <li class="list-group-item"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <strong>Lock Button</strong>: Change the user's password.</li>
+
+    <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit the user.</li>
+
+    <li class="list-group-item"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <strong>Trash Button</strong>: Permanantly remove the user from the system, and all historical data about them.  Very, very destructive - use with extream caution.</li>
+    
+</ul>
+<?= $this->Pretty->helpMeEnd(); ?>

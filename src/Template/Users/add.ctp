@@ -23,3 +23,16 @@
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+
+<?= $this->Pretty->helpMeStart('Add User'); ?>
+<p>This display allows you to add a new user to the system.</p>
+<ul class="list-group">
+    <li class="list-group-item"><strong>E-Mail</strong>: User's e-mail address, used for login and notifications.</li>
+    <li class="list-group-item"><strong>Password</strong>: User's initial password.</li>
+    <li class="list-group-item"><strong>First</strong>: User's first name</li>
+    <li class="list-group-item"><strong>Last</strong>: User's last name</li>
+    <li class="list-group-item"><strong>Phone</strong>: User's 10-digit phone number, no punctuation.</li>
+    <li class="list-group-item"><strong>Pay Rate</strong>: User's Pay Rate.</li>
+    <li class="list-group-item"><strong>Time Zone</strong>: User's time zone. Defaults to EST/EDT (USA).</li>
+</ul>
+<?= $this->Pretty->helpMeEnd(); ?>

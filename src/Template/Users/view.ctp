@@ -128,3 +128,27 @@
     <?php endif; ?>
     </div>
 </div>
+
+
+<?= $this->Pretty->helpMeStart('View Budgets'); ?>
+<p>This display shows details of the user record, along with the currently assigned permissions</p>
+<p>Near the user's full name, you will see two buttons:</p>
+<ul class="list-group">
+    <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit the user.</li>
+
+    <li class="list-group-item"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <strong>Lock Button</strong>: Change the user's password.</li>
+</ul>
+<h4>Permissions</h4>
+<p>These lists show the shows that the current user has permissions on. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.</p>
+<ul class="list-group">
+    <li class="list-group-item label-info">Budget User</li>
+    <li class="list-group-item">Budget Users have the ability to add, edit, and delete budget items from the show.</li>
+    <li class="list-group-item label-danger">Payroll Admin</li>
+    <li class="list-group-item">Payroll admin's have the ability to add, edit, and delete payroll items for any "Payroll User" of the show.  Most useful for group supervisors that do not need full system administrator access.  Payroll admin's may also view the payroll report from the show. System administrators can not automatically add payroll items, although they may view any payroll report from any show.</li>
+    <li class="list-group-item label-success">Payroll User</li>
+    <li class="list-group-item">Payroll users may add payroll items to the show.  They may edit or delete those payroll hours that have not yet been marked as "paid". Only payroll users appear on the payroll report for the show.</li>
+</ul>
+
+<h4>Messages</h4>
+<p>Finally, if there are any messages waiting for the user, they are shown at the bottom of this display, with a delete button.  At this time, there is very little internal messaging used, preferring e-mail to the internal system.</p>
+<?= $this->Pretty->helpMeEnd(); ?>
