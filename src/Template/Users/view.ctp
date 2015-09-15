@@ -29,6 +29,10 @@
             <p><?= $user->created_at->i18nFormat(null, $tz); ?></p>
             <h4><span class="label label-warning"><?= __('Last Update At') ?></span></h4>
             <p><?= $user->updated_at->i18nFormat(null, $tz); ?></p>
+            <?php if ( isset($showpay) ): ?>
+            <h4><span class="label label-danger"><?= __('Pay Rate') ?></span></h4>
+            <p><?= $this->Number->currency($user->pay_rate); ?></p>
+            <?php endif; ?>
         </div>
         <div class="col-md-4">
             <h4><span class="label label-success"><?= __('Active User?') ?></span></h4>

@@ -67,14 +67,9 @@ class PayrollsTable extends Table
             ->notEmpty('date_worked');
 
         $validator
-            ->add('start_time', 'valid', ['rule' => 'time'])
-            ->requirePresence('start_time', 'create')
-            ->notEmpty('start_time');
-
-        $validator
-            ->add('end_time', 'valid', ['rule' => 'time'])
-            ->requirePresence('end_time', 'create')
-            ->notEmpty('end_time');
+            ->add('worked', 'valid', ['rule' => 'numeric'])
+            ->requirePresence('worked', 'create')
+            ->notEmpty('worked');
 
         $validator
             ->add('is_paid', 'valid', ['rule' => 'boolean'])

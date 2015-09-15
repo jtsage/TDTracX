@@ -8,6 +8,7 @@
             echo $this->Form->input('first', ['label' => __("First Name")]);
             echo $this->Form->input('last', ['label' => __("Last Name")]);
             echo $this->Form->input('phone', ['label' => __("Phone Number")]);
+            echo $this->Form->input('pay_rate', ['label' => __("Pay Rate")]);
         ?>
         <div class="form-group"><label class="control-label">Time Zone</label>
         <?php
