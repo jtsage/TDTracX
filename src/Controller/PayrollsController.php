@@ -11,6 +11,11 @@ use App\Controller\AppController;
 class PayrollsController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('UserPerm');
+    }
     /**
      * Index method
      *
@@ -18,11 +23,70 @@ class PayrollsController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-            'contain' => ['Users', 'Shows']
-        ];
-        $this->set('payrolls', $this->paginate($this->Payrolls));
-        $this->set('_serialize', ['payrolls']);
+        $this->loadModel('Shows');
+
+        $permListPaid = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_paid');
+        $permListPadmin = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_pay_admin');
+
+        $showsPaid = $this->Shows->find('all')
+            ->where(['Shows.is_active' => 1])
+            ->where(['id' => $permListPaid], ['id' => 'integer[]'])
+            ->order(['end_date' => 'ASC']);
+
+        $showsPadmin = $this->Shows->find('all')
+            ->where(['Shows.is_active' => 1])
+            ->where(['id' => $permListPadmin], ['id' => 'integer[]'])
+            ->order(['end_date' => 'ASC']);
+
+        $payPaid = $this->Payrolls->find('all')
+            ->where(['show_id' => $permListPaid], ['show_id' => 'integer[]'])
+            ->where(['user_id' => $this->Auth->user('id')])
+            ->select([
+                'show_id' => 'Payrolls.show_id',
+                'totalwork' => 'sum(Payrolls.worked)',
+                'is_paid' => 'Payrolls.is_paid'
+            ])
+            ->group('show_id')
+            ->group('is_paid')
+            ->order(['show_id' => 'ASC']);
+
+        $payPadmin = $this->Payrolls->find('all')
+            ->where(['show_id' => $permListPadmin], ['show_id' => 'integer[]'])
+            ->select([
+                'show_id' => 'Payrolls.show_id',
+                'totalwork' => 'sum(Payrolls.worked)',
+                'is_paid' => 'Payrolls.is_paid'
+            ])
+            ->group('show_id')
+            ->group('is_paid')
+            ->order(['show_id' => 'ASC']);
+
+        if ( $this->Auth->user('is_admin') ) {
+            $permListExclude = array_merge($permListPaid, $permListPadmin);
+
+            $showsAdmin = $this->Shows->find('all')
+                ->where(['Shows.is_active' => 1])
+                ->where(['id NOT IN' => $permListExclude])
+                ->order(['end_date' => 'ASC']);
+
+            $payAdmin = $this->Payrolls->find('all')
+                ->where(['show_id NOT IN' => $permListExclude])
+                ->select([
+                    'show_id' => 'Payrolls.show_id',
+                    'totalwork' => 'sum(Payrolls.worked)',
+                ])
+                ->group('show_id')
+                ->order(['show_id' => 'ASC']);
+
+            $this->set('showsAdmin', $showsAdmin);
+            $this->set('payAdmin', $payAdmin);
+        }
+            
+        $this->set('showsPaid', $showsPaid);
+        $this->set('payPaid', $payPaid);
+
+        $this->set('showsPadmin', $showsPadmin);
+        $this->set('payPadmin', $payPadmin);
     }
 
     /**
