@@ -116,3 +116,13 @@
     </div>
 </div>
 <?php endforeach; ?>
+
+<?= $this->Pretty->helpMeStart('View Budgets'); ?>
+<p>This display shows the budgets of the shows you have access, along with the current expenditure broken down by budget category.</p>
+<p>For each show, you will see two buttons:</p>
+<ul class="list-group">
+    <li class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>Plus Button</strong>: Add an expense to the show.</li>
+    <li class="list-group-item"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <strong>Eye Button</strong>: View a detailed expense report.</li>
+</ul>
+<p>Additionally, if you are a system administrator, you can view the budgets from closed (inactive) shows.</p>
+<?= $this->Pretty->helpMeEnd(); ?>

@@ -82,3 +82,17 @@
         </tbody>
     </table>
 </div>
+
+<?= $this->Pretty->helpMeStart('View Detailed Budget'); ?>
+<p>This display shows detailed budget of the current show, broken down by budget category.</p>
+<p>Next to the show title, there are two buttons:</p>
+<ul class="list-group">
+    <li class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>Plus Button</strong>: Add an expense to the show.</li>
+    <li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> <strong>Download Button</strong>: Download a comma seperated (csv) file of the budget for offline printing or editing.</li>
+</ul>
+<p>For each budget item, there are two buttoms:</p>
+<ul class="list-group">
+    <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit this budget expense.</li>
+    <li class="list-group-item"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <strong>Trash Button</strong>: Permanantly remove this budget expense.</li>
+</ul>
+<?= $this->Pretty->helpMeEnd(); ?>

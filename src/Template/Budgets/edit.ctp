@@ -14,3 +14,15 @@
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
+
+<?= $this->Pretty->helpMeStart('Edit Budget Item'); ?>
+<p>This display allows you to edit and existing budget item.</p>
+<ul class="list-group">
+    <li class="list-group-item"><strong>Show</strong>: locked to the current show.</li>
+    <li class="list-group-item"><strong>Category</strong>: A Grouping category for this budget expense.</li>
+    <li class="list-group-item"><strong>Vendor</strong>: The Vendor this budget expense was transacted with.</li>
+    <li class="list-group-item"><strong>Description</strong>: A description of the expense.</li>
+    <li class="list-group-item"><strong>Price</strong>: Price, without dollar sign of the expense.</li>
+    <li class="list-group-item"><strong>Date</strong>: Date of the expense.  Defaults to today.</li>
+</ul>
+<?= $this->Pretty->helpMeEnd(); ?>
