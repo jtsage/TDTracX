@@ -60,3 +60,22 @@
         <p><?= $this->Paginator->counter() ?></p>
     </div>
 </div>
+
+<?= $this->Pretty->helpMeStart('Show List'); ?>
+<p>This display shows the shows that you have access to.</p>
+<p>Near the title, you will see one button:</p>
+<ul class="list-group">
+    <li class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>Plus Button</strong>: Add a show to the system (admin only).</li>
+</ul>
+<p>For each show, you will see four buttons:</p>
+<ul class="list-group">
+    <li class="list-group-item"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <strong>Eye Button</strong>: View a detailed show record.</li>
+
+    <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit the show (admin only).</li>
+
+    <li class="list-group-item"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <strong>Person Button</strong>: Change the show's permissions (admin only).</li>
+
+    <li class="list-group-item"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <strong>Trash Button</strong>: Permanantly remove the show from the system, and all historical data about it.  Very, very destructive - use with extream caution (admin only).</li>
+    
+</ul>
+<?= $this->Pretty->helpMeEnd(); ?>

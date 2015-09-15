@@ -47,50 +47,19 @@
 
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
-
-    <?php /*if (!empty($show->show_user_perms)): ?>
-    <div class="row">
-        <div class="col-md-4">
-            <ul class="list-group">
-            <li class="list-group-item label-primart">Budget Users</li>
-            <?php foreach ($show->show_user_perms as $showUserPerms) {
-                if ($showUserPerms->is_budget) { 
-                    echo "<li class='list-group-item'>";
-                    echo h($showUserPerms->user->last) . ", " . h($showUserPerms->user->first);
-                    echo "</li>";
-                }
-            } ?>
-            </ul>
-        </div>
-        <div class="col-md-4">
-            <ul class="list-group">
-            <li class="list-group-item label-danger">Payroll Admins</li>
-            <?php foreach ($show->show_user_perms as $showUserPerms) {
-                if ($showUserPerms->is_pay_admin) { 
-                    echo "<li class='list-group-item'>";
-                    echo h($showUserPerms->user->last) . ", " . h($showUserPerms->user->first);
-                    echo "</li>";
-                }
-            } ?>
-            </ul>
-        </div>
-        <div class="col-md-4">
-            <ul class="list-group">
-            <li class="list-group-item label-success">Payroll Users</li>
-            <?php foreach ($show->show_user_perms as $showUserPerms) {
-                if ($showUserPerms->is_paid) { 
-                    echo "<li class='list-group-item'>";
-                    echo h($showUserPerms->user->last) . ", " . h($showUserPerms->user->first);
-                    echo "</li>";
-                }
-            } ?>
-            </ul>
-        </div>
-
-    </div>
-   
-
-
-    <?php endif; */ ?>
     </div>
 </div>
+
+
+<?= $this->Pretty->helpMeStart('Edit Show Permissions'); ?>
+<p>This display allows you to edit the show's permissions for each active user.</p>
+<ul class="list-group">
+    <li class="list-group-item label-info">Budget User</li>
+    <li class="list-group-item">Budget Users have the ability to add, edit, and delete budget items from the show.</li>
+    <li class="list-group-item label-danger">Payroll Admin</li>
+    <li class="list-group-item">Payroll admin's have the ability to add, edit, and delete payroll items for any "Payroll User" of the show.  Most useful for group supervisors that do not need full system administrator access.  Payroll admin's may also view the payroll report from the show. System administrators can not automatically add payroll items, although they may view any payroll report from any show.</li>
+    <li class="list-group-item label-success">Payroll  User</li>
+    <li class="list-group-item">Payroll users may add payroll items to the show.  They may edit or delete those payroll hours that have not yet been marked as "paid". Only payroll users appear on the payroll report for the show.</li>
+</ul>
+
+<?= $this->Pretty->helpMeEnd(); ?>
