@@ -106,15 +106,84 @@ class PayrollsController extends AppController
     }
 
     /**
-     * Add method
+     * Add method - by show
      *
      * @return void Redirects on successful add, renders view otherwise.
      */
-    public function add()
+    public function addtoshow($id = null)
     {
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->findById($id)->first();
+
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
+
+        if ( ! $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_pay_admin') ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ( $show->is_active < 1 ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
         $payroll = $this->Payrolls->newEntity();
         if ($this->request->is('post')) {
-            $payroll = $this->Payrolls->patchEntity($payroll, $this->request->data);
+            if ( ! $this->UserPerm->checkShow($this->request->data['user_id'], $id, 'is_paid') ) {
+                $this->Flash->error(__('That user cannot be paid on this show'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $fixed_data = array_merge($this->request->data, ['show_id' => $show->id, 'is_paid' => 0]);
+            $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
+            if ($this->Payrolls->save($payroll)) {
+                $this->Flash->success(__('The payroll has been saved.'));
+                return $this->redirect(['action' => 'index', $show->id]);
+            } else {
+                $this->Flash->error(__('The payroll could not be saved. Please, try again.'));
+            }
+        }
+
+        $users = $this->UserPerm->getShowPaidUsers($id);
+        $shows = [$show->id => $show->name];
+        $this->set(compact('payroll', 'users', 'shows'));
+        $this->set('_serialize', ['payroll']);
+        $this->render('add');
+    }
+
+    /**
+     * Add method - by self
+     *
+     * @return void Redirects on successful add, renders view otherwise.
+     */
+    public function addtoself($id = null)
+    {
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->findById($id)->first();
+
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
+
+        if ( ! $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_paid') ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ( $show->is_active < 1 ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
+        $payroll = $this->Payrolls->newEntity();
+        if ($this->request->is('post')) {
+            $fixed_data = array_merge($this->request->data, ['show_id' => $show->id, 'user_id' => $this->Auth->user('id'), 'is_paid' => 0]);
+            $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
             if ($this->Payrolls->save($payroll)) {
                 $this->Flash->success(__('The payroll has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -122,10 +191,12 @@ class PayrollsController extends AppController
                 $this->Flash->error(__('The payroll could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Payrolls->Users->find('list', ['limit' => 200]);
-        $shows = $this->Payrolls->Shows->find('list', ['limit' => 200]);
+
+        $users = [$this->Auth->user('id') => $this->Auth->user('first') . " " . $this->Auth->user('last')];
+        $shows = [$show->id => $show->name];
         $this->set(compact('payroll', 'users', 'shows'));
         $this->set('_serialize', ['payroll']);
+        $this->render('add');
     }
 
     /**

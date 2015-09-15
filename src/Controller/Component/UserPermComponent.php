@@ -51,5 +51,26 @@ class UserPermComponent extends Component
 
         return $perms->access;
     }
+
+    /**
+     * getShowPaidUsers
+     *
+     * Get a list of paid users for the specified show
+     *
+     * @param string|null $showId Show Id.
+     * @return Array [$userID => {User Full Name}, ... ]
+     */
+    public function getShowPaidUsers($showId) {
+        $this->ShowUserPerms = TableRegistry::get('ShowUserPerms');
+
+        $hooper = $this->ShowUserPerms->find('list', ['valueField' => 'fullname', 'keyField' => 'user_id'])
+            ->where(['ShowUserPerms.show_id' => $showId])
+            ->where(['is_paid' => true])
+            ->contain(['Users'])
+            ->select(['fullname' => 'concat(Users.first, " ", Users.last)', 'ShowUserPerms.user_id'])
+            ->order(['Users.last' => 'ASC', 'Users.first' => 'DESC']);
+
+        return $hooper->toArray();
+    }
 }
 ?>

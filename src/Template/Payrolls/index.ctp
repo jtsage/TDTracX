@@ -9,7 +9,7 @@
             <?= $item->name ?>
             <?= $this->Html->link(
                 $this->Pretty->iconView(__("Your Payroll for ") . $item->name),
-                ['action' => 'viewbyuser', $item->id],
+                ['action' => 'viewbyshow', $item->id],
                 ['escape' => false]
             ) ?>
             <?= $this->Html->link(

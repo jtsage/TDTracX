@@ -3,7 +3,7 @@
   color:red;
 }
 
-select[name*="date"] { 
+select[name*="date"], select[name*="time"] { 
 	display: inline-block;
 	margin-left: 2px;
 	margin-right: 2px;
