@@ -11,6 +11,11 @@ use App\Controller\AppController;
 class BudgetsController extends AppController
 {
 
+    public function initialize()
+    {
+        parent::initialize();
+        $this->loadComponent('UserPerm');
+    }
     /**
      * Index method
      *
@@ -19,28 +24,17 @@ class BudgetsController extends AppController
     public function index()
     {
 
-        $this->loadModel('ShowUserPerms');
         $this->loadModel('Shows');
 
-        $perms = $this->ShowUserPerms->find('list', [
-            'keyField' => 'id',
-            'valueField' => 'show_id',
-            'conditions' => ['ShowUserPerms.user_id' => $this->Auth->user('id'), 'ShowUserPerms.is_budget' => 1]
-        ]);
+        $permList = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_budget');
 
-        $plist = $perms->toArray();
-        
         $shows = $this->Shows->find('all')
             ->where(['Shows.is_active' => 1])
-            ->where(['id' => $plist], ['id' => 'integer[]'])
+            ->where(['id' => $permList], ['id' => 'integer[]'])
             ->order(['end_date' => 'ASC']);
 
-        $this->paginate = [
-            'contain' => ['Shows']
-        ];
-
         $budget = $this->Budgets->find('all')
-            ->where(['show_id' => $plist], ['show_id' => 'integer[]'])
+            ->where(['show_id' => $permList], ['show_id' => 'integer[]'])
             ->select([
                 'category' => 'Budgets.category',
                 'total' => 'sum(Budgets.price)',
@@ -50,6 +44,14 @@ class BudgetsController extends AppController
             ->group('category')
             ->order(['category' => 'ASC']);
 
+        if ( $this->Auth->user('is_admin') ) {
+            $inactshows = $this->Shows->find('all')
+                ->where(['Shows.is_active' => 0])
+                ->where(['id' => $permList], ['id' => 'integer[]'])
+                ->order(['end_date' => 'ASC']);
+            $this->set('inactshows', $inactshows);
+        }
+            
         $this->set('shows', $shows);
         $this->set('budget', $budget);
         $this->set('_serialize', ['budgets']);
@@ -64,29 +66,29 @@ class BudgetsController extends AppController
      */
     public function view($id = null)
     {
-
-        $this->loadModel('ShowUserPerms');
         $this->loadModel('Shows');
 
-        $show = $this->Shows->get($id);
+        $show = $this->Shows->findById($id)->first();
 
-        $perms = $this->ShowUserPerms->find()
-            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
-            ->where(['ShowUserPerms.show_id' => $id])
-            ->select([
-                'user_id' => 'ShowUserPerms.user_id',
-                'show_id' => 'ShowUserPerms.show_id',
-                'access' => 'ShowUserPerms.is_budget'
-                ])
-            ->first();
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
 
-        if ( $perms->access < 1 ) {
+        if ( ! $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_budget') ) {
             $this->Flash->error(__('You do not have access to this show'));
             return $this->redirect(['action' => 'index']);
         }
+
         if ( $show->is_active < 1 ) {
             $this->Flash->error(__('Sorry, this show is now closed.'));
-            return $this->redirect(['action' => 'index']);   
+            if ( $this->Auth->user('is_admin') ) {
+                $this->set('opsok', false);
+            } else {
+                return $this->redirect(['action' => 'index']);
+            }
+        } else {
+            $this->set('opsok', true);
         }
 
         $budgets = $this->Budgets->find('all')
@@ -107,29 +109,18 @@ class BudgetsController extends AppController
      */
     public function viewcsv($id = null)
     {
-
-        $this->loadModel('ShowUserPerms');
         $this->loadModel('Shows');
 
-        $show = $this->Shows->get($id);
+        $show = $this->Shows->findById($id)->first();
 
-        $perms = $this->ShowUserPerms->find()
-            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
-            ->where(['ShowUserPerms.show_id' => $id])
-            ->select([
-                'user_id' => 'ShowUserPerms.user_id',
-                'show_id' => 'ShowUserPerms.show_id',
-                'access' => 'ShowUserPerms.is_budget'
-                ])
-            ->first();
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
 
-        if ( $perms->access < 1 ) {
+        if ( ! $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_budget') ) {
             $this->Flash->error(__('You do not have access to this show'));
             return $this->redirect(['action' => 'index']);
-        }
-        if ( $show->is_active < 1 ) {
-            $this->Flash->error(__('Sorry, this show is now closed.'));
-            return $this->redirect(['action' => 'index']);   
         }
 
         $budgets = $this->Budgets->find('all')
@@ -166,30 +157,24 @@ class BudgetsController extends AppController
      */
     public function add($id = null)
     {
-        $this->loadModel('ShowUserPerms');
         $this->loadModel('Shows');
 
-        $show = $this->Shows->get($id);
+        $show = $this->Shows->findById($id)->first();
 
-        $perms = $this->ShowUserPerms->find()
-            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
-            ->where(['ShowUserPerms.show_id' => $id])
-            ->select([
-                'user_id' => 'ShowUserPerms.user_id',
-                'show_id' => 'ShowUserPerms.show_id',
-                'access' => 'ShowUserPerms.is_budget'
-                ])
-            ->first();
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
 
-        if ( $perms->access < 1 ) {
+        if ( ! $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_budget') ) {
             $this->Flash->error(__('You do not have access to this show'));
             return $this->redirect(['action' => 'index']);
         }
+
         if ( $show->is_active < 1 ) {
             $this->Flash->error(__('Sorry, this show is now closed.'));
             return $this->redirect(['action' => 'index']);   
         }
-
 
         $budget = $this->Budgets->newEntity();
         if ($this->request->is('post')) {
@@ -206,17 +191,13 @@ class BudgetsController extends AppController
             ->select(['vendor'])
             ->distinct(['vendor'])
             ->order(['vendor' => 'ASC']);
-        $venda = [];
-        foreach ( $vendq as $v ) { $venda[] = $v->vendor; }
-        $vend = json_encode($venda);
+        $vend = json_encode($vendq->extract('vendor'));
 
         $catq = $this->Budgets->find()
             ->select(['category'])
             ->distinct(['category'])
             ->order(['category' => 'ASC']);
-        $cata = [];
-        foreach ( $catq as $c ) { $cata[] = $c->category; }
-        $cat = json_encode($cata);
+        $cat = json_encode($catq->extract('category'));
 
         $shows = [$show->id => $show->name];
         $this->set(compact('budget', 'shows', 'vend', 'cat'));
@@ -236,25 +217,20 @@ class BudgetsController extends AppController
             'contain' => []
         ]);
 
-        $this->loadModel('ShowUserPerms');
         $this->loadModel('Shows');
 
-        $show = $this->Shows->get($budget->show_id);
+        $show = $this->Shows->findById($budget->show_id)->first();
 
-        $perms = $this->ShowUserPerms->find()
-            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
-            ->where(['ShowUserPerms.show_id' => $budget->show_id])
-            ->select([
-                'user_id' => 'ShowUserPerms.user_id',
-                'show_id' => 'ShowUserPerms.show_id',
-                'access' => 'ShowUserPerms.is_budget'
-                ])
-            ->first();
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
 
-        if ( $perms->access < 1 ) {
+        if ( ! $this->UserPerm->checkShow($this->Auth->user('id'), $budget->show_id, 'is_budget') ) {
             $this->Flash->error(__('You do not have access to this show'));
             return $this->redirect(['action' => 'index']);
         }
+
         if ( $show->is_active < 1 ) {
             $this->Flash->error(__('Sorry, this show is now closed.'));
             return $this->redirect(['action' => 'index']);   
@@ -276,17 +252,13 @@ class BudgetsController extends AppController
             ->select(['vendor'])
             ->distinct(['vendor'])
             ->order(['vendor' => 'ASC']);
-        $venda = [];
-        foreach ( $vendq as $v ) { $venda[] = $v->vendor; }
-        $vend = json_encode($venda);
+        $vend = json_encode($vendq->extract('vendor'));
 
         $catq = $this->Budgets->find()
             ->select(['category'])
             ->distinct(['category'])
             ->order(['category' => 'ASC']);
-        $cata = [];
-        foreach ( $catq as $c ) { $cata[] = $c->category; }
-        $cat = json_encode($cata);
+        $cat = json_encode($catq->extract('category'));
 
         $shows = [$show->id => $show->name];
         $this->set(compact('budget', 'shows', 'cat', 'vend'));
@@ -305,25 +277,20 @@ class BudgetsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $budget = $this->Budgets->get($id);
 
-        $this->loadModel('ShowUserPerms');
         $this->loadModel('Shows');
 
-        $show = $this->Shows->get($budget->show_id);
+        $show = $this->Shows->findById($budget->show_id)->first();
 
-        $perms = $this->ShowUserPerms->find()
-            ->where(['ShowUserPerms.user_id' => $this->Auth->user('id')])
-            ->where(['ShowUserPerms.show_id' => $budget->show_id])
-            ->select([
-                'user_id' => 'ShowUserPerms.user_id',
-                'show_id' => 'ShowUserPerms.show_id',
-                'access' => 'ShowUserPerms.is_budget'
-                ])
-            ->first();
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
 
-        if ( $perms->access < 1 ) {
+        if ( ! $this->UserPerm->checkShow($this->Auth->user('id'), $budget->show_id, 'is_budget') ) {
             $this->Flash->error(__('You do not have access to this show'));
             return $this->redirect(['action' => 'index']);
         }
+
         if ( $show->is_active < 1 ) {
             $this->Flash->error(__('Sorry, this show is now closed.'));
             return $this->redirect(['action' => 'index']);   
