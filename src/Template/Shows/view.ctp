@@ -40,7 +40,7 @@
             <ul class="list-group">
             <li class="list-group-item label-info"><?= __("Budget Users") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
-                if ($showUserPerms->is_budget) { 
+                if ($showUserPerms->is_budget && $showUserPerms->user->is_active) { 
                     echo "<li class='list-group-item'>";
                     echo h($showUserPerms->user->last) . ", " . h($showUserPerms->user->first);
                     echo "</li>";
@@ -52,7 +52,7 @@
             <ul class="list-group">
             <li class="list-group-item label-danger"><?= __("Payroll Admins") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
-                if ($showUserPerms->is_pay_admin) { 
+                if ($showUserPerms->is_pay_admin && $showUserPerms->user->is_active) { 
                     echo "<li class='list-group-item'>";
                     echo h($showUserPerms->user->last) . ", " . h($showUserPerms->user->first);
                     echo "</li>";
@@ -64,7 +64,7 @@
             <ul class="list-group">
             <li class="list-group-item label-success"><?= __("Payroll Users") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
-                if ($showUserPerms->is_paid) { 
+                if ($showUserPerms->is_paid && $showUserPerms->user->is_active) { 
                     echo "<li class='list-group-item'>";
                     echo h($showUserPerms->user->last) . ", " . h($showUserPerms->user->first);
                     echo "</li>";
