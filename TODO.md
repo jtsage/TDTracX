@@ -6,7 +6,7 @@ Main Items:
 
 Desired features (highly likely):
  * cron e-mails
- * per user, accessible only to admin (STARTED)
+ * pay_rate: per user, accessible only to admin (STARTED)
 
 
 Maybe features (less likely, still thinking):

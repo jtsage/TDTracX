@@ -81,12 +81,9 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
 
     <?= $this->Flash->render() ?>
 
-    <?php
-
-    ?>
-    <div class="page-header">
+    <!-- <div class="page-header">
       <h2><?= $this->fetch('title') ?></h2>
-    </div>
+    </div> -->
 
     <?= $this->fetch('content') ?>
   

@@ -14,7 +14,7 @@
             ['escape' => false]
         ) ?>
     </h3>
-    <table class="table table-striped">
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th><?= __('Date') ?></th>

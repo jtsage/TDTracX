@@ -6,14 +6,14 @@
     ) ?>
 </h3>
 <div class="shows index large-10 medium-9 columns">
-    <table class="table table-striped">
+    <table class="table table-hover">
     <thead>
-        <tr>
+        <tr class="success">
             <th><?= $this->Paginator->sort('name') ?></th>
             <th><?= $this->Paginator->sort('location') ?></th>
             <th><?= $this->Paginator->sort('end_date') ?></th>
-            <th><?= $this->Paginator->sort('is_active') ?></th>
-            <th class="actions"><?= __('Actions') ?></th>
+            <th><?= $this->Paginator->sort('is_active', __('Is Open'), ['direction' => 'DESC']) ?></th>
+            <th class="text-center"><?= __('Actions') ?></th>
         </tr>
     </thead>
     <tbody>
@@ -24,7 +24,7 @@
             <td><?= $show->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'); ?></td>
             <td><?= $this->Bool->prefYes($show->is_active) ?></td>
             
-            <td class="actions">
+            <td class="text-center">
                 <?= $this->Html->link(
                     $this->Pretty->iconView($show->name),
                     ['action' => 'view', $show->id],

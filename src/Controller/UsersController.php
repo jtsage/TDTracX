@@ -26,6 +26,12 @@ class UsersController extends AppController
         if ( ! $this->Auth->user('is_admin')) {
             return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
         }
+        $this->paginate = [
+            'order' => [
+                'Users.last' => 'ASC',
+                'Users.first' => 'ASC'
+            ]
+        ];
         $this->set('users', $this->paginate($this->Users));
         $this->set('_serialize', ['users']);
         $this->set('tz', $this->Auth->user('time_zone'));

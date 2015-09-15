@@ -7,16 +7,15 @@
 </h3>
 
 <div class="users index large-10 medium-9 columns">
-    <table class="table table-striped">
+    <table class="table table-hover">
     <thead>
-        <tr>
+        <tr class="success">
             <th><?= $this->Paginator->sort('username', __("E-Mail")) ?></th>
-            <th><?= $this->Paginator->sort('first', __("First Name")) ?></th>
-            <th><?= $this->Paginator->sort('last', __("Last Name")) ?></th>
-            <th><?= $this->Paginator->sort('phone') ?></th>
+            <th><?= $this->Paginator->sort('last', __("Full Name")) ?></th>
+            <th><?= __('Phone Number') ?></th>
             <th><?= $this->Paginator->sort('is_active', __("Active User")) ?></th>
-            <th><?= $this->Paginator->sort('is_admin', __("Administrator")) ?></th>
-            <th><?= $this->Paginator->sort('last_login_at', __("Last Login")) ?></th>
+            <th><?= $this->Paginator->sort('is_admin', __("Administrator"), ['direction' => 'desc']) ?></th>
+            <th><?= $this->Paginator->sort('last_login_at', __("Last Login"), ['direction' => 'desc']) ?></th>
             <th class="text-center"><?= __('Actions') ?></th>
         </tr>
     </thead>
@@ -24,8 +23,7 @@
     <?php foreach ($users as $user): ?>
         <tr>
             <td><?= h($user->username) ?></td>
-            <td><?= h($user->first) ?></td>
-            <td><?= h($user->last) ?></td>
+            <td><?= h($user->first) . " " .  h($user->last) ?></td>
             <td><?= $this->Pretty->phone($user->phone) ?></td>
             <td><?= $this->Bool->prefYes($user->is_active) ?></td>
             <td><?= $this->Bool->prefNo($user->is_admin) ?></td>
