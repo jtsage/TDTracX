@@ -57,12 +57,22 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="/">Home</a></li>
-            <li><a href="/payrolls/">Payroll</a></li>
-            <li><a href="/budgets/">Budget</a></li>
-            <li><a href="/shows/">Shows</a></li>
-            <li><a href="/users/">Account</a></li>
-            <li class="active"><a href="/users/logout/">Logout</a></li>
+            <li<?= ($this->request->controller == 'Payrolls') ? " class='active'" : "" ?>><a href="/payrolls/">Payroll</a></li>
+            <li<?= ($this->request->controller == 'Budgets') ? " class='active'" : "" ?>><a href="/budgets/">Budget</a></li>
+            <li<?= ($this->request->controller == 'Shows') ? " class='active'" : "" ?>><a href="/shows/">Shows</a></li>
+            <li<?= ($this->request->controller == 'Users') ? " class='active'" : "" ?>><a href="/users/">Account</a></li>
+            <li><a href="/users/logout/">Logout</a></li>
+            <li><a id="helpme" href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true">&thinsp;Help</a></li>
           </ul>
+
+        <?php 
+        $user = $this->request->session()->read('Auth.User');
+
+        if( ! empty( $user ) ) 
+        {
+            echo '<p class="navbar-text navbar-right">Signed in: ' . $user['first'] . " " . $user['last'] . ' </p>';
+        } ?>
+
         </div><!--/.nav-collapse -->
       </div>
     </nav>
@@ -71,6 +81,9 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
 
     <?= $this->Flash->render() ?>
 
+    <?php
+
+    ?>
     <div class="page-header">
       <h2><?= $this->fetch('title') ?></h2>
     </div>
