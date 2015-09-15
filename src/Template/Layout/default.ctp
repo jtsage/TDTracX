@@ -62,7 +62,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
             <li<?= ($this->request->controller == 'Shows') ? " class='active'" : "" ?>><a href="/shows/">Shows</a></li>
             <li<?= ($this->request->controller == 'Users') ? " class='active'" : "" ?>><a href="/users/">Account</a></li>
             <li><a href="/users/logout/">Logout</a></li>
-            <li><a id="helpme" href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true">&thinsp;Help</a></li>
+            <li><a data-toggle="modal" data-target="#helpMe" href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true">&thinsp;Help</a></li>
           </ul>
 
         <?php 

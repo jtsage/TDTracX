@@ -52,5 +52,35 @@ class PrettyHelper extends Helper
         $outtie .= '</label></div>';
         return $outtie;
     }
+    public function helpMeStart($title = "") {
+        $outtie = <<<OUT
+<div class="modal fade" id="helpMe" tabindex="-1" role="dialog" aria-labelledby="helpMeLabel">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+<h4 class="modal-title" id="helpMeLabel">
+OUT;
+        $outtie .= $title;
+        $outtie .= <<<OUT
+</h4>
+</div>
+<div class="modal-body">
+OUT;
+        return $outtie;
+    }
+
+    public function helpMeEnd() {
+        $outtie = <<<OUT
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+OUT;
+        return $outtie;
+    }
 }
 ?>
