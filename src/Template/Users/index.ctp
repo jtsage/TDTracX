@@ -2,57 +2,63 @@
     <?= $this->Html->link(
         $this->Pretty->iconAdd(__("User")),
         ['action' => 'add'],
-        ['escape' => false]
+        ['escape' => false, 'class' => 'btn btn-success btn-sm']
     ) ?>
 </h3>
 
 <div class="users index large-10 medium-9 columns">
     <table class="table table-hover">
     <thead>
-        <tr class="success">
-            <th><?= $this->Paginator->sort('username', __("E-Mail")) ?></th>
-            <th><?= $this->Paginator->sort('last', __("Full Name")) ?></th>
-            <th><?= __('Phone Number') ?></th>
-            <th><?= $this->Paginator->sort('is_active', __("Active User")) ?></th>
-            <th><?= $this->Paginator->sort('is_admin', __("Administrator"), ['direction' => 'desc']) ?></th>
-            <th><?= $this->Paginator->sort('last_login_at', __("Last Login"), ['direction' => 'desc']) ?></th>
-            <th class="text-center"><?= __('Actions') ?></th>
-        </tr>
+        <?= $this->Html->tableHeaders([
+            $this->Paginator->sort('username', __("E-Mail")),
+            $this->Paginator->sort('last', __("Full Name")),
+            __('Phone Number'),
+            $this->Paginator->sort('is_active', __("Active User")),
+            $this->Paginator->sort('is_admin', __("Administrator"), ['direction' => 'desc']),
+            $this->Paginator->sort('last_login_at', __("Last Login"), ['direction' => 'desc']),
+            [__('Actions') => ['class' => 'text-center']]
+        ]); ?>
+
     </thead>
     <tbody>
-    <?php foreach ($users as $user): ?>
-        <tr>
-            <td><?= h($user->username) ?></td>
-            <td><?= h($user->first) . " " .  h($user->last) ?></td>
-            <td><?= $this->Pretty->phone($user->phone) ?></td>
-            <td><?= $this->Bool->prefYes($user->is_active) ?></td>
-            <td><?= $this->Bool->prefNo($user->is_admin) ?></td>
-            <td><?= $user->last_login_at->i18nFormat(null, $tz); ?></td>
-            <td class="text-center">
-                <?= $this->Html->link(
-                    $this->Pretty->iconView($user->username),
-                    ['action' => 'view', $user->id],
-                    ['escape' => false]
-                ) ?>
-                <?= $this->Html->link(
-                    $this->Pretty->iconLock($user->username),
-                    ['action' => 'changepass', $user->id],
-                    ['escape' => false]
-                ) ?>
-                <?= $this->Html->link(
-                    $this->Pretty->iconEdit($user->username),
-                    ['action' => 'edit', $user->id],
-                    ['escape' => false]
-                ) ?>
-                <?= $this->Form->postLink(
-                    $this->Pretty->iconDelete($user->username),
-                    ['action' => 'delete', $user->id],
-                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $user->id)]
-                ) ?>
-            </td>
-        </tr>
+    <?php foreach ($users as $user) {
+        echo $this->Html->tableCells([
+            [
+                h($user->username),
+                h($user->first) . " " .  h($user->last),
+                $this->Pretty->phone($user->phone),
+                $this->Bool->prefYes($user->is_active),
+                $this->Bool->prefNo($user->is_admin),
+                $user->last_login_at->i18nFormat(null, $tz),
+                [  
+                    '<div class="btn-group" role="group" aria-label="...">' .
+                    $this->Html->link(
+                        $this->Pretty->iconView($user->username),
+                        ['action' => 'view', $user->id],
+                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                    ) . 
+                    $this->Html->link(
+                        $this->Pretty->iconLock($user->username),
+                        ['action' => 'changepass', $user->id],
+                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                    ) .
+                    $this->Html->link(
+                        $this->Pretty->iconEdit($user->username),
+                        ['action' => 'edit', $user->id],
+                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                    ) .
+                    $this->Form->postLink(
+                        $this->Pretty->iconDelete($user->username),
+                        ['action' => 'delete', $user->id],
+                        ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn btn-danger btn-sm']
+                    ) .
+                    '</div>',
+                    ['class' => 'text-center']
+                ]
+            ]
+        ]);
+    } ?>
 
-    <?php endforeach; ?>
     </tbody>
     </table>
     <div class="paginator">
@@ -66,20 +72,22 @@
 </div>
 
 <?= $this->Pretty->helpMeStart('User List'); ?>
-<p>This system administrator only display shows users associated with this system. "Administrators" are users with super user privledges.  "Active" users can login and be assigned permission roles.</p>
-<p>Near the title, you will see one button:</p>
-<ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>Plus Button</strong>: Add a user to the system (admin only).</li>
-</ul>
-<p>For each user, you will see four buttons:</p>
-<ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <strong>Eye Button</strong>: View a detailed user record.</li>
+<p><?= _('This system administrator only display shows users associated with this system. "Administrators" are users with super user privledges.  "Active" users can login and be assigned permission roles.') ?></p>
+<p><?= _('Near the title, you will see one button:') ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('plus', 'success', _('Plus Button'), _('Add a user to the system'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
 
-    <li class="list-group-item"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <strong>Lock Button</strong>: Change the user's password.</li>
+<p><?= _('For each user, you will see four buttons:') ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('eye-open', 'default', _('Eye Button'), _('View a detailed user record')),
+        $this->Pretty->helpButton('lock', 'default', _('Lock Button'), _('Change the user\'s password')),
+        $this->Pretty->helpButton('pencil', 'default', _('Pencil Button'), _('Edit the user record')),
+        $this->Pretty->helpButton('trash', 'danger', _('Trash Button'), _('Permanantly remove the user from the system, and all historical data about them.  Very, very destructive - use with extream caution.'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
 
-    <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit the user.</li>
 
-    <li class="list-group-item"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <strong>Trash Button</strong>: Permanantly remove the user from the system, and all historical data about them.  Very, very destructive - use with extream caution (admin only).</li>
-    
-</ul>
+
 <?= $this->Pretty->helpMeEnd(); ?>

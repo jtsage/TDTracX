@@ -1,15 +1,17 @@
 <div class="users view large-10 medium-9 columns">
     <h3><?= h($user->first) . " " . h($user->last) ?>
+    <div class='btn-group'>
     <?= $this->Html->link(
         $this->Pretty->iconEdit($user->username),
         ['action' => 'edit', $user->id],
-        ['escape' => false]
+        ['escape' => false, 'class' => 'btn btn-default btn-sm']
     ) ?>
     <?= $this->Html->link(
         $this->Pretty->iconLock($user->username),
         ['action' => 'changepass', $user->id],
-        ['escape' => false]
+        ['escape' => false, 'class' => 'btn btn-default btn-sm']
     ) ?>
+    </div>
     </h3>
     <div class="row">
         <div class="col-md-4">
@@ -131,15 +133,17 @@
 
 
 <?= $this->Pretty->helpMeStart('View User Details'); ?>
-<p>This display shows details of the user record, along with the currently assigned permissions</p>
-<p>Near the user's full name, you will see two buttons:</p>
-<ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit the user.</li>
 
-    <li class="list-group-item"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> <strong>Lock Button</strong>: Change the user's password.</li>
-</ul>
-<h4>Permissions</h4>
-<p>These lists show the shows that the current user has permissions on. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.</p>
+<p><?= _('This display shows details of the user record, along with the currently assigned permissions') ?></p>
+<p><?= _('Near the user\'s full name, you will see two buttons:') ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('pencil', 'default', _('Pencil Button'), _('Edit the user')),
+        $this->Pretty->helpButton('lock', 'default', _('Lock Button'), _('Change the user\'s password'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
+
+<h4><?= _('Permissions') ?></h4>
+<p><?= _('These lists show the shows that the current user has permissions on. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.') ?></p>
 <ul class="list-group">
     <li class="list-group-item label-info">Budget User</li>
     <li class="list-group-item">Budget Users have the ability to add, edit, and delete budget items from the show.</li>
@@ -149,6 +153,6 @@
     <li class="list-group-item">Payroll users may add payroll items to the show.  They may edit or delete those payroll hours that have not yet been marked as "paid". Only payroll users appear on the payroll report for the show.</li>
 </ul>
 
-<h4>Messages</h4>
-<p>Finally, if there are any messages waiting for the user, they are shown at the bottom of this display, with a delete button.  At this time, there is very little internal messaging used, preferring e-mail to the internal system.</p>
+<h4><?= _('Messages') ?></h4>
+<p><?= _('Finally, if there are any messages waiting for the user, they are shown at the bottom of this display, with a delete button.  At this time, there is very little internal messaging used, preferring e-mail to the internal system.') ?></p>
 <?= $this->Pretty->helpMeEnd(); ?>

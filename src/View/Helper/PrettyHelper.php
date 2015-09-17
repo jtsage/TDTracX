@@ -15,39 +15,43 @@ class PrettyHelper extends Helper
     }
     public function iconEdit($name)
     {
-    	return "<span class='sr-only'>" . __('Edit') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Edit') . ": {$name}' class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
+    	return "<span class='sr-only'>" . __('Edit') . ": {$name}</span><span title='" . __('Edit') . ": {$name}' class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
     }
     public function iconMark($name)
     {
-        return "<span class='sr-only'>" . __('Mark') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Mark') . ": {$name}' class='glyphicon glyphicon-ok' aria-hidden='true'></span>";
+        return "<span class='sr-only'>" . __('Mark') . ": {$name}</span><span title='" . __('Mark') . ": {$name}' class='glyphicon glyphicon-ok' aria-hidden='true'></span>";
     }
     public function iconLock($name)
     {
-        return "<span class='sr-only'>" . __('Change Password') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Change Password') . ": {$name}' class='glyphicon glyphicon-lock' aria-hidden='true'></span>";
+        return "<span class='sr-only'>" . __('Change Password') . ": {$name}</span><span title='" . __('Change Password') . ": {$name}' class='glyphicon glyphicon-lock' aria-hidden='true'></span>";
     }
     public function iconView($name)
     {
-    	return "<span class='sr-only'>" . __('View') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('View') . ": {$name}' class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>";
+    	return "<span class='sr-only'>" . __('View') . ": {$name}</span><span title='" . __('View') . ": {$name}' class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>";
     }
     public function iconDelete($name)
     {
-    	return "<span class='sr-only'>" . __('Delete') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Delete') . ": {$name}' class='glyphicon glyphicon-trash' aria-hidden='true'></span>";
+    	return "<span class='sr-only'>" . __('Delete') . ": {$name}</span><span title='" . __('Delete') . ": {$name}' class='glyphicon glyphicon-trash' aria-hidden='true'></span>";
     }
     public function iconAdd($name)
     {
-        return "<span class='sr-only'>" . __('Add') . " {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Add') . " {$name}' class='glyphicon glyphicon-plus' aria-hidden='true'></span>";
+        return "<span class='sr-only'>" . __('Add') . " {$name}</span><span title='" . __('Add') . " {$name}' class='glyphicon glyphicon-plus' aria-hidden='true'></span>";
     }
     public function iconPerm($name)
     {
-        return "<span class='sr-only'>" . __('User Permissions') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('User Permissions') . ": {$name}' class='glyphicon glyphicon-user' aria-hidden='true'></span>";
+        return "<span class='sr-only'>" . __('User Permissions') . ": {$name}</span><span title='" . __('User Permissions') . ": {$name}' class='glyphicon glyphicon-user' aria-hidden='true'></span>";
     }
     public function iconDL($name)
     {
-        return "<span class='sr-only'>" . __('Download') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('Download') . ": {$name}' class='glyphicon glyphicon-download' aria-hidden='true'></span>";
+        return "<span class='sr-only'>" . __('Download') . ": {$name}</span><span title='" . __('Download') . ": {$name}' class='glyphicon glyphicon-download' aria-hidden='true'></span>";
     }
     public function iconUnpaid($name)
     {
-        return "<span class='sr-only'>" . __('View Unpaid') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('View Unpaid') . ": {$name}' class='glyphicon glyphicon-usd' aria-hidden='true'></span>";
+        return "<span class='sr-only'>" . __('View Unpaid') . ": {$name}</span><span title='" . __('View Unpaid') . ": {$name}' class='glyphicon glyphicon-usd' aria-hidden='true'></span>";
+    }
+    public function helpButton($icon, $color = 'default', $name, $desc) {
+        return '<a href="#" class="btn btn-' . $color . ' btn-sm"><span class="glyphicon glyphicon-' . $icon . '" aria-hidden="true"></span></a>' .
+        ' <strong>' . $name . '</strong>: ' . $desc;
     }
 
     public function clockPicker( $name, $label, $time=null ) {

@@ -22,11 +22,12 @@
 </div>
 
 <?= $this->Pretty->helpMeStart('Edit Your Account'); ?>
-<p>This display allows you to edit your account details.  To change your login e-mail, notification settings or access level, you must contact your system administrator.</p>
-<ul class="list-group">
-    <li class="list-group-item"><strong>First</strong>: Your first name</li>
-    <li class="list-group-item"><strong>Last</strong>: Your last name</li>
-    <li class="list-group-item"><strong>Phone</strong>: Your 10-digit phone number, no punctuation.</li>
-    <li class="list-group-item"><strong>Time Zone</strong>: Your time zone. Defaults to EST/EDT (USA).</li>
-</ul>
+<p><?= _('This display allows you to edit your account details.  To change your login e-mail, notification settings or access level, you must contact your system administrator.') ?></p>
+<?= $this->Html->nestedList([
+        "<strong>First Name</strong>: Your first name",
+        "<strong>Last Name</strong>: Your last name",
+        "<strong>Phone Number</strong>: Your 10-digit phone number, no punctuation.",
+        "<strong>Time Zone</strong>: Your time zone. Defaults to EST/EDT (USA)."
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
 <?= $this->Pretty->helpMeEnd(); ?>

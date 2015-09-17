@@ -29,12 +29,13 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
 
     <?= $this->Html->meta('icon') ?>
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="css/bootstrap-clockpicker.min.css" rel="stylesheet">
-    <link href="css/tdtracx.css" rel="stylesheet">
-    
+    <?php
+       echo $this->Html->css('bootstrap.min');
+       echo $this->Html->css('bootstrap-theme.min');
+       echo $this->Html->css('bootstrap-clockpicker.min');
+       echo $this->Html->css('tdtracx');
+    ?>
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -82,30 +83,26 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
 
     <?= $this->Flash->render() ?>
 
-    <!-- <div class="page-header">
-      <h2><?= $this->fetch('title') ?></h2>
-    </div> -->
-
     <?= $this->fetch('content') ?>
   
   </div>
   <footer style="padding-top: 20px; margin-top: 20px; border-top: 1px solid #e5e5e5;">
     <p class="text-center text-muted">TDTracX: the quick time and budget tracking tool</p>
-    <ul class="text-center list-inline text-muted">
-      <li>Currently v0.0.9</li>
-      <li>·</li>
-      <li><a href="https://github.com/jtsage/TDTracX">GitHub</a></li>
-      <li>·</li>
-      <li><a href="http://tdtrac.com/">Home Page</a></li>
-      <li>·</li>
-      <li><a href="http://demox.tdtrac.com">Demo Application</a></li>
-    </ul>
+    <?= $this->Html->nestedList([
+        'Currently v0.0.9', ' ',
+        '<a href="https://github.com/jtsage/TDTracX">GitHub</a>', ' ',
+        '<a href="http://tdtrac.com/">Home Page</a>', ' ',
+        '<a href="http://demox.tdtrac.com">Demo Application</a>'
+      ], ["class" => "text-center list-inline text-muted"]
+    ); ?>
   </footer>
-    
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap3-typeahead.min.js"></script>
-    <script src="js/bootstrap-clockpicker.min.js"></script>
+  
+  <?php
+    echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js');
+    echo $this->Html->script('bootstrap.min');
+    echo $this->Html->script('bootstrap3-typeahead.min');
+    echo $this->Html->script('bootstrap-clockpicker.min');
+  ?>
 
   <script type="text/javascript">
     $('.clockpicker').each(function() { 

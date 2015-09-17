@@ -25,14 +25,16 @@
 </div>
 
 <?= $this->Pretty->helpMeStart('Add User'); ?>
-<p>This display allows you to add a new user to the system.</p>
-<ul class="list-group">
-    <li class="list-group-item"><strong>E-Mail</strong>: User's e-mail address, used for login and notifications.</li>
-    <li class="list-group-item"><strong>Password</strong>: User's initial password.</li>
-    <li class="list-group-item"><strong>First</strong>: User's first name</li>
-    <li class="list-group-item"><strong>Last</strong>: User's last name</li>
-    <li class="list-group-item"><strong>Phone</strong>: User's 10-digit phone number, no punctuation.</li>
-    <li class="list-group-item"><strong>Pay Rate</strong>: User's Pay Rate.</li>
-    <li class="list-group-item"><strong>Time Zone</strong>: User's time zone. Defaults to EST/EDT (USA).</li>
-</ul>
+
+<p><?= _('This display allows you to add a new user in the system. This display is only available to system administrators.') ?></p>
+<?= $this->Html->nestedList([
+        "<strong>E-Mail Address</strong>: User's e-mail address, used for login and notifications.",
+        "<strong>Password</strong>: User's initial password.",
+        "<strong>First Name</strong>: User's first name",
+        "<strong>Last Name</strong>: User's last name",
+        "<strong>Phone Number</strong>: User's 10-digit phone number, no punctuation.",
+        "<strong>Pay Rate</strong>: User's Pay Rate.",
+        "<strong>Time Zone</strong>: User's time zone. Defaults to EST/EDT (USA).",
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
 <?= $this->Pretty->helpMeEnd(); ?>

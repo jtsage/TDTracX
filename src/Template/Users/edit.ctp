@@ -30,17 +30,18 @@
 </div>
 
 <?= $this->Pretty->helpMeStart('Edit User'); ?>
-<p>This display allows you to edit a user in the system. This display is only available to system administrators.</p>
-<ul class="list-group">
-    <li class="list-group-item"><strong>E-Mail</strong>: User's e-mail address, used for login and notifications.</li>
-    <li class="list-group-item"><strong>First</strong>: User's first name</li>
-    <li class="list-group-item"><strong>Last</strong>: User's last name</li>
-    <li class="list-group-item"><strong>Phone</strong>: User's 10-digit phone number, no punctuation.</li>
-    <li class="list-group-item"><strong>Pay Rate</strong>: User's Pay Rate.</li>
-    <li class="list-group-item"><strong>Time Zone</strong>: User's time zone. Defaults to EST/EDT (USA).</li>
-    <li class="list-group-item"><strong>Is Active</strong>: When checked, the user can login.</li>
-    <li class="list-group-item"><strong>Is Password Expired</strong>: When checked, the user will be reminded to change their password on login - but not forced.</li>
-    <li class="list-group-item"><strong>Is Notified</strong>: User is notified when a payroll admin adds hours for this user, and when automatic "payroll is due" e-mails are sent.</li>
-    <li class="list-group-item"><strong>Is Admin</strong>: User's is a system administrator. This grants addition tools, and the user will recieve automatic payroll reports.</li>
-</ul>
+<p><?= _('This display allows you to edit a user in the system. This display is only available to system administrators.') ?></p>
+<?= $this->Html->nestedList([
+        "<strong>E-Mail Address</strong>: User's e-mail address, used for login and notifications.",
+        "<strong>First Name</strong>: User's first name",
+        "<strong>Last Name</strong>: User's last name",
+        "<strong>Phone Number</strong>: User's 10-digit phone number, no punctuation.",
+        "<strong>Pay Rate</strong>: User's Pay Rate.",
+        "<strong>Time Zone</strong>: User's time zone. Defaults to EST/EDT (USA).",
+        "<strong>Is Active</strong>: When checked, the user can login.",
+        "<strong>Is Password Expired</strong>: When checked, the user will be reminded to change their password on login - but not forced.",
+        "<strong>Is Notified</strong>: User is notified when a payroll admin adds hours for this user, and when automatic \"payroll is due\" e-mails are sent.",
+        "<strong>Is Admin</strong>: User's is a system administrator. This grants addition tools, and the user will recieve automatic payroll reports."
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
 <?= $this->Pretty->helpMeEnd(); ?>
