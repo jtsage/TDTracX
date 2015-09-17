@@ -111,7 +111,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     $('.clockpicker').each(function() { 
       $(this).clockpicker({
         donetext: 'Done',
-        twelvehour: true,
+        twelvehour: false,
         autoclose: true,
         minutestep: 15
       });

@@ -50,6 +50,22 @@ class PrettyHelper extends Helper
         return "<span class='sr-only'>" . __('View Unpaid') . ": {$name}</span><span style='padding-left: 2px; padding-right: 2px; font-size: 16px' title='" . __('View Unpaid') . ": {$name}' class='glyphicon glyphicon-usd' aria-hidden='true'></span>";
     }
 
+    public function clockPicker( $name, $label, $time=null ) {
+
+        if ( !is_null($time) ) { 
+            $realtime = " value=\"" . $time . "\"";
+        } else {
+            $realtime = "";
+        }
+
+        $retty  = '<div class="form-group required">';
+        $retty .= '<label class="control-label" for="'. $name . '">' . $label . '</label>';
+        $retty .= '<div class="input-group clockpicker">';
+        $retty .= '<input type="text" name="' . $name . '" id="' . $name . '" class="form-control"' . $realtime . '>';
+        $retty .= '<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>';
+        $retty .= '</div></div>';
+        return $retty;
+    }
     public function onoff($name, $check=false)
     {
         $outtie  = '<div class="onoffswitch">';

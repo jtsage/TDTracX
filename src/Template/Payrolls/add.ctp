@@ -7,8 +7,10 @@
             echo $this->Form->input('user_id', ['options' => $users]);
             echo $this->Form->input('notes');
             echo $this->Form->input('date_worked');
-            echo $this->Form->input('start_time', ['interval' => 15, 'default' => '9:00:00', 'timeFormat' => 12]);
-            echo $this->Form->input('end_time', ['interval' => 15, 'default' => '16:00:00', 'timeFormat' => 12]);
+            echo $this->Pretty->clockPicker('start_time', 'Start Time', '9:00');
+            echo $this->Pretty->clockPicker('end_time', 'End Time',  '16:00');
+            //echo $this->Form->input('start_time', ['interval' => 15, 'default' => '9:00:00', 'timeFormat' => 12]);
+            //echo $this->Form->input('end_time', ['interval' => 15, 'default' => '16:00:00', 'timeFormat' => 12]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
