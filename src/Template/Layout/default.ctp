@@ -32,11 +32,8 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/bootstrap-clockpicker.min.css" rel="stylesheet">
     <link href="css/tdtracx.css" rel="stylesheet">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/bootstrap3-typeahead.min.js"></script>
     
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -105,6 +102,20 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     </ul>
   </footer>
     
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap3-typeahead.min.js"></script>
+    <script src="js/bootstrap-clockpicker.min.js"></script>
 
+  <script type="text/javascript">
+    $('.clockpicker').each(function() { 
+      $(this).clockpicker({
+        donetext: 'Done',
+        twelvehour: true,
+        autoclose: true,
+        minutestep: 15
+      });
+    });
+  </script>
   </body>
 </html>
