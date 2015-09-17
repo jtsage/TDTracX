@@ -1,21 +1,17 @@
 <div class="shows view large-10 medium-9 columns">
     <h3>
-        <?= h($show->name) . _(" Payroll Expenditure") ?>
-        <?= ( isset($show_add) && $show_add ) ? $this->Html->link(
-                $this->Pretty->iconAdd($show->name . " " . _("Payroll Item")),
-                ['action' => 'addtoshow', $show->id],
-                ['escape' => false]
-            ) : "" ?>
+        <?= h($user->first) . " " . h($user->last) . _("'s Payroll Expenditure") ?>
         <?= $this->Html->link(
-                $this->Pretty->iconDL($show->name . " " . _("Payroll Item")),
-                ['action' => 'viewbyshowcsv', $show->id],
-                ['escape' => false]);
-        ?>
-        <?= ( isset($show_add) && $show_add  ) ? 
-            $this->Form->postLink(
-                $this->Pretty->iconMark($show->name),
-                ['action' => 'markshowpaid', $show->id],
-                ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name)]) : "";
+                $this->Pretty->iconDL(
+                    $user->first . " " . $user->last . _('&#39;s Payroll Report')
+                ),
+                ['action' => 'viewbyusercsv', $user->id],
+                ['escape' => false]
+            ); ?>
+        <?= $this->Form->postLink(
+            $this->Pretty->iconMark($user->first . " " . $user->last),
+            ['action' => 'markuserpaid', $user->id],
+            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $user->first . " " . $user->last)]);
         ?>
     </h3>
 </div>
@@ -40,7 +36,7 @@
         $lastuser = "";
 
         foreach ( $payrolls as $item ) {
-            if ( $item->fullname <> $lastuser ) {
+            if ( $item->showname <> $lastuser ) {
                 if ( $subtotal > 0 ) {
                     echo "<tr class='success'><td colspan='4'><strong>";
                     echo __('User Sub-Total') . ": " . $lastuser;
@@ -49,10 +45,13 @@
                     echo "</td><td></td><td></td></tr>";    
                 }
                 echo "<tr class='info'><td colspan='7'><strong>";
-                echo __('User') . ": " . $item->fullname;
+                echo __('Show') . ": " . $item->showname;
+                if ( ! $item->activeshow ) {
+                    echo "<strong> [" . _('closed') . "]</strong>";
+                }
                 echo "</td></tr>";
                 $subtotal = 0;
-                $lastuser = $item->fullname;
+                $lastuser = $item->showname;
             }
 
             echo "<tr".(( !$item->is_paid ) ? " title='"._('Unpaid')."'":"")."><td>";
@@ -62,7 +61,7 @@
             echo "</td><td>" . $item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC');
             echo "</td><td class='text-right'>" . number_format($item->worked, 2);
             echo "</td><td class='text-center'>";
-            if ( isset($show_add) && $show_add && !$item->is_paid ) {
+            if ( !$item->is_paid ) {
                 echo $this->Form->postLink(
                     $this->Pretty->iconMark($item->notes),
                     ['action' => 'markpaid', $item->id],
@@ -71,25 +70,22 @@
             }
             echo $this->Bool->prefYes($item->is_paid);
             echo "</td><td class='text-center'>";
-            
-            if ( (isset($show_add) && $show_add) || !$item->is_paid ) {
-                echo $this->Html->link(
-                    $this->Pretty->iconEdit($item->notes),
-                    ['action' => 'edit', $item->id],
-                    ['escape' => false]);
+            echo $this->Html->link(
+                $this->Pretty->iconEdit($item->notes),
+                ['action' => 'edit', $item->id],
+                ['escape' => false]);
 
-                echo $this->Form->postLink(
-                    $this->Pretty->iconDelete($item->notes),
-                    ['action' => 'delete', $item->id],
-                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id)]);
-            }
+            echo $this->Form->postLink(
+                $this->Pretty->iconDelete($item->notes),
+                ['action' => 'delete', $item->id],
+                ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id)]);
             echo "</td></tr>";
 
             $subtotal += $item->worked;
             $total += $item->worked;
         }
         echo "<tr class='success'><td colspan='4'><strong>";
-        echo __('User Sub-Total') . ": " . $lastuser;
+        echo __('Show Sub-Total') . ": " . $lastuser;
         echo "</td><td class='text-right'>";
         echo number_format($subtotal,2);
         echo "</td><td></td><td></td></tr>";
@@ -105,17 +101,14 @@
 </table>
 
 
-<?= $this->Pretty->helpMeStart('View Show Payroll Report'); ?>
-<p>This display shows the payroll report for the specified show, broken down by user</p>
-<p>After the show name, you may see the following buttons: (<em>Note: only payroll admin's my add direct to a show or mark records as paid</em>)</p>
+<?= $this->Pretty->helpMeStart('View User Payroll Report'); ?>
+<p>This display shows the payroll report for the specified user, broken down by show</p>
+<p>After the user name, you will see the following button:</p>
 <ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>Plus Button</strong>: Add an payroll item to the show.</li>
-
     <li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> <strong>Download Button</strong>: Download a comma seperated (csv) file of the payroll report for offline printing or editing.</li>
 
-    <li class="list-group-item"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <strong>Check Button</strong>: Mark ALL this show's payroll records paid.</li>
+    <li class="list-group-item"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <strong>Check Button</strong>: Mark ALL this user's payroll records paid.</li>
 </ul>
-
 
 <p>For each entry, you may see these three buttons:</p>
 <ul class="list-group">
@@ -125,6 +118,5 @@
 
     <li class="list-group-item"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <strong>Trash Button</strong>: Remove the payroll record.</li>
 </ul>
-<p>Only payroll admin's may mark records paid.  Regular payroll users may only edit or delete payroll records that have not yet been marked paid.</p>
 
 <?= $this->Pretty->helpMeEnd(); ?>

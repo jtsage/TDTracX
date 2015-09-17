@@ -130,7 +130,7 @@ class BudgetsController extends AppController
         $csvdata = [];
         foreach ( $budgets as $item ) {
             $csvdata[] = [
-                $item->date,
+                $item->date->i18nFormat('EEE, MMM dd, yyyy', 'UTC'),
                 $show->name,
                 $item->category,
                 $item->vendor,
