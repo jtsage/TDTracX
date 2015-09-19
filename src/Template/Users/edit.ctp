@@ -18,11 +18,40 @@
             );
         ?>
         </div>
+        <label>Switches</label>
         <?php
-            echo $this->Form->input('is_active');
-            echo $this->Form->input('is_password_expired');
-            echo $this->Form->input('is_notified');
-            echo $this->Form->input('is_admin');
+            echo $this->Pretty->check('is_active', $user->is_active, [
+                'label-width' => '100',
+                'label-text' => 'Is Active',
+                'on-text' => 'YES',
+                'off-text' => 'NO',
+                'on-color' => 'success',
+                'off-color' => 'danger'
+            ]);
+            echo $this->Pretty->check('is_password_expired', $user->is_password_expired, [
+                'label-width' => '100',
+                'label-text' => 'Is Pass Expired',
+                'on-text' => 'YES',
+                'off-text' => 'NO',
+                'off-color' => 'success',
+                'on-color' => 'danger'
+            ]);
+            echo $this->Pretty->check('is_notified', $user->is_notified, [
+                'label-width' => '100',
+                'label-text' => 'Is Notified',
+                'on-text' => 'YES',
+                'off-text' => 'NO',
+                'on-color' => 'success',
+                'off-color' => 'danger'
+            ]);
+            echo $this->Pretty->check('is_admin', $user->is_admin, [
+                'label-width' => '100',
+                'label-text' => 'Is Admin',
+                'on-text' => 'YES',
+                'off-text' => 'NO',
+                'off-color' => 'success',
+                'on-color' => 'danger'
+            ]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

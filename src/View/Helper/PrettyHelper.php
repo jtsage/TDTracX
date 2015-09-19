@@ -80,35 +80,30 @@ class PrettyHelper extends Helper
         $outtie .= '</label></div>';
         return $outtie;
     }
-    public function helpMeStart($title = "") {
-        $outtie = <<<OUT
-<div class="modal fade" id="helpMe" tabindex="-1" role="dialog" aria-labelledby="helpMeLabel">
-<div class="modal-dialog" role="document">
-<div class="modal-content">
-<div class="modal-header">
-<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-<h4 class="modal-title" id="helpMeLabel">
-OUT;
-        $outtie .= $title;
-        $outtie .= <<<OUT
-</h4>
-</div>
-<div class="modal-body">
-OUT;
+    public function check($name, $check=false, $other, $size="normal") {
+        $outtie  = '<div class="form-group">';
+        $outtie .= '<input type="hidden" name="' . $name . '" value="0">';
+        $outtie .= '<input type="checkbox" name="' . $name . '" ';
+        $outtie .= 'class="bootcheck" data-size="' . $size . '" ';
+        $outtie .= "value='1' ";
+        $outtie .= ($check) ? "checked " : "";
+        if ( is_array($other) ) {
+            foreach ( $other as $key => $value ) {
+                $outtie .= "data-" . $key . '="' . $value . '" ';
+            }
+        }
+        $outtie .= '></div>';
         return $outtie;
+
+    }
+    public function helpMeStart($title = "") {
+        $outtie = '<div class="modal fade" id="helpMe" tabindex="-1" role="dialog" aria-labelledby="helpMeLabel"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="helpMeLabel">';
+        $outtie .= $title;
+        return $outtie . '</h4></div><div class="modal-body">';
     }
 
     public function helpMeEnd() {
-        $outtie = <<<OUT
-</div>
-<div class="modal-footer">
-<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-</div>
-</div>
-</div>
-</div>
-OUT;
-        return $outtie;
+        return '</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div>';
     }
 }
 ?>
