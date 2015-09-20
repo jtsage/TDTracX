@@ -57,6 +57,15 @@ class PrettyHelper extends Helper
         return '<a href="#" title="' . $title . '" class="btn btn-' . $color . ' ' . $class . ' btn-sm" id="' . $id . '"><span class="glyphicon glyphicon-' . $icon . '" aria-hidden="true"></span></a>';
     }
 
+    public function money($name, $label, $value=null) {
+
+        $retty  = '<div class="form-group required">';
+        $retty .= '<label class="control-label" for="' . $name . '">' . $label . '</label>';
+        $retty .= '<div class="input-group"><span class="input-group-addon">$</span>';
+        $retty .= '<input type="number" ' . ((!is_null($value)) ? "value='" . number_format($value,2) . "'" : "" ) . ' name="' . $name . '" required="required" step=".01" min="0" id="price" class="form-control">';
+        $retty .= "</div></div>";
+        return $retty;
+    }
     public function clockPicker( $name, $label, $time=null ) {
 
         if ( !is_null($time) ) { 
@@ -66,7 +75,7 @@ class PrettyHelper extends Helper
         }
 
         $retty  = '<div class="form-group required">';
-        $retty .= '<label class="control-label" for="'. $name . '">' . $label . '</label>';
+        $retty .= '<label class="control-label">' . $label . '</label>';
         $retty .= '<div class="input-group clockpicker">';
         $retty .= '<input type="text" name="' . $name . '" id="' . $name . '" class="form-control"' . $realtime . '>';
         $retty .= '<span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>';
@@ -88,7 +97,7 @@ class PrettyHelper extends Helper
         }
 
         $retty  = '<div class="form-group">';
-        $retty .= '<label class="control-label" for="'. $name . '">' . $label . '</label>';
+        $retty .= '<label class="control-label">' . $label . '</label>';
         $retty .= '<div class="input-group date datepicker" data-date="' . $realtime . '" data-date-format="MM d, yyyy" data-link-field="' . $name . '" data-link-format="yyyy-mm-dd">';
         $retty .= '<input class="form-control" size="16" type="text" value="' . $pretval . '" readonly>';
         $retty .= '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';

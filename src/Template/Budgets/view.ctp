@@ -2,27 +2,28 @@
 <div class="budgets view large-10 medium-9 columns">
     <h3>
         <?= h($show->name) ?>
-
+        <div class="btn-group">
         <?php if ( $opsok ) { echo $this->Html->link(
             $this->Pretty->iconAdd($show->name . " " . _("Budget Item")),
             ['action' => 'add', $show->id],
-            ['escape' => false]
+            ['escape' => false, 'class' => 'btn btn-success btn-sm']
         ); } ?>
         <?= $this->Html->link(
             $this->Pretty->iconDL($show->name . " " . _("Budget")),
             ['action' => 'viewcsv', $show->id],
-            ['escape' => false]
+            ['escape' => false, 'class' => 'btn btn-default btn-sm']
         ) ?>
+        </div>
     </h3>
     <table class="table table-striped table-bordered">
         <thead>
-            <tr>
-                <th><?= __('Date') ?></th>
-                <th><?= __('Vendor') ?></th>
-                <th><?= __('Description') ?></th>
-                <th class='text-right'><?= __('Price') ?></th>
-                <th class='text-center'><?= __('Actions') ?></th>
-            </tr>
+            <?= $this->Html->tableHeaders([
+                __('Date'),
+                __('Vendor'),
+                __('Description'),
+                [__('Price') => ['class' => 'text-right']],
+                [__('Actions') => ['class' => 'text-center']]
+            ]); ?>
         </thead>
         <tbody>
         <?php
@@ -33,64 +34,83 @@
             foreach ( $budgets as $item ) {
                 if ( $item->category <> $lastcat ) {
                     if ( $subtotal > 0 ) {
-                        echo "<tr class='success'><td colspan='3'><strong>";
-                        echo __('Category Sub-Total') . ": " . $lastcat;
-                        echo "</td><td class='text-right'>";
-                        echo $this->Number->currency($subtotal);
-                        echo "</td><td></td></tr>";    
+                        echo $this->Html->tableCells([
+                            [
+                                [ __('Category Sub-Total') . ": " . $lastcat , ['colspan' => 3]],
+                                [$this->Number->currency($subtotal), ['class' => 'text-right']],
+                                ""
+                            ]
+                        ], ['class' => 'success bold'], null, 1, false); 
                     }
-                    echo "<tr class='info'><td colspan='5'><strong>";
-                    echo __('Category') . ": " . $item->category;
-                    echo "</td></tr>";
+                    echo $this->Html->tableCells([
+                        [
+                            [ __('Category') . ": " . $item->category , ['colspan' => 5]]
+                        ]
+                    ], ['class' => 'info bold'], null, 1, false); 
+
                     $subtotal = 0;
                     $lastcat = $item->category;
                 }
-                echo "<tr><td>";
-                echo $item->date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC');
-                echo "</td><td>" . $item->vendor;
-                echo "</td><td>" . $item->description;
-                echo "</td><td class='text-right'>" . $this->Number->currency($item->price);
-                echo "</td><td class='text-center'>";
-                if ( $opsok ) {
-                    echo $this->Html->link(
-                        $this->Pretty->iconEdit($item->description),
-                        ['action' => 'edit', $item->id],
-                        ['escape' => false]);
 
-                    echo $this->Form->postLink(
-                        $this->Pretty->iconDelete($item->description),
-                        ['action' => 'delete', $item->id],
-                        ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id)]);
-                }
-                echo "</td></tr>";
+                echo $this->Html->tableCells([
+                    [
+                        $item->date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
+                        $item->vendor,
+                        $item->description,
+                        [ $this->Number->currency($item->price), ['class' => 'text-right']],
+                        [
+                            "<div class='btn-group'>" .
+                            ( ($opsok) ? $this->Html->link(
+                                $this->Pretty->iconEdit($item->description),
+                                ['action' => 'edit', $item->id],
+                                ['escape' => false, 'class' => 'btn btn-default btn-sm' ] )
+                            : "" ) .
+                            ( ($opsok) ? $this->Form->postLink(
+                                $this->Pretty->iconDelete($item->description),
+                                ['action' => 'delete', $item->id],
+                                ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id), 'class' => 'btn btn-danger btn-sm' ] )
+                            : "" ) .
+                            "</div>",
+                            ['class' => 'text-center']
+                        ]
+                    ]
+                ]);
 
                 $subtotal += $item->price;
                 $total += $item->price;
             }
-            echo "<tr class='success'><td colspan='3'><strong>";
-            echo __('Category Sub-Total') . ": " . $lastcat;
-            echo "</td><td class='text-right'>";
-            echo $this->Number->currency($subtotal);
-            echo "</td><td></td></tr>";
 
-            echo "<tr class='danger'><td colspan='3'><strong>";
-            echo __('Total Expenditure');
-            echo "</td><td class='text-right'>";
-            echo $this->Number->currency($total);
-            echo "</td><td></td></tr>";
+            echo $this->Html->tableCells([
+                [
+                    [ __('Category Sub-Total') . ": " . $lastcat , ['colspan' => 3]],
+                    [$this->Number->currency($subtotal), ['class' => 'text-right']],
+                    ""
+                ]
+            ], ['class' => 'success bold'], null, 1, false); 
+
+            echo $this->Html->tableCells([
+                [
+                    [ __('Total Expenditure'), ['colspan' => 3]],
+                    [$this->Number->currency($total), ['class' => 'text-right']],
+                    ""
+                ]
+            ], ['class' => 'danger bold'], null, 1, false); 
         ?>
         </tbody>
     </table>
 </div>
 
 <?= $this->Pretty->helpMeStart('View Detailed Budget'); ?>
-<p>This display shows detailed budget of the current show, broken down by budget category.</p>
-<p>Next to the show title, there are two buttons:</p>
-<ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>Plus Button</strong>: Add an expense to the show.</li>
-    <li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> <strong>Download Button</strong>: Download a comma seperated (csv) file of the budget for offline printing or editing.</li>
-</ul>
-<p>For each budget item, there are two buttoms:</p>
+<p><?= _("This display shows detailed budget of the current show, broken down by budget category.") ?></p>
+<p><?= _("Next to the show title, there are two buttons:") ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('plus', 'success', _('Plus Button'), _('Add an expenss to the show')),
+        $this->Pretty->helpButton('download', 'default', _('Download Button'), _('Download a CSV file for offline editing or printing'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
+
+
+<p><?= _("For each budget item, there are two buttoms:") ?></p>
 <ul class="list-group">
     <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit this budget expense.</li>
     <li class="list-group-item"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <strong>Trash Button</strong>: Permanantly remove this budget expense.</li>

@@ -6,16 +6,18 @@
     <div class="panel-heading">
         <h3 class="panel-title">
             <?= $show->name ?>
+            <div class="btn-group">
             <?= $this->Html->link(
                 $this->Pretty->iconView($show->name . " " . _("Budget")),
                 ['action' => 'view', $show->id],
-                ['escape' => false]
+                ['escape' => false, 'class' => 'btn btn-default btn-sm']
             ) ?>
             <?= $this->Html->link(
                 $this->Pretty->iconAdd($show->name . " " . _("Budget Item")),
                 ['action' => 'add', $show->id],
-                ['escape' => false]
+                ['escape' => false, 'class' => 'btn btn-success btn-sm']
             ) ?>
+            </div>
         </h3>
     </div>
     <div class="panel-body">
@@ -73,7 +75,7 @@
             <?= $this->Html->link(
                 $this->Pretty->iconView($show->name . " " . _("Budget")),
                 ['action' => 'view', $show->id],
-                ['escape' => false]
+                ['escape' => false, 'class' => 'btn btn-default btn-sm']
             ) ?>
         </h3>
     </div>
@@ -118,11 +120,12 @@
 <?php endforeach; ?>
 
 <?= $this->Pretty->helpMeStart('View Budgets'); ?>
-<p>This display shows the budgets of the shows you have access, along with the current expenditure broken down by budget category.</p>
-<p>For each show, you will see two buttons:</p>
-<ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>Plus Button</strong>: Add an expense to the show.</li>
-    <li class="list-group-item"><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span> <strong>Eye Button</strong>: View a detailed expense report.</li>
-</ul>
-<p>Additionally, if you are a system administrator, you can view the budgets from closed (inactive) shows.</p>
+<p><?= _("This display shows the budgets of the shows you have access, along with the current expenditure broken down by budget category.") ?></p>
+<p><?= _("For each show, you will see two buttons:") ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('eye-open', 'default', _('Person Button'), _('View detailed expense report for show')),
+        $this->Pretty->helpButton('plus', 'success', _('Plus Button'), _('Add Expense to show'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
+<p><?= _("Additionally, if you are a system administrator, you can view the budgets from closed (inactive) shows.") ?></p>
 <?= $this->Pretty->helpMeEnd(); ?>

@@ -66,7 +66,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
             <li<?= ($this->request->controller == 'Shows') ? " class='active'" : "" ?>><a href="/shows/">Shows</a></li>
             <li<?= ($this->request->controller == 'Users') ? " class='active'" : "" ?>><a href="/users/">Account</a></li>
             <li><a href="/users/logout/">Logout</a></li>
-            <li><a data-toggle="modal" data-target="#helpMe" href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true">&thinsp;Help</a></li>
+            <li><a data-toggle="modal" data-target="#helpMe" href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>&thinsp;Help</a></li>
           </ul>
 
         <?php 
@@ -93,6 +93,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
             echo "<li><a href='" . $crumb[0] . "'>" . $crumb[1] . "</a></li>";
           }
         }
+        echo '</ol>';
       }
     ?>
 
@@ -140,6 +141,8 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
         startView: 2,
         minView: 2,
         todayBtn: "linked",
+        pickerPosition: "bottom-left",
+        pickerReferer: "input"
       });
     });
     $('.toggleState').on('click', function() {
