@@ -1,7 +1,7 @@
 <h3>Login</h3>
 <?= $this->Form->create() ?>
-<?= $this->Form->input('username', ['label' => __("E-Mail Address")]) ?>
-<?= $this->Form->input('password') ?>
+<?= $this->Form->input('username', ['label' => __("E-Mail Address") ]) ?>
+<?= $this->Form->input('password', ['label' => __("Password") ]) ?>
 <?= $this->Form->button(__('Login'), ['class' => 'btn-default']) ?>
 <?= $this->Form->end() ?>
 

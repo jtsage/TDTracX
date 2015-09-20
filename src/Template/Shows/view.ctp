@@ -83,16 +83,16 @@
 
 
 <?= $this->Pretty->helpMeStart('View Show Details'); ?>
-<p><?= _("This display shows details of the show record, along with the currently assigned permissions"); ?></p>
-<p><?= _("Near the show title, you may see two buttons:"); ?></p>
+<p><?= __("This display shows details of the show record, along with the currently assigned permissions"); ?></p>
+<p><?= __("Near the show title, you may see two buttons:"); ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('pencil', 'default', _('Pencil Button'), _('Edit the show record (admin only)')),
-        $this->Pretty->helpButton('user', 'warning', _('Person Button'), _('Change the show permission lists (admin only)'))
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the show record (admin only)')),
+        $this->Pretty->helpButton('user', 'warning', __('Person Button'), __('Change the show permission lists (admin only)'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 
-<h4><?= _('Permissions') ?></h4>
-<p><?= _('These lists show the users that the current show has granted permission to. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.') ?></p>
+<h4><?= __('Permissions') ?></h4>
+<p><?= __('These lists show the users that the current show has granted permission to. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.') ?></p>
 <ul class="list-group">
     <li class="list-group-item label-info">Budget User</li>
     <li class="list-group-item">Budget Users have the ability to add, edit, and delete budget items from the show.</li>

@@ -24,9 +24,9 @@
     <?= $this->Form->end() ?>
 </div>
 
-<?= $this->Pretty->helpMeStart('Add User'); ?>
+<?= $this->Pretty->helpMeStart(__('Add User')); ?>
 
-<p><?= _('This display allows you to add a new user in the system. This display is only available to system administrators.') ?></p>
+<p><?= __('This display allows you to add a new user in the system. This display is only available to system administrators.') ?></p>
 <?= $this->Html->nestedList([
         "<strong>E-Mail Address</strong>: User's e-mail address, used for login and notifications.",
         "<strong>Password</strong>: User's initial password.",

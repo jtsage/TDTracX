@@ -137,13 +137,13 @@
 <p><?= _('This display shows details of the user record, along with the currently assigned permissions') ?></p>
 <p><?= _('Near the user\'s full name, you will see two buttons:') ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('pencil', 'default', _('Pencil Button'), _('Edit the user')),
-        $this->Pretty->helpButton('lock', 'default', _('Lock Button'), _('Change the user\'s password'))
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the user')),
+        $this->Pretty->helpButton('lock', 'default', __('Lock Button'), __('Change the user\'s password'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 
-<h4><?= _('Permissions') ?></h4>
-<p><?= _('These lists show the shows that the current user has permissions on. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.') ?></p>
+<h4><?= __('Permissions') ?></h4>
+<p><?= __('These lists show the shows that the current user has permissions on. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.') ?></p>
 <ul class="list-group">
     <li class="list-group-item label-info">Budget User</li>
     <li class="list-group-item">Budget Users have the ability to add, edit, and delete budget items from the show.</li>
@@ -153,6 +153,6 @@
     <li class="list-group-item">Payroll users may add payroll items to the show.  They may edit or delete those payroll hours that have not yet been marked as "paid". Only payroll users appear on the payroll report for the show.</li>
 </ul>
 
-<h4><?= _('Messages') ?></h4>
-<p><?= _('Finally, if there are any messages waiting for the user, they are shown at the bottom of this display, with a delete button.  At this time, there is very little internal messaging used, preferring e-mail to the internal system.') ?></p>
+<h4><?= __('Messages') ?></h4>
+<p><?= __('Finally, if there are any messages waiting for the user, they are shown at the bottom of this display, with a delete button.  At this time, there is very little internal messaging used, preferring e-mail to the internal system.') ?></p>
 <?= $this->Pretty->helpMeEnd(); ?>

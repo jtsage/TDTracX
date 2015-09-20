@@ -81,19 +81,19 @@
 </div>
 
 <?= $this->Pretty->helpMeStart('Show List'); ?>
-<p><?= _("This display shows the shows that you have access to."); ?></p>
-<p><?= _("Near the title, you may see one button:"); ?></p>
+<p><?= __("This display shows the shows that you have access to."); ?></p>
+<p><?= __("Near the title, you may see one button:"); ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('plus', 'success', _('Plus Button'), _('Add a show to the system (admin only)'))
+        $this->Pretty->helpButton('plus', 'success', __('Plus Button'), __('Add a show to the system (admin only)'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 
 <p><?= _("For each show, you may see up to four buttons:") ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('eye-open', 'default', _('Eye Button'), _('View a detailed show record')),
-        $this->Pretty->helpButton('pencil', 'default', _('Pencil Button'), _('Edit the show record')),
-        $this->Pretty->helpButton('user', 'warning', _('Person Button'), _('Change the show\'s permission sets')),
-        $this->Pretty->helpButton('trash', 'danger', _('Trash Button'), _('Permanantly remove the show from the system, and all historical data about it.  Very, very destructive - use with extream caution.'))
+        $this->Pretty->helpButton('eye-open', 'default', __('Eye Button'), __('View a detailed show record')),
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the show record')),
+        $this->Pretty->helpButton('user', 'warning', __('Person Button'), __('Change the show\'s permission sets')),
+        $this->Pretty->helpButton('trash', 'danger', __('Trash Button'), __('Permanantly remove the show from the system, and all historical data about it.  Very, very destructive - use with extream caution.'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 

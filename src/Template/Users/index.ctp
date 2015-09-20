@@ -71,20 +71,20 @@
     </div>
 </div>
 
-<?= $this->Pretty->helpMeStart('User List'); ?>
-<p><?= _('This system administrator only display shows users associated with this system. "Administrators" are users with super user privledges.  "Active" users can login and be assigned permission roles.') ?></p>
+<?= $this->Pretty->helpMeStart(__('User List')); ?>
+<p><?= __('This system administrator only display shows users associated with this system. "Administrators" are users with super user privledges.  "Active" users can login and be assigned permission roles.') ?></p>
 <p><?= _('Near the title, you will see one button:') ?></p>
 <?= $this->Html->nestedList([
         $this->Pretty->helpButton('plus', 'success', _('Plus Button'), _('Add a user to the system'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 
-<p><?= _('For each user, you will see four buttons:') ?></p>
+<p><?= __('For each user, you will see four buttons:') ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('eye-open', 'default', _('Eye Button'), _('View a detailed user record')),
-        $this->Pretty->helpButton('lock', 'default', _('Lock Button'), _('Change the user\'s password')),
-        $this->Pretty->helpButton('pencil', 'default', _('Pencil Button'), _('Edit the user record')),
-        $this->Pretty->helpButton('trash', 'danger', _('Trash Button'), _('Permanantly remove the user from the system, and all historical data about them.  Very, very destructive - use with extream caution.'))
+        $this->Pretty->helpButton('eye-open', 'default', __('Eye Button'), __('View a detailed user record')),
+        $this->Pretty->helpButton('lock', 'default', __('Lock Button'), __('Change the user\'s password')),
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the user record')),
+        $this->Pretty->helpButton('trash', 'danger', __('Trash Button'), __('Permanantly remove the user from the system, and all historical data about them.  Very, very destructive - use with extream caution.'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 

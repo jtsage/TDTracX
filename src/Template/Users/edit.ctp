@@ -59,7 +59,7 @@
 </div>
 
 <?= $this->Pretty->helpMeStart('Edit User'); ?>
-<p><?= _('This display allows you to edit a user in the system. This display is only available to system administrators.') ?></p>
+<p><?= __('This display allows you to edit a user in the system. This display is only available to system administrators.') ?></p>
 <?= $this->Html->nestedList([
         "<strong>E-Mail Address</strong>: User's e-mail address, used for login and notifications.",
         "<strong>First Name</strong>: User's first name",

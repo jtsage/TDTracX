@@ -21,8 +21,8 @@
     <?= $this->Form->end() ?>
 </div>
 
-<?= $this->Pretty->helpMeStart('Edit Your Account'); ?>
-<p><?= _('This display allows you to edit your account details.  To change your login e-mail, notification settings or access level, you must contact your system administrator.') ?></p>
+<?= $this->Pretty->helpMeStart(__('Edit Your Account')); ?>
+<p><?= __('This display allows you to edit your account details.  To change your login e-mail, notification settings or access level, you must contact your system administrator.') ?></p>
 <?= $this->Html->nestedList([
         "<strong>First Name</strong>: Your first name",
         "<strong>Last Name</strong>: Your last name",
