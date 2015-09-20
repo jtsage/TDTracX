@@ -83,6 +83,19 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
 
   <div class="container" role="main">
 
+    <?php 
+      if ( !empty($crumby) && is_array($crumby) ) {
+        echo '<ol class="breadcrumb">';
+        foreach ( $crumby as $crumb ) {
+          if ( is_null($crumb[0]) ) {
+            echo "<li class='active'>" . $crumb[1] . "</li>";
+          } else {
+            echo "<li><a href='" . $crumb[0] . "'>" . $crumb[1] . "</a></li>";
+          }
+        }
+      }
+    ?>
+
     <?= $this->Flash->render() ?>
 
     <?= $this->fetch('content') ?>

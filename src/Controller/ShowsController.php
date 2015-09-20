@@ -44,6 +44,11 @@ class ShowsController extends AppController
                 ->where(['id' => $plist], ['id' => 'integer[]']);
         }
 
+        $this->set('crumby', [
+            ["/", "Home"],
+            [null, "Show List"]
+        ]);
+
         $this->set('isAdmin', $this->Auth->user('is_admin'));
         $this->set('shows', $this->paginate($query));
         $this->set('_serialize', ['shows']);
@@ -84,6 +89,12 @@ class ShowsController extends AppController
                 return $this->redirect(['action' => 'index']);   
             }
         }
+
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/shows/", "Shows"],
+            [null, $show->name]
+        ]);
 
         $this->set('isAdmin', $this->Auth->user('is_admin'));
         $this->set('show', $show);
@@ -161,6 +172,13 @@ class ShowsController extends AppController
             }
         }
 
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/shows/", "Shows"],
+            ["/shows/view/" . $show->id, $show->name],
+            [null, "Edit Permissions"]
+        ]);
+
         $this->set('users', $users);
 
         $this->set('_serialize', ['show']);
@@ -193,6 +211,12 @@ class ShowsController extends AppController
                 $this->Flash->error(__('The show could not be saved. Please, try again.'));
             }
         }
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/shows/", "Shows"],
+            [null, "Add Show"]
+        ]);
+
         $this->set(compact('show'));
         $this->set('_serialize', ['show']);
     }
@@ -228,6 +252,14 @@ class ShowsController extends AppController
                 $this->Flash->error(__('The show could not be saved. Please, try again.'));
             }
         }
+        
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/shows/", "Shows"],
+            ["/shows/view/" . $show->id, $show->name],
+            [null, "Edit Show"]
+        ]);
+
         $this->set(compact('show'));
         $this->set('_serialize', ['show']);
     }
