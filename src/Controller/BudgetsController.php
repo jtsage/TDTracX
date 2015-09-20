@@ -51,7 +51,12 @@ class BudgetsController extends AppController
                 ->order(['end_date' => 'ASC']);
             $this->set('inactshows', $inactshows);
         }
-            
+
+        $this->set('crumby', [
+            ["/", "Home"],
+            [null, "Budget Lists"]
+        ]);
+
         $this->set('shows', $shows);
         $this->set('budget', $budget);
         $this->set('_serialize', ['budgets']);
@@ -94,6 +99,12 @@ class BudgetsController extends AppController
         $budgets = $this->Budgets->find('all')
             ->where(['show_id' => $id])
             ->order(['category' => 'ASC', 'date' => 'ASC']);
+
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/budgets/", "Budget Lists"],
+            [null, $show->name . " Budget"]
+        ]);
 
         $this->set('show', $show);
         $this->set('budgets', $budgets);
@@ -199,6 +210,13 @@ class BudgetsController extends AppController
             ->order(['category' => 'ASC']);
         $cat = json_encode($catq->extract('category'));
 
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/budgets/", "Budget Lists"],
+            ["/budgets/view/" . $show->id, $show->name . " Budget"],
+            [null, "Add Expense"]
+        ]);
+
         $shows = [$show->id => $show->name];
         $this->set(compact('budget', 'shows', 'vend', 'cat'));
         $this->set('_serialize', ['budget']);
@@ -259,6 +277,13 @@ class BudgetsController extends AppController
             ->distinct(['category'])
             ->order(['category' => 'ASC']);
         $cat = json_encode($catq->extract('category'));
+
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/budgets/", "Budget Lists"],
+            ["/budgets/view/" . $show->id, $show->name . " Budget"],
+            [null, "Edit Expense"]
+        ]);
 
         $shows = [$show->id => $show->name];
         $this->set(compact('budget', 'shows', 'cat', 'vend'));
