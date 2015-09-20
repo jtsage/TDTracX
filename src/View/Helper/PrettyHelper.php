@@ -70,6 +70,30 @@ class PrettyHelper extends Helper
         $retty .= '</div></div>';
         return $retty;
     }
+
+    public function datePicker( $name, $label, $time=null ) {
+
+        
+        if ( !is_null($time) ) { 
+            $realtime = $time->i18nFormat('YYYY-MM-dd') . "T00:00:00Z";
+            $val = $time->i18nFormat('YYYY-MM-dd');
+            $pretval = $time->i18nFormat('MMMM d, YYYY');
+        } else {
+            $realtime = date('Y-m-d') . "T00:00:00Z";
+            $val = date('Y-m-d');
+            $pretval = date('F d, Y');
+        }
+
+        $retty  = '<div class="form-group">';
+        $retty .= '<label class="control-label" for="'. $name . '">' . $label . '</label>';
+        $retty .= '<div class="input-group date datepicker" data-date="' . $realtime . '" data-date-format="MM d, yyyy" data-link-field="' . $name . '" data-link-format="yyyy-mm-dd">';
+        $retty .= '<input class="form-control" size="16" type="text" value="' . $pretval . '" readonly>';
+        $retty .= '<span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>';
+        $retty .= '</div><input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $val . '" /><br/></div>';
+
+        return $retty;
+    }
+
     public function onoff($name, $check=false)
     {
         $outtie  = '<div class="onoffswitch">';

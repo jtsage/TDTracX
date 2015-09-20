@@ -72,7 +72,7 @@ class ShowsTable extends Table
             ->notEmpty('location');
 
         $validator
-            ->add('end_date', 'valid', ['rule' => 'date'])
+            ->add('end_date', 'valid', ['rule' => ['date', 'ymd']])
             ->requirePresence('end_date', 'create')
             ->notEmpty('end_date');
 

@@ -34,6 +34,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
        echo $this->Html->css('bootstrap-theme.min');
        echo $this->Html->css('bootstrap-clockpicker.min');
        echo $this->Html->css('bootstrap-switch.min');
+       echo $this->Html->css('bootstrap-datetimepicker.min');
        echo $this->Html->css('tdtracx');
     ?>
 
@@ -103,7 +104,8 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     echo $this->Html->script('bootstrap.min');
     echo $this->Html->script('bootstrap3-typeahead.min');
     echo $this->Html->script('bootstrap-clockpicker.min');
-    echo $this->Html->script('bootstrap-switch.min')
+    echo $this->Html->script('bootstrap-switch.min');
+    echo $this->Html->script('bootstrap-datetimepicker.min');
   ?>
 
   <script type="text/javascript">
@@ -117,6 +119,15 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     });
     $(".bootcheck").each(function() {
       $(this).bootstrapSwitch();
+    });
+    $(".datepicker").each(function() {
+      $(this).datetimepicker({
+        autoclose: true,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        todayBtn: "linked",
+      });
     });
   </script>
   </body>

@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 /**
  * Shows Controller
@@ -178,6 +179,12 @@ class ShowsController extends AppController
         }
         $show = $this->Shows->newEntity();
         if ($this->request->is('post')) {
+            $time = Time::createFromFormat(
+                 'Y-m-d',
+                 $this->request->data['end_date'],
+                 'UTC'
+            );
+            $this->request->data['end_date'] = $time;
             $show = $this->Shows->patchEntity($show, $this->request->data);
             if ($this->Shows->save($show)) {
                 $this->Flash->success(__('The show has been saved.'));
@@ -207,6 +214,12 @@ class ShowsController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $time = Time::createFromFormat(
+                 'Y-m-d',
+                 $this->request->data['end_date'],
+                 'UTC'
+            );
+            $this->request->data['end_date'] = $time;
             $show = $this->Shows->patchEntity($show, $this->request->data);
             if ($this->Shows->save($show)) {
                 $this->Flash->success(__('The show has been saved.'));
