@@ -92,7 +92,7 @@
 ); ?>
 
 <h4><?= _('Permissions') ?></h4>
-<p><?= _('These lists show the shows that the current user has permissions on. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.') ?></p>
+<p><?= _('These lists show the users that the current show has granted permission to. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.') ?></p>
 <ul class="list-group">
     <li class="list-group-item label-info">Budget User</li>
     <li class="list-group-item">Budget Users have the ability to add, edit, and delete budget items from the show.</li>

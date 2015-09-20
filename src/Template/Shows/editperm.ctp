@@ -25,21 +25,106 @@
     <?= $this->Form->create($show) ?>
 
     <table class="table table-bordered">
-        <thead><tr>
-            <th><?= __("Full Name") ?></th>
-            <th class="info"><?= __("Budget User") ?></th>
-            <th class="danger"><?= __("Payroll Admin") ?></th>
-            <th class="success"><?= __("Payroll User") ?></th>
-        </tr></thead>
+        <thead>
+            <?= $this->Html->tableHeaders([
+                __("Full Name"),
+
+                [ __("Budget User") . ' ' . "<div class='btn-group'>" .
+                    $this->Pretty->jqButton(
+                        'ok',
+                        'default',
+                        'buserAllOn',
+                        'toggleState',
+                        'Toggle All YES' ) .
+                    $this->Pretty->jqButton(
+                        'remove',
+                        'default',
+                        'buserAllOff',
+                        'toggleState',
+                        'Toggle All NO' ) .
+                    "</div>"
+                    => ['class' => 'info text-center' ]
+                ],
+                
+                [ __("Payroll Admin") . ' ' . "<div class='btn-group'>" .
+                    $this->Pretty->jqButton(
+                        'ok',
+                        'default',
+                        'padminAllOn',
+                        'toggleState',
+                        'Toggle All YES' ) .
+                    $this->Pretty->jqButton(
+                        'remove',
+                        'default',
+                        'padminAllOff',
+                        'toggleState',
+                        'Toggle All NO' ) .
+                    "</div>"
+                    => ['class' => 'danger text-center' ]
+                ],
+
+                [ __("Payroll User") . ' ' . "<div class='btn-group'>" .
+                    $this->Pretty->jqButton(
+                        'ok',
+                        'default',
+                        'paidAllOn',
+                        'toggleState',
+                        'Toggle All YES' ) .
+                    $this->Pretty->jqButton(
+                        'remove',
+                        'default',
+                        'paidAllOff',
+                        'toggleState',
+                        'Toggle All NO' ) .
+                    "</div>"
+                    => ['class' => 'success text-center' ]
+                ],
+            ]); ?>
+        </thead>
         <tbody>
         <?php
             foreach ( $users as $user ) {
-                echo "<tr>";
-                echo "<td><input type='hidden' name='users[]' value='" . $user->id . "'>" . $user->first . " " . $user->last . "</td>";
-                echo "<td>" . $this->Pretty->onoff('budget[' . $user->id . ']', $user->perms['is_budget']) . "</td>";
-                echo "<td>" . $this->Pretty->onoff('padmin[' . $user->id . ']', $user->perms['is_pay_admin']) . "</td>";
-                echo "<td>" . $this->Pretty->onoff('paid[' . $user->id . ']', $user->perms['is_paid']) . "</td>";
-                echo "</tr>\n";
+                 echo $this->Html->tableCells([
+                    [
+                        "<input type='hidden' name='users[]' value='" . $user->id . "'>" . $user->first . " " . $user->last,
+                        [
+                            $this->Pretty->check(
+                                'budget[' . $user->id . ']',
+                                $user->perms['is_budget'],
+                                [
+                                    'on-text' => 'YES',
+                                    'off-text' => 'NO',
+                                    'on-color' => 'success',
+                                    'off-color' => 'danger'
+                                ]
+                            ), ['class' => 'text-center']
+                        ],
+                        [
+                            $this->Pretty->check(
+                                'padmin[' . $user->id . ']',
+                                $user->perms['is_pay_admin'],
+                                [
+                                    'on-text' => 'YES',
+                                    'off-text' => 'NO',
+                                    'on-color' => 'success',
+                                    'off-color' => 'danger'
+                                ]
+                            ), ['class' => 'text-center']
+                        ],
+                        [
+                            $this->Pretty->check(
+                                'paid[' . $user->id . ']',
+                                $user->perms['is_paid'],
+                                [
+                                    'on-text' => 'YES',
+                                    'off-text' => 'NO',
+                                    'on-color' => 'success',
+                                    'off-color' => 'danger'
+                                ]
+                            ), ['class' => 'text-center']
+                        ],
+                    ]
+                ]);
             }
         ?>
         </tbody>
@@ -53,6 +138,13 @@
 
 <?= $this->Pretty->helpMeStart('Edit Show Permissions'); ?>
 <p>This display allows you to edit the show's permissions for each active user.</p>
+<p><?= _("Near each permission type, you will see two buttons:"); ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('ok', 'default', _('Check Button'), _('Toggle this permission ON for all active users')),
+        $this->Pretty->helpButton('remove', 'default', _('X Button'), _('Toggle this permission OFF for all active users'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
+
 <ul class="list-group">
     <li class="list-group-item label-info">Budget User</li>
     <li class="list-group-item">Budget Users have the ability to add, edit, and delete budget items from the show.</li>

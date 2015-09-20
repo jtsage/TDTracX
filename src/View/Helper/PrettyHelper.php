@@ -53,6 +53,9 @@ class PrettyHelper extends Helper
         return '<a href="#" class="btn btn-' . $color . ' btn-sm"><span class="glyphicon glyphicon-' . $icon . '" aria-hidden="true"></span></a>' .
         ' <strong>' . $name . '</strong>: ' . $desc;
     }
+    public function jqButton($icon, $color = 'default', $id, $class="", $title="") {
+        return '<a href="#" title="' . $title . '" class="btn btn-' . $color . ' ' . $class . ' btn-sm" id="' . $id . '"><span class="glyphicon glyphicon-' . $icon . '" aria-hidden="true"></span></a>';
+    }
 
     public function clockPicker( $name, $label, $time=null ) {
 
@@ -94,17 +97,7 @@ class PrettyHelper extends Helper
         return $retty;
     }
 
-    public function onoff($name, $check=false)
-    {
-        $outtie  = '<div class="onoffswitch">';
-        $outtie .= '<input value="true" type="checkbox" name="' . $name . '" class="onoffswitch-checkbox" id="' . $name . '" ' . ($check?"checked":"") . '>';
-        $outtie .= '<label class="onoffswitch-label" for="' . $name . '">';
-        $outtie .= '<span class="onoffswitch-inner"></span>';
-        $outtie .= '<span class="onoffswitch-switch"></span>';
-        $outtie .= '</label></div>';
-        return $outtie;
-    }
-    public function check($name, $check=false, $other, $size="normal") {
+    public function check($name, $check=false, $other=null, $size="normal") {
         $outtie  = '<div class="form-group">';
         $outtie .= '<input type="hidden" name="' . $name . '" value="0">';
         $outtie .= '<input type="checkbox" name="' . $name . '" ';

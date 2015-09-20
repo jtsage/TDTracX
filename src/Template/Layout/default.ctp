@@ -129,6 +129,30 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
         todayBtn: "linked",
       });
     });
+    $('.toggleState').on('click', function() {
+      switch($(this).attr('id')) {
+        case 'buserAllOn' :
+          $('input[type="checkbox"][name^="budget"').bootstrapSwitch('state', true);
+          break;
+        case 'buserAllOff':
+          $('input[type="checkbox"][name^="budget"').bootstrapSwitch('state', false);
+          break;
+        case 'paidAllOn' :
+          $('input[type="checkbox"][name^="paid"').bootstrapSwitch('state', true);
+          break;
+        case 'paidAllOff':
+          $('input[type="checkbox"][name^="paid"').bootstrapSwitch('state', false);
+          break;
+        case 'padminAllOn' :
+          $('input[type="checkbox"][name^="padmin"').bootstrapSwitch('state', true);
+          break;
+        case 'padminAllOff':
+          $('input[type="checkbox"][name^="padmin"').bootstrapSwitch('state', false);
+          break;
+      }
+      return false;
+
+    });
   </script>
   </body>
 </html>
