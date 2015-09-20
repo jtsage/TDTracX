@@ -86,6 +86,11 @@ class PayrollsController extends AppController
 
         $this->set('showsPadmin', $showsPadmin);
         $this->set('payPadmin', $payPadmin);
+
+        $this->set('crumby', [
+            ["/", "Home"],
+            [null, "Payroll Lists"]
+        ]);
     }
 
     /**
