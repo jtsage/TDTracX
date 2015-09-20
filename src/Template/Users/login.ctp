@@ -2,7 +2,7 @@
 <?= $this->Form->create() ?>
 <?= $this->Form->input('username', ['label' => __("E-Mail Address")]) ?>
 <?= $this->Form->input('password') ?>
-<?= $this->Form->button('Login') ?>
+<?= $this->Form->button(__('Login'), ['class' => 'btn-default']) ?>
 <?= $this->Form->end() ?>
 
 <?= $this->Pretty->helpMeStart('Welcome to TDTracX'); ?>

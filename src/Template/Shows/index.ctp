@@ -19,7 +19,17 @@
         </tr>
     </thead>
     <tbody>
-    <?php foreach ($shows as $show) {
+    <?php 
+    $last_status = 1;
+    foreach ($shows as $show) {
+        if ( $show->is_active <> $last_status ) {
+            echo $this->Html->tableCells([
+                [  
+                    [ _('Closed Shows'), ['colspan' => '5', 'class' => 'text-center danger'] ]
+                ]
+            ], ['class' => 'bold'], null, 1, false);
+            $last_status = 0;
+        }
         echo $this->Html->tableCells([
             [
                 h($show->name),

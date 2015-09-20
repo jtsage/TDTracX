@@ -20,7 +20,7 @@
         ?>
         </div>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Add'), ['class' => 'btn-default']) ?>
     <?= $this->Form->end() ?>
 </div>
 

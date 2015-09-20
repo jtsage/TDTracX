@@ -7,7 +7,7 @@
         ?>
         <input type="hidden" name="is_password_expired" value="0">
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Change Password'), ['class' => 'btn-default']) ?>
     <?= $this->Form->end() ?>
 </div>
 

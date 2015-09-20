@@ -54,7 +54,7 @@
             ]);
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Save'), ['class' => 'btn-default']) ?>
     <?= $this->Form->end() ?>
 </div>
 

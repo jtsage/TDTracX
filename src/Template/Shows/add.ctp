@@ -8,7 +8,7 @@
             echo $this->Pretty->datePicker('end_date', 'End Date');
         ?>
     </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__('Add'), ['class' => 'btn-default']) ?>
     <?= $this->Form->end() ?>
 </div>
 
