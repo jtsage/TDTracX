@@ -6,7 +6,15 @@
             echo $this->Form->input('name');
             echo $this->Form->input('location');
             echo $this->Form->input('end_date');
-            echo $this->Form->input('is_active');
+            echo "<label>Switches</label>";
+            echo $this->Pretty->check('is_active', $show->is_active, [
+                'label-width' => '100',
+                'label-text' => 'Is Open',
+                'on-text' => 'YES',
+                'off-text' => 'NO',
+                'on-color' => 'success',
+                'off-color' => 'danger'
+            ]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

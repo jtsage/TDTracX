@@ -31,7 +31,7 @@
                 $this->Bool->prefNo($user->is_admin),
                 $user->last_login_at->i18nFormat(null, $tz),
                 [  
-                    '<div class="btn-group" role="group" aria-label="...">' .
+                    '<div class="btn-group" role="group">' .
                     $this->Html->link(
                         $this->Pretty->iconView($user->username),
                         ['action' => 'view', $user->id],

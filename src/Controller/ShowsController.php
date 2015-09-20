@@ -43,7 +43,7 @@ class ShowsController extends AppController
                 ->where(['id' => $plist], ['id' => 'integer[]']);
         }
 
-
+        $this->set('isAdmin', $this->Auth->user('is_admin'));
         $this->set('shows', $this->paginate($query));
         $this->set('_serialize', ['shows']);
     }
@@ -84,6 +84,7 @@ class ShowsController extends AppController
             }
         }
 
+        $this->set('isAdmin', $this->Auth->user('is_admin'));
         $this->set('show', $show);
         $this->set('_serialize', ['show']);
         $this->set('tz', $this->Auth->user('time_zone'));

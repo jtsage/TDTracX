@@ -1,16 +1,18 @@
 <div class="shows view large-10 medium-9 columns">
     <h3>
         <?= h($show->name) ?>
-        <?= $this->Html->link(
+        <div class="btn-group">
+        <?= ($isAdmin) ? $this->Html->link(
             $this->Pretty->iconEdit($show->name),
             ['action' => 'edit', $show->id],
-            ['escape' => false]
-        ) ?>
-        <?= $this->Html->link(
+            ['escape' => false, 'class' => 'btn btn-default btn-sm']
+        ) : "" ?>
+        <?= ($isAdmin) ? $this->Html->link(
             $this->Pretty->iconPerm($show->name),
             ['action' => 'editperm', $show->id],
-            ['escape' => false]
-        ) ?>
+            ['escape' => false, 'class' => 'btn btn-warning btn-sm']
+        ) : "" ?>
+        </div>
     </h3>
     <div class="row">
         <div class="col-md-6">
@@ -81,15 +83,16 @@
 
 
 <?= $this->Pretty->helpMeStart('View Show Details'); ?>
-<p>This display shows details of the show record, along with the currently assigned permissions</p>
-<p>Near the show's name, you will see two buttons:</p>
-<ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit the user.</li>
+<p><?= _("This display shows details of the show record, along with the currently assigned permissions"); ?></p>
+<p><?= _("Near the show title, you may see two buttons:"); ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('pencil', 'default', _('Pencil Button'), _('Edit the show record (admin only)')),
+        $this->Pretty->helpButton('user', 'warning', _('Person Button'), _('Change the show permission lists (admin only)'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
 
-    <li class="list-group-item"><span class="glyphicon glyphicon-user" aria-hidden="true"></span> <strong>Person Button</strong>: Change the show's permissions.</li>
-</ul>
-<h4>Permissions</h4>
-<p>These lists show the users that the current show has granted permissions to. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.</p>
+<h4><?= _('Permissions') ?></h4>
+<p><?= _('These lists show the shows that the current user has permissions on. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.') ?></p>
 <ul class="list-group">
     <li class="list-group-item label-info">Budget User</li>
     <li class="list-group-item">Budget Users have the ability to add, edit, and delete budget items from the show.</li>
