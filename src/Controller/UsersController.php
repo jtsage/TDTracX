@@ -32,6 +32,12 @@ class UsersController extends AppController
                 'Users.first' => 'ASC'
             ]
         ];
+
+        $this->set('crumby', [
+            ["/", "Home"],
+            [null, "User List"]
+        ]);
+
         $this->set('users', $this->paginate($this->Users));
         $this->set('_serialize', ['users']);
         $this->set('tz', $this->Auth->user('time_zone'));
@@ -97,6 +103,19 @@ class UsersController extends AppController
 
         if ( $this->Auth->user('is_admin')) { $this->set('showpay', true); }
 
+        if ( $this->Auth->user('is_admin')) {
+            $this->set('crumby', [
+                ["/", "Home"],
+                ["/users/", "Users"],
+                [null, "View User"]
+            ]);
+        } else {
+            $this->set('crumby', [
+                ["/", "Home"],
+                [null, "Your Profile"]
+            ]);
+        }
+
         $this->set('user', $user);
         $this->set('_serialize', ['user']);
         $this->set('tz', $this->Auth->user('time_zone'));
@@ -123,6 +142,11 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/users/", "Users"],
+            [null, "Add User"]
+        ]);
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
@@ -154,6 +178,12 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/users/", "Users"],
+            ["/users/view/" . $user->id, $user->first . " " . $user->last],
+            [null, "Edit User"]
+        ]);
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
@@ -178,6 +208,11 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/users/view/" . $user->id, "Your Profile"],
+            [null, "Edit Profile"]
+        ]);
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
@@ -199,6 +234,20 @@ class UsersController extends AppController
             } else {
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
+        }
+        if ( $this->Auth->user('is_admin') ) {
+            $this->set('crumby', [
+                ["/", "Home"],
+                ["/users/", "User List"],
+                ["/users/view/" . $user->id, $user->first . " " . $user->last],
+                [null, "Change Password"]
+            ]);
+        } else {
+            $this->set('crumby', [
+                ["/", "Home"],
+                ["/users/view/" . $user->id, "Your Profile"],
+                [null, "Change Your Password"]
+            ]);
         }
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
