@@ -186,9 +186,9 @@ class ShowsController extends AppController
             );
             $this->request->data['end_date'] = $time;
             $show = $this->Shows->patchEntity($show, $this->request->data);
-            if ($this->Shows->save($show)) {
-                $this->Flash->success(__('The show has been saved.'));
-                return $this->redirect(['action' => 'index']);
+            if ($result = $this->Shows->save($show)) {
+                $this->Flash->success(__('The show has been saved, please adjust permissions'));
+                return $this->redirect(['action' => 'editperm', $result->id]);
             } else {
                 $this->Flash->error(__('The show could not be saved. Please, try again.'));
             }
