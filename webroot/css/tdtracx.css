@@ -3,6 +3,9 @@
   color:red;
 }
 
+tr.bold td { font-weight: 700; }
+
+fieldset { margin-top: 20px; }
 select[name*="date"], select[name*="time"] { 
 	display: inline-block;
 	margin-left: 2px;
