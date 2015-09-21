@@ -4,65 +4,62 @@
 
 <div class="row">
 <?php $rowcount = 0; ?>
-<?php foreach ( $showsPaid as $item ): ?>
+
+<?php foreach ($showsPaid as $item): ?>
 <?php if ( $rowcount == 2 ) { echo "</div><div class='row'>"; $rowcount=0; } $rowcount++; ?>
 <div class="col-md-6">
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            <?= $item->name ?>
-            <div class="btn-group">
-                <?= 
-                $this->Html->link(
-                    $this->Pretty->iconView(__("Your Payroll for ") . $item->name),
-                    ['action' => 'viewbyshow', $item->id],
-                    ['escape' => false, 'class' => 'btn btn-default btn-sm']
-                ) .
-                $this->Html->link(
-                    $this->Pretty->iconAdd($item->name . " " . __("Payroll Item")),
-                    ['action' => 'addtoself', $item->id],
-                    ['escape' => false, 'class' => 'btn btn-success btn-sm']
-                ); ?>
-            </div>
-        </h3>
-    </div>
-    <div class="panel-body">
-        <?php
-            $worked_paid = 0;
-            $worked_owed = 0;
+    <?php
+        $worked_paid = 0;
+        $worked_owed = 0;
 
-            foreach ( $payPaid as $pitem ) {
-                if ( $pitem->show_id == $item->id ) {
-                    if ( $pitem->is_paid ) { 
-                        $worked_paid = $pitem->totalwork;
-                    } else {
-                        $worked_owed = $pitem->totalwork;
-                    }
+        foreach ( $payPaid as $pitem ) {
+            if ( $pitem->show_id == $item->id ) {
+                if ( $pitem->is_paid ) { 
+                    $worked_paid = $pitem->totalwork;
+                } else {
+                    $worked_owed = $pitem->totalwork;
                 }
             }
-        ?>
-        <p><?= __("{0}{2}{1} taking place at {0}{3}{1} and ending on {0}{4}{1}", [
-            "<strong>",
-            "</strong>",
-            $item->name,
-            $item->location,
-            $item->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC')
-        ]); ?></p>
-        <table class="table table-condensed">
-            <tbody>
-                <tr class="danger <?= ($worked_owed>0?"bold":"") ?>">
-                    <td><?= __("Your Owed Hours") ?></td>
-                    <td class='text-right'><?= number_format($worked_owed, 2) ?></td>
-                </tr>            
-                <tr class="success">
-                    <td><?= __("Your Paid Hours") ?></td>
-                    <td class='text-right'><?= number_format($worked_paid, 2) ?></td>
-                </tr>
-            </tbody>
-        </table>
-
+        }
+    ?>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-3">
+                    <i class="fa fa-bar-chart fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                    <div class="huge"><?= $item->name ?></div>
+                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1},", [
+                            "<strong>",
+                            "</strong>",
+                            $item->location,
+                            $item->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
+                        ]) . __(" with {0}{2}{1} outstanding payable hours, and {0}{3}{1} paid hours", [
+                            "<strong>",
+                            "</strong>",
+                            number_format($worked_owed, 2),
+                            number_format($worked_paid, 2)
+                        ]); ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="/payrolls/addtoself/<?= $item->id; ?>">
+            <div class="panel-footer">
+                <span class="pull-left"><?= __('Add Payroll Item'); ?></span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        </a>
+        <a href="/payrolls/viewbyshow/<?= $item->id; ?>">
+            <div class="panel-footer">
+                <span class="pull-left"><?= __('View Details'); ?></span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        </a>
     </div>
-</div>
 </div>
 <?php endforeach; ?>
 </div>
@@ -73,39 +70,90 @@
 
 <div class="row">
 <?php $rowcount = 0; ?>
-<?php foreach ( $showsPadmin as $item ): ?>
+
+<?php foreach ($showsPadmin as $item): ?>
 <?php if ( $rowcount == 2 ) { echo "</div><div class='row'>"; $rowcount=0; } $rowcount++; ?>
 <div class="col-md-6">
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">
-            <?= $item->name ?>
-            <div class="btn-group">
-            <?= 
-            $this->Html->link(
-                $this->Pretty->iconView($item->name . " " . __("Payroll")),
-                ['action' => 'viewbyshow', $item->id],
-                ['escape' => false, 'class' => 'btn btn-default btn-sm']
-            ) .
-            $this->Html->link(
-                $this->Pretty->iconUnpaid($item->name),
-                ['action' => 'unpaidbyshow', $item->id],
-                ['escape' => false, 'class' => 'btn btn-default btn-sm']
-            ) .
-            $this->Html->link(
-                $this->Pretty->iconAdd($item->name . " " . _("Payroll Item")),
-                ['action' => 'addtoshow', $item->id],
-                ['escape' => false, 'class' => 'btn btn-success btn-sm']
-            ); ?>
+    <?php
+        $worked_paid = 0;
+        $worked_owed = 0;
+
+        foreach ( $payPadmin as $pitem ) {
+            if ( $pitem->show_id == $item->id ) {
+                if ( $pitem->is_paid ) { 
+                    $worked_paid = $pitem->totalwork;
+                } else {
+                    $worked_owed = $pitem->totalwork;
+                }
+            }
+        }
+    ?>
+    <div class="panel panel-green">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-xs-3">
+                    <i class="fa fa-bar-chart fa-5x"></i>
+                </div>
+                <div class="col-xs-9 text-right">
+                    <div class="huge"><?= $item->name ?></div>
+                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1},", [
+                            "<strong>",
+                            "</strong>",
+                            $item->location,
+                            $item->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
+                        ]) . __(" with {0}{2}{1} outstanding payable hours, and {0}{3}{1} paid hours", [
+                            "<strong>",
+                            "</strong>",
+                            number_format($worked_owed, 2),
+                            number_format($worked_paid, 2)
+                        ]); ?>
+                    </div>
+                </div>
             </div>
-        </h3>
+        </div>
+        <a href="/payrolls/addtoshow/<?= $item->id; ?>">
+            <div class="panel-footer">
+                <span class="pull-left"><?= __('Add Payroll Item'); ?></span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        </a>
+        <a href="/payrolls/unpaidbyshow/<?= $item->id; ?>">
+            <div class="panel-footer">
+                <span class="pull-left"><?= __('View Unpaid Hours'); ?></span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        </a>
+        <a href="/payrolls/viewbyshow/<?= $item->id; ?>">
+            <div class="panel-footer">
+                <span class="pull-left"><?= __('View Details'); ?></span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        </a>
     </div>
-    <div class="panel-body">
+</div>
+<?php endforeach; ?>
+</div>
+
+
+
+<?php if ( isset($showsAdmin) && !empty($showsAdmin) ): ?>
+    <h3><?= __("Other Shows"); ?></h3>
+    <p><?= __("These are the other open shows in the system.") ?></p>
+
+    <div class="row">
+    <?php $rowcount = 0; ?>
+
+    <?php foreach ($showsAdmin as $item): ?>
+    <?php if ( $rowcount == 2 ) { echo "</div><div class='row'>"; $rowcount=0; } $rowcount++; ?>
+    <div class="col-md-6">
         <?php
             $worked_paid = 0;
             $worked_owed = 0;
 
-            foreach ( $payPadmin as $pitem ) {
+            foreach ( $payAdmin as $pitem ) {
                 if ( $pitem->show_id == $item->id ) {
                     if ( $pitem->is_paid ) { 
                         $worked_paid = $pitem->totalwork;
@@ -115,94 +163,44 @@
                 }
             }
         ?>
-        <p><?= __("{0}{2}{1} taking place at {0}{3}{1} and ending on {0}{4}{1}", [
-            "<strong>",
-            "</strong>",
-            $item->name,
-            $item->location,
-            $item->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC')
-        ]); ?></p>
-        <table class="table table-condensed">
-            <tbody>
-                <tr class="danger <?= ($worked_owed>0?"bold":"") ?>">
-                    <td><?= __("Total Owed Hours") ?></td>
-                    <td class='text-right'><?= number_format($worked_owed, 2) ?></td>
-                </tr>            
-                <tr class="success">
-                    <td><?= __("Total Paid Hours") ?></td>
-                    <td class='text-right'><?= number_format($worked_paid, 2) ?></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-</div>
-<?php endforeach; ?>
-</div>
-
-<?php if ( isset($showsAdmin) && !empty($showsAdmin) ): ?>
-    <h3><?= __("Other Shows"); ?></h3>
-    <p><?= __("These are the other open shows in the system.") ?></p>
-
-    <div class="row">
-    <?php $rowcount = 0; ?>
-    <?php foreach ( $showsAdmin as $item ): ?>
-    <?php if ( $rowcount == 2 ) { echo "</div><div class='row'>"; $rowcount=0; } $rowcount++; ?>
-    <div class="col-md-6">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h3 class="panel-title">
-                <?= $item->name ?>
-                <div class="btn-group">
-                <?= $this->Html->link(
-                    $this->Pretty->iconView($item->name . " " . __("Payroll")),
-                    ['action' => 'viewbyshow', $item->id],
-                    ['escape' => false, 'class' => 'btn btn-default btn-sm']
-                ) ?>
-                <?= $this->Html->link(
-                    $this->Pretty->iconUnpaid($item->name),
-                    ['action' => 'unpaidbyshow', $item->id],
-                    ['escape' => false, 'class' => 'btn btn-default btn-sm']
-                ) ?>
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-bar-chart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><?= $item->name ?></div>
+                        <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1},", [
+                                "<strong>",
+                                "</strong>",
+                                $item->location,
+                                $item->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
+                            ]) . __(" with {0}{2}{1} outstanding payable hours, and {0}{3}{1} paid hours", [
+                                "<strong>",
+                                "</strong>",
+                                number_format($worked_owed, 2),
+                                number_format($worked_paid, 2)
+                            ]); ?>
+                        </div>
+                    </div>
                 </div>
-            </h3>
+            </div>
+            <a href="/payrolls/unpaidbyshow/<?= $item->id; ?>">
+                <div class="panel-footer">
+                    <span class="pull-left"><?= __('View Unpaid Hours'); ?></span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <a href="/payrolls/viewbyshow/<?= $item->id; ?>">
+                <div class="panel-footer">
+                    <span class="pull-left"><?= __('View Details'); ?></span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
         </div>
-        <div class="panel-body">
-            <?php
-                $worked_paid = 0;
-                $worked_owed = 0;
-
-                foreach ( $payAdmin as $pitem ) {
-                    if ( $pitem->show_id == $item->id ) {
-                        if ( $pitem->is_paid ) { 
-                            $worked_paid = $pitem->totalwork;
-                        } else {
-                            $worked_owed = $pitem->totalwork;
-                        }
-                    }
-                }
-            ?>
-            <p><?= __("{0}{2}{1} taking place at {0}{3}{1} and ending on {0}{4}{1}", [
-                "<strong>",
-                "</strong>",
-                $item->name,
-                $item->location,
-                $item->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC')
-            ]); ?></p>
-            <table class="table table-condensed">
-                <tbody>
-                    <tr class="danger <?= ($worked_owed>0?"bold":"") ?>">
-                        <td><?= __("Total Owed Hours") ?></td>
-                        <td class='text-right'><?= number_format($worked_owed, 2) ?></td>
-                    </tr>            
-                    <tr class="success">
-                        <td><?= __("Total Paid Hours") ?></td>
-                        <td class='text-right'><?= number_format($worked_paid, 2) ?></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
     </div>
     <?php endforeach; ?>
     </div>

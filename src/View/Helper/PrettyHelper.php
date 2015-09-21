@@ -21,7 +21,7 @@ class PrettyHelper extends Helper
     }
     public function iconMark($name)
     {
-        return PrettyHelper::makeIcon($name, 'check-circle-o', __('Edit'));
+        return PrettyHelper::makeIcon($name, 'check-circle-o', __('Mark Paid'));
     }
     public function iconLock($name)
     {
@@ -119,7 +119,7 @@ class PrettyHelper extends Helper
         $outtie .= '></div>';
         return $outtie;
     }
-    
+
     public function helpMeStart($title = "") {
         $outtie = '<div class="modal fade" id="helpMe" tabindex="-1" role="dialog" aria-labelledby="helpMeLabel"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="helpMeLabel">';
         $outtie .= $title;
