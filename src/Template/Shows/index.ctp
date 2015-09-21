@@ -10,9 +10,9 @@
     <thead>
         <tr>
             <?= $this->Html->tableHeaders([
-                $this->Paginator->sort('name'),
-                $this->Paginator->sort('location'),
-                $this->Paginator->sort('end_date'),
+                $this->Paginator->sort('name', __("Name")),
+                $this->Paginator->sort('location', __("Location")),
+                $this->Paginator->sort('end_date', __("End Date")),
                 $this->Paginator->sort('is_active', __('Is Open'), ['direction' => 'DESC']),
                 [__('Actions') => ['class' => 'text-center']]
             ]); ?>
@@ -25,7 +25,7 @@
         if ( $show->is_active <> $last_status ) {
             echo $this->Html->tableCells([
                 [  
-                    [ _('Closed Shows'), ['colspan' => '5', 'class' => 'text-center danger'] ]
+                    [ __('Closed Shows'), ['colspan' => '5', 'class' => 'text-center danger'] ]
                 ]
             ], ['class' => 'bold'], null, 1, false);
             $last_status = 0;
@@ -80,7 +80,7 @@
     </div>
 </div>
 
-<?= $this->Pretty->helpMeStart('Show List'); ?>
+<?= $this->Pretty->helpMeStart(__('Show List')); ?>
 <p><?= __("This display shows the shows that you have access to."); ?></p>
 <p><?= __("Near the title, you may see one button:"); ?></p>
 <?= $this->Html->nestedList([

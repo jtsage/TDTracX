@@ -3,8 +3,8 @@
     <fieldset>
         <legend><?= __('Add Show') ?></legend>
         <?php
-            echo $this->Form->input('name', ['label' => __('Name'), 'data-minlength' => 15]);
-            echo $this->Form->input('location', ['label' => __('Location'), 'data-minlength' => 15]);
+            echo $this->Form->input('name', ['label' => __('Name'), 'data-minlength' => 5]);
+            echo $this->Form->input('location', ['label' => __('Location'), 'data-minlength' => 5]);
             echo $this->Pretty->datePicker('end_date', __('End Date'));
         ?>
     </fieldset>
@@ -12,12 +12,13 @@
     <?= $this->Form->end() ?>
 </div>
 
-<?= $this->Pretty->helpMeStart('Add Show'); ?>
+<?= $this->Pretty->helpMeStart(__('Add Show')); ?>
 <p><?= __("This display allows you to add a new show."); ?></p>
-<?= $this->Html->nestedList([
-        "<strong>Name</strong>: name of the show.",
-        "<strong>Location</strong>: Location of the show (informational).",
-        "<strong>End Date</strong>: End date of the show (informational only)."
-    ], ['class' => 'list-group'], ['class' => 'list-group-item']
-); ?>
+<table class="table table-condensed helptable">
+<?= $this->Html->tableCells([
+    [__("Name"),        __("Name of the show")],
+    [__("Location"),    __("Location of the show")],
+    [__("End Date"),    __("End date of the show")]
+]); ?>
+</table>
 <?= $this->Pretty->helpMeEnd(); ?>

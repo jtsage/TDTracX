@@ -7,7 +7,6 @@ use Cake\View\Helper;
 
 class PrettyHelper extends Helper
 {
-
     public function phone($value)
     {
         if ( $value  < 100000000 ) { return "n/a"; }
@@ -26,7 +25,7 @@ class PrettyHelper extends Helper
     }
     public function iconLock($name)
     {
-        return PrettyHelper::makeIcon($name, 'lock', __('CXhange Password'));
+        return PrettyHelper::makeIcon($name, 'lock', __('Change Password'));
     }
     public function iconView($name)
     {

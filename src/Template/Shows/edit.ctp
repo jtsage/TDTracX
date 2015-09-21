@@ -3,13 +3,13 @@
     <fieldset>
         <legend><?= __('Edit Show') ?></legend>
         <?php
-            echo $this->Form->input('name', ['label' => __('Name'), 'data-minlength' => 15]);
-            echo $this->Form->input('location', ['label' => __('Location'), 'data-minlength' => 15]);
+            echo $this->Form->input('name', ['label' => __('Name'), 'data-minlength' => 5]);
+            echo $this->Form->input('location', ['label' => __('Location'), 'data-minlength' => 5]);
             echo $this->Pretty->datePicker('end_date', __('End Date'),  $show->end_date);
-            echo "<label>Switches</label>";
+            echo "<label>" . __("Switches") . "</label>";
             echo $this->Pretty->check('is_active', $show->is_active, [
                 'label-width' => '100',
-                'label-text' => __('Is Open'),
+                'label-text' => __('Is Active'),
                 'on-text' => __('YES'),
                 'off-text' => __('NO'),
                 'on-color' => 'success',
@@ -23,11 +23,12 @@
 
 <?= $this->Pretty->helpMeStart(__('Edit Show')); ?>
 <p><?= __("This display allows you to edit an existing show."); ?></p>
-<?= $this->Html->nestedList([
-        "<strong>Name</strong>: name of the show.",
-        "<strong>Location</strong>: Location of the show (informational).",
-        "<strong>End Date</strong>: End date of the show (informational only).",
-        "<strong>Is Active</strong>: When checked, budget and payroll items may be added or modified for this show."
-    ], ['class' => 'list-group'], ['class' => 'list-group-item']
-); ?>
+<table class="table table-condensed helptable">
+<?= $this->Html->tableCells([
+    [__("Name"),        __("Name of the show")],
+    [__("Location"),    __("Location of the show")],
+    [__("End Date"),    __("End date of the show")],
+    [__("Is Active"),   __("When checked, budget and payroll items may be added or modified for this show")]
+]); ?>
+</table>
 <?= $this->Pretty->helpMeEnd(); ?>

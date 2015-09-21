@@ -169,7 +169,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
       }
       return false;
     });
-    $('input').each(function() {
+    $('input[type="text"]').each(function() {
       $(this).after($('<div class="help-block with-errors"></div>'));
     })
   </script>

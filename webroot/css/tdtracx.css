@@ -60,3 +60,7 @@ select[name*="date"], select[name*="time"] {
 .table-striped>tbody>tr:nth-of-type(odd) {
     background-color: rgb(235,235,235);
 }
+
+.helptable tr td:first-child {
+	font-weight: 700;
+}
