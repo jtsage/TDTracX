@@ -30,8 +30,8 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     <?= $this->Html->meta('icon') ?>
 
     <?php
-       echo $this->Html->css('bootstrap.min');
-       echo $this->Html->css('bootstrap-theme.min');
+       echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');
+       echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css');
        echo $this->Html->css('bootstrap-clockpicker.min');
        echo $this->Html->css('bootstrap-switch.min');
        echo $this->Html->css('bootstrap-datetimepicker.min');
@@ -115,7 +115,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
   
   <?php
     echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js');
-    echo $this->Html->script('bootstrap.min');
+    echo $this->Html->script('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js');
     echo $this->Html->script('bootstrap3-typeahead.min');
     echo $this->Html->script('bootstrap-clockpicker.min');
     echo $this->Html->script('bootstrap-switch.min');
