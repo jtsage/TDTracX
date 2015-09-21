@@ -129,7 +129,8 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
         donetext: 'Done',
         twelvehour: false,
         autoclose: true,
-        minutestep: 15
+        minutestep: 15,
+        placement: 'bottom'
       });
     });
     $(".bootcheck").each(function() {
@@ -142,8 +143,8 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
         startView: 2,
         minView: 2,
         todayBtn: "linked",
-        pickerPosition: "bottom-left",
-        pickerReferer: "input"
+        pickerPosition: "bottom-right",
+        fontAwesome: true
       });
     });
     $('.toggleState').on('click', function() {
@@ -171,6 +172,11 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     });
     $('input[type="text"]').each(function() {
       $(this).after($('<div class="help-block with-errors"></div>'));
+    })
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip({
+        container: 'body'
+      });
     })
   </script>
   </body>

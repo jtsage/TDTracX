@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\I18n\Time;
 
 /**
  * Budgets Controller
@@ -189,6 +190,12 @@ class BudgetsController extends AppController
 
         $budget = $this->Budgets->newEntity();
         if ($this->request->is('post')) {
+            $time = Time::createFromFormat(
+                 'Y-m-d',
+                 $this->request->data['date'],
+                 'UTC'
+            );
+            $this->request->data['date'] = $time;
             $budget = $this->Budgets->patchEntity($budget, $this->request->data);
             if ($this->Budgets->save($budget)) {
                 $this->Flash->success(__('The budget has been saved.'));
@@ -255,6 +262,12 @@ class BudgetsController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $time = Time::createFromFormat(
+                 'Y-m-d',
+                 $this->request->data['date'],
+                 'UTC'
+            );
+            $this->request->data['date'] = $time;
             $budget = $this->Budgets->patchEntity($budget, $this->request->data, [
                 'fieldList' => ['vendor', 'category', 'description', 'price', 'date']
             ]);

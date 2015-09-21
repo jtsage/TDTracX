@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
+
 /**
  * Payrolls Controller
  *
@@ -406,6 +407,12 @@ class PayrollsController extends AppController
 
         $payroll = $this->Payrolls->newEntity();
         if ($this->request->is('post')) {
+            $time = Time::createFromFormat(
+                 'Y-m-d',
+                 $this->request->data['date_worked'],
+                 'UTC'
+            );
+            $this->request->data['date_worked'] = $time;
             if ( ! $this->UserPerm->checkShow($this->request->data['user_id'], $id, 'is_paid') ) {
                 $this->Flash->error(__('That user cannot be paid on this show'));
                 return $this->redirect(['action' => 'index']);
@@ -455,6 +462,12 @@ class PayrollsController extends AppController
 
         $payroll = $this->Payrolls->newEntity();
         if ($this->request->is('post')) {
+            $time = Time::createFromFormat(
+                 'Y-m-d',
+                 $this->request->data['date_worked'],
+                 'UTC'
+            );
+            $this->request->data['date_worked'] = $time;
             $fixed_data = array_merge($this->request->data, ['show_id' => $show->id, 'user_id' => $this->Auth->user('id'), 'is_paid' => 0]);
             $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
             if ($this->Payrolls->save($payroll)) {
@@ -485,6 +498,12 @@ class PayrollsController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
+            $time = Time::createFromFormat(
+                 'Y-m-d',
+                 $this->request->data['date_worked'],
+                 'UTC'
+            );
+            $this->request->data['date_worked'] = $time;
             $payroll = $this->Payrolls->patchEntity($payroll, $this->request->data);
             if ($this->Payrolls->save($payroll)) {
                 $this->Flash->success(__('The payroll has been saved.'));
