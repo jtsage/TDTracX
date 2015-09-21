@@ -35,6 +35,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
        echo $this->Html->css('bootstrap-clockpicker.min');
        echo $this->Html->css('bootstrap-switch.min');
        echo $this->Html->css('bootstrap-datetimepicker.min');
+       echo $this->Html->css('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
        echo $this->Html->css('tdtracx');
     ?>
 
@@ -56,17 +57,16 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand">TDTrac<span style="color:#C3593C">X</span></a>
+          <a href="/" class="navbar-brand">TDTrac<span style="color:#C3593C">X</span></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
             <li<?= ($this->request->controller == 'Payrolls') ? " class='active'" : "" ?>><a href="/payrolls/">Payroll</a></li>
             <li<?= ($this->request->controller == 'Budgets') ? " class='active'" : "" ?>><a href="/budgets/">Budget</a></li>
             <li<?= ($this->request->controller == 'Shows') ? " class='active'" : "" ?>><a href="/shows/">Shows</a></li>
             <li<?= ($this->request->controller == 'Users') ? " class='active'" : "" ?>><a href="/users/">Account</a></li>
             <li><a href="/users/logout/">Logout</a></li>
-            <li><a data-toggle="modal" data-target="#helpMe" href="#"><span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>&thinsp;Help</a></li>
+            <li><a data-toggle="modal" data-target="#helpMe" href="#"><i class="fa fa-lg fa-fw fa-question-circle"></i>&thinsp;Help</a></li>
           </ul>
 
         <?php 

@@ -31,13 +31,13 @@
 
                 [ __("Budget User") . ' ' . "<div class='btn-group'>" .
                     $this->Pretty->jqButton(
-                        'ok',
+                        'toggle-on',
                         'default',
                         'buserAllOn',
                         'toggleState',
                         'Toggle All YES' ) .
                     $this->Pretty->jqButton(
-                        'remove',
+                        'toggle-off',
                         'default',
                         'buserAllOff',
                         'toggleState',
@@ -48,13 +48,13 @@
                 
                 [ __("Payroll Admin") . ' ' . "<div class='btn-group'>" .
                     $this->Pretty->jqButton(
-                        'ok',
+                        'toggle-on',
                         'default',
                         'padminAllOn',
                         'toggleState',
                         'Toggle All YES' ) .
                     $this->Pretty->jqButton(
-                        'remove',
+                        'toggle-off',
                         'default',
                         'padminAllOff',
                         'toggleState',
@@ -65,13 +65,13 @@
 
                 [ __("Payroll User") . ' ' . "<div class='btn-group'>" .
                     $this->Pretty->jqButton(
-                        'ok',
+                        'toggle-on',
                         'default',
                         'paidAllOn',
                         'toggleState',
                         'Toggle All YES' ) .
                     $this->Pretty->jqButton(
-                        'remove',
+                        'toggle-off',
                         'default',
                         'paidAllOff',
                         'toggleState',
@@ -140,8 +140,8 @@
 <p>This display allows you to edit the show's permissions for each active user.</p>
 <p><?= _("Near each permission type, you will see two buttons:"); ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('ok', 'default', _('Check Button'), _('Toggle this permission ON for all active users')),
-        $this->Pretty->helpButton('remove', 'default', _('X Button'), _('Toggle this permission OFF for all active users'))
+        $this->Pretty->helpButton('toggle-on', 'default', _('Toggle On Button'), _('Toggle this permission ON for all active users')),
+        $this->Pretty->helpButton('toggle-off', 'default', _('Toggle Off Button'), _('Toggle this permission OFF for all active users'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 

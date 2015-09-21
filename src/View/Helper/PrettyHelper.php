@@ -13,48 +13,51 @@ class PrettyHelper extends Helper
         if ( $value  < 100000000 ) { return "n/a"; }
         return substr($value, 0, 3) . "." . substr($value, 3, 3) . "." . substr($value, 6, 4);
     }
+    public function makeIcon($name, $icon, $text) {
+        return "<span class='sr-only'>{$text}: {$name}</span><i class='fa fa-lg fa-fw fa-{$icon}' title='{$text}: {$name}'></i></span>";
+    }
     public function iconEdit($name)
     {
-    	return "<span class='sr-only'>" . __('Edit') . ": {$name}</span><span title='" . __('Edit') . ": {$name}' class='glyphicon glyphicon-pencil' aria-hidden='true'></span>";
+        return PrettyHelper::makeIcon($name, 'pencil-square-o', __('Edit'));
     }
     public function iconMark($name)
     {
-        return "<span class='sr-only'>" . __('Mark') . ": {$name}</span><span title='" . __('Mark') . ": {$name}' class='glyphicon glyphicon-ok' aria-hidden='true'></span>";
+        return PrettyHelper::makeIcon($name, 'check-circle-o', __('Edit'));
     }
     public function iconLock($name)
     {
-        return "<span class='sr-only'>" . __('Change Password') . ": {$name}</span><span title='" . __('Change Password') . ": {$name}' class='glyphicon glyphicon-lock' aria-hidden='true'></span>";
+        return PrettyHelper::makeIcon($name, 'lock', __('CXhange Password'));
     }
     public function iconView($name)
     {
-    	return "<span class='sr-only'>" . __('View') . ": {$name}</span><span title='" . __('View') . ": {$name}' class='glyphicon glyphicon-eye-open' aria-hidden='true'></span>";
+        return PrettyHelper::makeIcon($name, 'eye', __('View'));
     }
     public function iconDelete($name)
     {
-    	return "<span class='sr-only'>" . __('Delete') . ": {$name}</span><span title='" . __('Delete') . ": {$name}' class='glyphicon glyphicon-trash' aria-hidden='true'></span>";
+        return PrettyHelper::makeIcon($name, 'trash', __('Delete'));
     }
     public function iconAdd($name)
     {
-        return "<span class='sr-only'>" . __('Add') . " {$name}</span><span title='" . __('Add') . " {$name}' class='glyphicon glyphicon-plus' aria-hidden='true'></span>";
+        return PrettyHelper::makeIcon($name, 'plus', __('Add'));
     }
     public function iconPerm($name)
     {
-        return "<span class='sr-only'>" . __('User Permissions') . ": {$name}</span><span title='" . __('User Permissions') . ": {$name}' class='glyphicon glyphicon-user' aria-hidden='true'></span>";
+        return PrettyHelper::makeIcon($name, 'cogs', __('User Permissions'));
     }
     public function iconDL($name)
     {
-        return "<span class='sr-only'>" . __('Download') . ": {$name}</span><span title='" . __('Download') . ": {$name}' class='glyphicon glyphicon-download' aria-hidden='true'></span>";
+        return PrettyHelper::makeIcon($name, 'cloud-download', __('Download'));
     }
     public function iconUnpaid($name)
     {
-        return "<span class='sr-only'>" . __('View Unpaid') . ": {$name}</span><span title='" . __('View Unpaid') . ": {$name}' class='glyphicon glyphicon-usd' aria-hidden='true'></span>";
+        return PrettyHelper::makeIcon($name, 'usd', __('View Unpaid'));
     }
     public function helpButton($icon, $color = 'default', $name, $desc) {
-        return '<a href="#" class="btn btn-' . $color . ' btn-sm"><span class="glyphicon glyphicon-' . $icon . '" aria-hidden="true"></span></a>' .
+        return '<a href="#" class="btn btn-' . $color . ' btn-sm"><i class="fa fa-fw fa-lg fa-' . $icon . '" aria-hidden="true"></i></a>' .
         ' <strong>' . $name . '</strong>: ' . $desc;
     }
     public function jqButton($icon, $color = 'default', $id, $class="", $title="") {
-        return '<a href="#" title="' . $title . '" class="btn btn-' . $color . ' ' . $class . ' btn-sm" id="' . $id . '"><span class="glyphicon glyphicon-' . $icon . '" aria-hidden="true"></span></a>';
+        return '<a href="#" title="' . $title . '" class="btn btn-' . $color . ' ' . $class . ' btn-sm" id="' . $id . '"><i class="fa fa-fw fa-lg fa-' . $icon . '" aria-hidden="true"></i></a>';
     }
 
     public function money($name, $label, $value=null) {
