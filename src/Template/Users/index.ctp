@@ -73,9 +73,9 @@
 
 <?= $this->Pretty->helpMeStart(__('User List')); ?>
 <p><?= __('This system administrator only display shows users associated with this system. "Administrators" are users with super user privledges.  "Active" users can login and be assigned permission roles.') ?></p>
-<p><?= _('Near the title, you will see one button:') ?></p>
+<p><?= __('Near the title, you will see one button:') ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('plus', 'success', _('Plus Button'), _('Add a user to the system'))
+        $this->Pretty->helpButton('plus', 'success', __('Plus Button'), __('Add a user to the system'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 
@@ -87,7 +87,5 @@
         $this->Pretty->helpButton('trash', 'danger', __('Trash Button'), __('Permanantly remove the user from the system, and all historical data about them.  Very, very destructive - use with extream caution.'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
-
-
 
 <?= $this->Pretty->helpMeEnd(); ?>

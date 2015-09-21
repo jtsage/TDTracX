@@ -132,26 +132,25 @@
 </div>
 
 
-<?= $this->Pretty->helpMeStart('View User Details'); ?>
+<?= $this->Pretty->helpMeStart(__('View User Details')); ?>
 
-<p><?= _('This display shows details of the user record, along with the currently assigned permissions') ?></p>
-<p><?= _('Near the user\'s full name, you will see two buttons:') ?></p>
+<p><?= __('This display shows details of the user record, along with the currently assigned permissions') ?></p>
+<p><?= __('Near the user\'s full name, you will see two buttons:') ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the user')),
+        $this->Pretty->helpButton('pencil-square-o', 'default', __('Pencil Button'), __('Edit the user')),
         $this->Pretty->helpButton('lock', 'default', __('Lock Button'), __('Change the user\'s password'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 
 <h4><?= __('Permissions') ?></h4>
 <p><?= __('These lists show the shows that the current user has permissions on. Permissions in TDTracX are on a per-show basis, granting permission on one show does not grant it on any other show.') ?></p>
-<ul class="list-group">
-    <li class="list-group-item label-info">Budget User</li>
-    <li class="list-group-item">Budget Users have the ability to add, edit, and delete budget items from the show.</li>
-    <li class="list-group-item label-danger">Payroll Admin</li>
-    <li class="list-group-item">Payroll admin's have the ability to add, edit, and delete payroll items for any "Payroll User" of the show.  Most useful for group supervisors that do not need full system administrator access.  Payroll admin's may also view the payroll report from the show. System administrators can not automatically add payroll items, although they may view any payroll report from any show.</li>
-    <li class="list-group-item label-success">Payroll  User</li>
-    <li class="list-group-item">Payroll users may add payroll items to the show.  They may edit or delete those payroll hours that have not yet been marked as "paid". Only payroll users appear on the payroll report for the show.</li>
-</ul>
+<table class="table table-condensed helptable">
+<?= $this->Html->tableCells([
+    [[__("Budget User"), ['class' => 'info']],          __("Budget Users have the ability to add, edit, and delete budget items from the show.")],
+    [[__("Payroll Admin"), ['class' => 'danger']],      __("Payroll admin's have the ability to add, edit, and delete payroll items for any \"Payroll User\" of the show.  Most useful for group supervisors that do not need full system administrator access.  Payroll admin's may also view the payroll report from the show. System administrators can not automatically add payroll items, although they may view any payroll report from any show.")],
+    [[__("Payroll User"), ['class' => 'success']],      __("Payroll users may add payroll items to the show.  They may edit or delete those payroll hours that have not yet been marked as \"paid\". Only payroll users appear on the payroll report for the show.")],
+]); ?>
+</table>
 
 <h4><?= __('Messages') ?></h4>
 <p><?= __('Finally, if there are any messages waiting for the user, they are shown at the bottom of this display, with a delete button.  At this time, there is very little internal messaging used, preferring e-mail to the internal system.') ?></p>

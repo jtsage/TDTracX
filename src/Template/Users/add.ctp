@@ -1,16 +1,16 @@
 <div class="users form large-10 medium-9 columns">
-    <?= $this->Form->create($user) ?>
+    <?= $this->Form->create($user, ['data-toggle' => 'validator', 'autocomplete' => 'off']) ?>
     <fieldset>
         <legend><?= __('Add User') ?></legend>
         <?php
             echo $this->Form->input('username', ['label' => __("E-Mail Address")]);
-            echo $this->Form->input('password');
+            echo $this->Form->input('password', ['label' => 'Password', 'data-minlength' => 6]);
             echo $this->Form->input('first', ['label' => __("First Name")]);
             echo $this->Form->input('last', ['label' => __("Last Name")]);
             echo $this->Form->input('phone', ['label' => __("Phone Number")]);
             echo $this->Form->input('pay_rate', ['label' => __("Pay Rate")]);
         ?>
-        <div class="form-group"><label class="control-label">Time Zone</label>
+        <div class="form-group"><label class="control-label"><?= __("Time Zone") ?></label>
         <?php
             echo $this->Form->select(
                 'time_zone',
@@ -27,14 +27,16 @@
 <?= $this->Pretty->helpMeStart(__('Add User')); ?>
 
 <p><?= __('This display allows you to add a new user in the system. This display is only available to system administrators.') ?></p>
-<?= $this->Html->nestedList([
-        "<strong>E-Mail Address</strong>: User's e-mail address, used for login and notifications.",
-        "<strong>Password</strong>: User's initial password.",
-        "<strong>First Name</strong>: User's first name",
-        "<strong>Last Name</strong>: User's last name",
-        "<strong>Phone Number</strong>: User's 10-digit phone number, no punctuation.",
-        "<strong>Pay Rate</strong>: User's Pay Rate.",
-        "<strong>Time Zone</strong>: User's time zone. Defaults to EST/EDT (USA).",
-    ], ['class' => 'list-group'], ['class' => 'list-group-item']
-); ?>
+<table class="table table-condensed helptable">
+<?= $this->Html->tableCells([
+    [__("E-Mail Address"),  __("User's e-mail address, used for login and notifications.")],
+    [__("Password"),        __("User's initial password.")],
+    [__("First Name"),      __("User's first name")],
+    [__("Last Name"),       __("User's last name")],
+    [__("Phone Number"),    __("User's 10-digit phone number, no punctuation.")],
+    [__("Pay Rate"),        __("User's Pay Rate.")],
+    [__("Time Zone"),       __("User's time zone. Defaults to EST/EDT (USA).")]
+]); ?>
+</table>
+
 <?= $this->Pretty->helpMeEnd(); ?>

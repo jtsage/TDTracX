@@ -1,5 +1,5 @@
 <div class="users form large-10 medium-9 columns">
-    <?= $this->Form->create($user) ?>
+    <?= $this->Form->create($user, ['data-toggle' => 'validator', 'autocomplete' => 'off']) ?>
     <fieldset>
         <legend><?= __('Edit User') ?></legend>
         <?php
@@ -9,7 +9,7 @@
             echo $this->Form->input('phone', ['label' => __("Phone Number")]);
             echo $this->Form->input('pay_rate', ['label' => __("Pay Rate")]);
         ?>
-        <div class="form-group"><label class="control-label">Time Zone</label>
+        <div class="form-group"><label class="control-label"><?= __("Time Zone") ?></label>
         <?php
             echo $this->Form->select(
                 'time_zone',
@@ -22,33 +22,33 @@
         <?php
             echo $this->Pretty->check('is_active', $user->is_active, [
                 'label-width' => '100',
-                'label-text' => 'Is Active',
-                'on-text' => 'YES',
-                'off-text' => 'NO',
+                'label-text' => __('Is Active'),
+                'on-text' => __('YES'),
+                'off-text' => __('NO'),
                 'on-color' => 'success',
                 'off-color' => 'danger'
             ]);
             echo $this->Pretty->check('is_password_expired', $user->is_password_expired, [
                 'label-width' => '100',
-                'label-text' => 'Is Pass Expired',
-                'on-text' => 'YES',
-                'off-text' => 'NO',
+                'label-text' => __('Is Pass Expired'),
+                'on-text' => __('YES'),
+                'off-text' => __('NO'),
                 'off-color' => 'success',
                 'on-color' => 'danger'
             ]);
             echo $this->Pretty->check('is_notified', $user->is_notified, [
                 'label-width' => '100',
-                'label-text' => 'Is Notified',
-                'on-text' => 'YES',
-                'off-text' => 'NO',
+                'label-text' => __('Is Notified'),
+                'on-text' => __('YES'),
+                'off-text' => __('NO'),
                 'on-color' => 'success',
                 'off-color' => 'danger'
             ]);
             echo $this->Pretty->check('is_admin', $user->is_admin, [
                 'label-width' => '100',
-                'label-text' => 'Is Admin',
-                'on-text' => 'YES',
-                'off-text' => 'NO',
+                'label-text' => __('Is Admin'),
+                'on-text' => __('YES'),
+                'off-text' => __('NO'),
                 'off-color' => 'success',
                 'on-color' => 'danger'
             ]);
@@ -58,19 +58,20 @@
     <?= $this->Form->end() ?>
 </div>
 
-<?= $this->Pretty->helpMeStart('Edit User'); ?>
+<?= $this->Pretty->helpMeStart(__('Edit User')); ?>
 <p><?= __('This display allows you to edit a user in the system. This display is only available to system administrators.') ?></p>
-<?= $this->Html->nestedList([
-        "<strong>E-Mail Address</strong>: User's e-mail address, used for login and notifications.",
-        "<strong>First Name</strong>: User's first name",
-        "<strong>Last Name</strong>: User's last name",
-        "<strong>Phone Number</strong>: User's 10-digit phone number, no punctuation.",
-        "<strong>Pay Rate</strong>: User's Pay Rate.",
-        "<strong>Time Zone</strong>: User's time zone. Defaults to EST/EDT (USA).",
-        "<strong>Is Active</strong>: When checked, the user can login.",
-        "<strong>Is Password Expired</strong>: When checked, the user will be reminded to change their password on login - but not forced.",
-        "<strong>Is Notified</strong>: User is notified when a payroll admin adds hours for this user, and when automatic \"payroll is due\" e-mails are sent.",
-        "<strong>Is Admin</strong>: User's is a system administrator. This grants addition tools, and the user will recieve automatic payroll reports."
-    ], ['class' => 'list-group'], ['class' => 'list-group-item']
-); ?>
+<table class="table table-condensed helptable">
+<?= $this->Html->tableCells([
+    [__("E-Mail Address"),  __("User's e-mail address, used for login and notifications.")],
+    [__("First Name"),      __("User's first name")],
+    [__("Last Name"),       __("User's last name")],
+    [__("Phone Number"),    __("User's 10-digit phone number, no punctuation.")],
+    [__("Pay Rate"),        __("User's Pay Rate.")],
+    [__("Time Zone"),       __("User's time zone. Defaults to EST/EDT (USA).")],
+    [__("Is Active"),       __("When checked, the user can login.")],
+    [__("Is Pass Expired"), __("When checked, the user will be reminded to change their password on login - but not forced.")],
+    [__("Is Notified"),     __("User is notified when a payroll admin adds hours for this user, and when automatic \"payroll is due\" e-mails are sent.")],
+    [__("Is Admin"),        __("User's is a system administrator. This grants addition tools, and the user will recieve automatic payroll reports.")]
+]); ?>
+</table>
 <?= $this->Pretty->helpMeEnd(); ?>

@@ -1,5 +1,5 @@
 <div class="users form large-10 medium-9 columns">
-    <?= $this->Form->create($user) ?>
+    <?= $this->Form->create($user, ['data-toggle' => 'validator', 'autocomplete' => 'off']) ?>
     <fieldset>
         <legend><?= __('Edit Your Account') ?>: <?= $user->username; ?></legend>
         <?php
@@ -7,7 +7,7 @@
             echo $this->Form->input('last', ['label' => __("Last Name")]);
             echo $this->Form->input('phone', ['label' => __("Phone Number")]);
         ?>
-        <div class="form-group"><label class="control-label">Time Zone</label>
+        <div class="form-group"><label class="control-label"><?= __("Time Zone") ?></label>
         <?php
             echo $this->Form->select(
                 'time_zone',
@@ -23,11 +23,12 @@
 
 <?= $this->Pretty->helpMeStart(__('Edit Your Account')); ?>
 <p><?= __('This display allows you to edit your account details.  To change your login e-mail, notification settings or access level, you must contact your system administrator.') ?></p>
-<?= $this->Html->nestedList([
-        "<strong>First Name</strong>: Your first name",
-        "<strong>Last Name</strong>: Your last name",
-        "<strong>Phone Number</strong>: Your 10-digit phone number, no punctuation.",
-        "<strong>Time Zone</strong>: Your time zone. Defaults to EST/EDT (USA)."
-    ], ['class' => 'list-group'], ['class' => 'list-group-item']
-); ?>
+<table class="table table-condensed helptable">
+<?= $this->Html->tableCells([
+    [__("First Name"),      __("User's first name")],
+    [__("Last Name"),       __("User's last name")],
+    [__("Phone Number"),    __("User's 10-digit phone number, no punctuation.")],
+    [__("Time Zone"),       __("User's time zone. Defaults to EST/EDT (USA).")]
+]); ?>
+</table>
 <?= $this->Pretty->helpMeEnd(); ?>
