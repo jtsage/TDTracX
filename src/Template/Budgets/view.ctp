@@ -4,12 +4,12 @@
         <?= h($show->name) ?>
         <div class="btn-group">
         <?php if ( $opsok ) { echo $this->Html->link(
-            $this->Pretty->iconAdd($show->name . " " . _("Budget Item")),
+            $this->Pretty->iconAdd($show->name . " " . __("Budget Item")),
             ['action' => 'add', $show->id],
             ['escape' => false, 'class' => 'btn btn-success btn-sm']
         ); } ?>
         <?= $this->Html->link(
-            $this->Pretty->iconDL($show->name . " " . _("Budget")),
+            $this->Pretty->iconDL($show->name . " " . __("Budget")),
             ['action' => 'viewcsv', $show->id],
             ['escape' => false, 'class' => 'btn btn-default btn-sm']
         ) ?>
@@ -100,19 +100,21 @@
     </table>
 </div>
 
-<?= $this->Pretty->helpMeStart('View Detailed Budget'); ?>
-<p><?= _("This display shows detailed budget of the current show, broken down by budget category.") ?></p>
-<p><?= _("Next to the show title, there are two buttons:") ?></p>
+<?= $this->Pretty->helpMeStart(__('View Detailed Budget')); ?>
+<p><?= __("This display shows detailed budget of the current show, broken down by budget category.") ?></p>
+<p><?= __("Next to the show title, there are two buttons:") ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('plus', 'success', _('Plus Button'), _('Add an expenss to the show')),
-        $this->Pretty->helpButton('download', 'default', _('Download Button'), _('Download a CSV file for offline editing or printing'))
+        $this->Pretty->helpButton('plus', 'success', __('Plus Button'), __('Add an expense to the show')),
+        $this->Pretty->helpButton('cloud-download', 'default', __('Download Button'), __('Download a CSV file for offline editing or printing'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 
 
-<p><?= _("For each budget item, there are two buttoms:") ?></p>
-<ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit this budget expense.</li>
-    <li class="list-group-item"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <strong>Trash Button</strong>: Permanantly remove this budget expense.</li>
-</ul>
+<p><?= __("For each budget item, there are two buttoms:") ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('pencil-square-o', 'default', __('Pencil Button'), __('Edit this budget expense')),
+        $this->Pretty->helpButton('trash', 'danger', __('Trash Button'), __('Remove this budget expense'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
+
 <?= $this->Pretty->helpMeEnd(); ?>
