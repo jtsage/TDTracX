@@ -1,10 +1,10 @@
 <div class="shows form large-10 medium-9 columns">
-    <?= $this->Form->create($show) ?>
+    <?= $this->Form->create($show, ['data-toggle' => 'validator']) ?>
     <fieldset>
         <legend><?= __('Edit Show') ?></legend>
         <?php
-            echo $this->Form->input('name', ['label' => __('Name')]);
-            echo $this->Form->input('location', ['label' => __('Location')]);
+            echo $this->Form->input('name', ['label' => __('Name'), 'data-minlength' => 15]);
+            echo $this->Form->input('location', ['label' => __('Location'), 'data-minlength' => 15]);
             echo $this->Pretty->datePicker('end_date', __('End Date'),  $show->end_date);
             echo "<label>Switches</label>";
             echo $this->Pretty->check('is_active', $show->is_active, [

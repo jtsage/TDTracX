@@ -120,6 +120,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     echo $this->Html->script('bootstrap-clockpicker.min');
     echo $this->Html->script('bootstrap-switch.min');
     echo $this->Html->script('bootstrap-datetimepicker.min');
+    echo $this->Html->script('validator.min');
   ?>
 
   <script type="text/javascript">
@@ -167,8 +168,10 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
           break;
       }
       return false;
-
     });
+    $('input').each(function() {
+      $(this).after($('<div class="help-block with-errors"></div>'));
+    })
   </script>
   </body>
 </html>
