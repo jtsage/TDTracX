@@ -60,7 +60,6 @@ class PrettyHelper extends Helper
     }
 
     public function money($name, $label, $value=null) {
-
         $retty  = '<div class="form-group required">';
         $retty .= '<label class="control-label" for="' . $name . '">' . $label . '</label>';
         $retty .= '<div class="input-group"><span class="input-group-addon">$</span>';
@@ -68,8 +67,8 @@ class PrettyHelper extends Helper
         $retty .= "</div></div>";
         return $retty;
     }
-    public function clockPicker( $name, $label, $time=null ) {
 
+    public function clockPicker( $name, $label, $time=null ) {
         if ( !is_null($time) ) { 
             $realtime = " value=\"" . $time . "\"";
         } else {
@@ -102,7 +101,6 @@ class PrettyHelper extends Helper
         $retty .= '<span class="input-group-addon"><i class="fa fa-calendar"></i></span>';
         $retty .= '<input class="form-control" size="16" type="text" value="' . $pretval . '" readonly>';
         $retty .= '</div><input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $val . '" /></div>';
-
         return $retty;
     }
 
@@ -120,8 +118,8 @@ class PrettyHelper extends Helper
         }
         $outtie .= '></div>';
         return $outtie;
-
     }
+    
     public function helpMeStart($title = "") {
         $outtie = '<div class="modal fade" id="helpMe" tabindex="-1" role="dialog" aria-labelledby="helpMeLabel"><div class="modal-dialog" role="document"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="helpMeLabel">';
         $outtie .= $title;

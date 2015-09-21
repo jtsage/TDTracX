@@ -129,7 +129,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
         donetext: 'Done',
         twelvehour: false,
         autoclose: true,
-        minutestep: 15,
+        minutestep: 5,
         placement: 'bottom'
       });
     });
