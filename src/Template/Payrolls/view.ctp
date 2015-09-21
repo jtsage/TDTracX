@@ -1,36 +1,38 @@
 <div class="shows view large-10 medium-9 columns">
     <h3>
         <?= h($show->name) . _(" Payroll Expenditure") ?>
+        <div class='btn-group'>
         <?= ( isset($show_add) && $show_add ) ? $this->Html->link(
                 $this->Pretty->iconAdd($show->name . " " . _("Payroll Item")),
                 ['action' => 'addtoshow', $show->id],
-                ['escape' => false]
+                ['escape' => false, 'class' => 'btn btn-success btn-sm']
             ) : "" ?>
-        <?= $this->Html->link(
-                $this->Pretty->iconDL($show->name . " " . _("Payroll Item")),
-                ['action' => 'viewbyshowcsv', $show->id],
-                ['escape' => false]);
-        ?>
         <?= ( isset($show_add) && $show_add  ) ? 
             $this->Form->postLink(
                 $this->Pretty->iconMark($show->name),
                 ['action' => 'markshowpaid', $show->id],
-                ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name)]) : "";
+                ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm']) : "";
         ?>
+        <?= $this->Html->link(
+                $this->Pretty->iconDL($show->name . " " . _("Payroll Item")),
+                ['action' => 'viewbyshowcsv', $show->id],
+                ['escape' => false, 'class' => 'btn btn-default btn-sm']);
+        ?>
+        </div>
     </h3>
 </div>
 
 <table class="table table-striped table-bordered">
     <thead>
-        <tr>
-            <th><?= _("Date Worked") ?></th>
-            <th><?= _("Note") ?></th>
-            <th><?= _("Start Time") ?></th>
-            <th><?= _("End Time") ?></th>
-            <th class="text-right"><?= _("Hours Worked") ?></th>
-            <th class="text-center"><?= _("Is Paid?") ?></th>
-            <th class="text-center"><?= _("Actions") ?></th>
-        </tr>
+        <?= $this->Html->tableHeaders([
+            __("Date Worked"),
+            __("Note"),
+            [__("Start Time") => ['class' => 'text-right']],
+            [__("End Time") => ['class' => 'text-right']],
+            [__("Hours Worked") => ['class' => 'text-right']],
+            [__("Is Paid?") => ['class' => 'text-center']],
+            [__("Actions") => ['class' => 'text-center']]
+        ]); ?>
     </thead>
     <tbody>
         <?php 
@@ -42,63 +44,75 @@
         foreach ( $payrolls as $item ) {
             if ( $item->fullname <> $lastuser ) {
                 if ( $subtotal > 0 ) {
-                    echo "<tr class='success'><td colspan='4'><strong>";
-                    echo __('User Sub-Total') . ": " . $lastuser;
-                    echo "</td><td class='text-right'>";
-                    echo number_format($subtotal,2);
-                    echo "</td><td></td><td></td></tr>";    
+                    echo $this->Html->tableCells([
+                        [
+                            [ __('User Sub-Total') . ": " . $lastuser , ['colspan' => 4]],
+                            [number_format($subtotal,2), ['class' => 'text-right']],
+                            [ "", ['colspan' => 2]]
+                        ]
+                    ], ['class' => 'success bold'], null, 1, false);  
                 }
-                echo "<tr class='info'><td colspan='7'><strong>";
-                echo __('User') . ": " . $item->fullname;
-                echo "</td></tr>";
+                echo $this->Html->tableCells([
+                    [
+                        [ __('User') . ": " . $item->fullname , ['colspan' => 7]]
+                    ]
+                ], ['class' => 'info bold'], null, 1, false); 
+
                 $subtotal = 0;
                 $lastuser = $item->fullname;
             }
 
-            echo "<tr".(( !$item->is_paid ) ? " title='"._('Unpaid')."'":"")."><td>";
-            echo $item->date_worked->i18nFormat('EEE, MMM dd, yyyy', 'UTC');
-            echo "</td><td>" . $item->notes;
-            echo "</td><td>" . $item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC');
-            echo "</td><td>" . $item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC');
-            echo "</td><td class='text-right'>" . number_format($item->worked, 2);
-            echo "</td><td class='text-center'>";
-            if ( isset($show_add) && $show_add && !$item->is_paid ) {
-                echo $this->Form->postLink(
-                    $this->Pretty->iconMark($item->notes),
-                    ['action' => 'markpaid', $item->id],
-                    ['escape' => false, 'confirm' => __('Are you sure you want to mark paid # {0}?', $item->id)]);
-                echo " ";
-            }
-            echo $this->Bool->prefYes($item->is_paid);
-            echo "</td><td class='text-center'>";
-            
-            if ( (isset($show_add) && $show_add) || !$item->is_paid ) {
-                echo $this->Html->link(
-                    $this->Pretty->iconEdit($item->notes),
-                    ['action' => 'edit', $item->id],
-                    ['escape' => false]);
-
-                echo $this->Form->postLink(
-                    $this->Pretty->iconDelete($item->notes),
-                    ['action' => 'delete', $item->id],
-                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id)]);
-            }
-            echo "</td></tr>";
+            echo $this->Html->tableCells([
+                [
+                    $item->date_worked->i18nFormat('EEE, MMM dd, yyyy', 'UTC'),
+                    $item->notes,
+                    [$item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'), ['class' => 'text-right']],
+                    [$item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'), ['class' => 'text-right']],
+                    [ number_format($item->worked, 2), ['class' => 'text-right']],
+                    [
+                        ( ( isset($show_add) && $show_add && !$item->is_paid ) ?
+                            $this->Form->postLink(
+                                $this->Pretty->iconMark($item->notes),
+                                ['action' => 'markpaid', $item->id],
+                                ['escape' => false, 'confirm' => __('Are you sure you want to mark paid # {0}?', $item->id), 'class' => 'btn btn-warning btn-sm']) : "" ) . " " .
+                        $this->Bool->prefYes($item->is_paid), ['class' => 'text-center']
+                    ],
+                    [
+                        ( ( (isset($show_add) && $show_add) || !$item->is_paid ) ?
+                            $this->Html->link(
+                                $this->Pretty->iconEdit($item->notes),
+                                ['action' => 'edit', $item->id],
+                                ['escape' => false, 'class' => 'btn btn-default btn-sm']) .
+                            $this->Form->postLink(
+                                $this->Pretty->iconDelete($item->notes),
+                                ['action' => 'delete', $item->id],
+                                ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id), 'class' => 'btn btn-danger btn-sm'])
+                            : "" ),
+                        ['class' => 'text-center']
+                    ]
+                ]
+            ]);
 
             $subtotal += $item->worked;
             $total += $item->worked;
         }
-        echo "<tr class='success'><td colspan='4'><strong>";
-        echo __('User Sub-Total') . ": " . $lastuser;
-        echo "</td><td class='text-right'>";
-        echo number_format($subtotal,2);
-        echo "</td><td></td><td></td></tr>";
+        if ( $total > 0 ) {
+            echo $this->Html->tableCells([
+                [
+                    [ __('User Sub-Total') . ": " . $lastuser , ['colspan' => 4]],
+                    [number_format($subtotal,2), ['class' => 'text-right']],
+                    [ "", ['colspan' => 2]]
+                ]
+            ], ['class' => 'success bold'], null, 1, false);  
 
-        echo "<tr class='danger'><td colspan='4'><strong>";
-        echo __('Total Hours');
-        echo "</td><td class='text-right'>";
-        echo number_format($total,2);
-        echo "</td><td></td><td></td></tr>";
+            echo $this->Html->tableCells([
+                [
+                    [ __('Total Hours'), ['colspan' => 4]],
+                    [number_format($total,2), ['class' => 'text-right']],
+                    [ "", ['colspan' => 2]]
+                ]
+            ], ['class' => 'danger bold'], null, 1, false);
+        }
 
         ?>
     </tbody>
@@ -106,25 +120,23 @@
 
 
 <?= $this->Pretty->helpMeStart('View Show Payroll Report'); ?>
-<p>This display shows the payroll report for the specified show, broken down by user</p>
-<p>After the show name, you may see the following buttons: (<em>Note: only payroll admin's my add direct to a show or mark records as paid</em>)</p>
-<ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> <strong>Plus Button</strong>: Add an payroll item to the show.</li>
+<p><?= __("This display shows the payroll report for the specified show, broken down by user") ?></p>
+<p><?= __("After the show name, you may see the following buttons: (<em>Note: only payroll admin's my add direct to a show or mark records as paid</em>)") ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('plus', 'success', __('Plus Button'), __('Add a payroll record to the show')),
+        $this->Pretty->helpButton('ok', 'warning', __('Check Button'), __('Mark ALL payroll records paid')),
+        $this->Pretty->helpButton('download', 'default', __('Download Button'), __('Download a CSV file for offline printing or editing'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
 
-    <li class="list-group-item"><span class="glyphicon glyphicon-download" aria-hidden="true"></span> <strong>Download Button</strong>: Download a comma seperated (csv) file of the payroll report for offline printing or editing.</li>
+<p><?= __("For each entry, you may see these three buttons:") ?></p>
+<?= $this->Html->nestedList([
+        $this->Pretty->helpButton('ok', 'warning', __('Check Button'), __('Mark the payroll record paid')),
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the payroll record')),
+        $this->Pretty->helpButton('trash', 'danger', __('Trash Button'), __('Remove the payroll record'))
+    ], ['class' => 'list-group'], ['class' => 'list-group-item']
+); ?>
 
-    <li class="list-group-item"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <strong>Check Button</strong>: Mark ALL this show's payroll records paid.</li>
-</ul>
-
-
-<p>For each entry, you may see these three buttons:</p>
-<ul class="list-group">
-    <li class="list-group-item"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> <strong>Check Button</strong>: Mark the payroll record paid.</li>
-
-    <li class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span> <strong>Pencil Button</strong>: Edit the payroll record.</li>
-
-    <li class="list-group-item"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> <strong>Trash Button</strong>: Remove the payroll record.</li>
-</ul>
-<p>Only payroll admin's may mark records paid.  Regular payroll users may only edit or delete payroll records that have not yet been marked paid.</p>
+<p><?= __("Only payroll admin's may mark records paid.  Regular payroll users may only edit or delete payroll records that have not yet been marked paid.") ?></p>
 
 <?= $this->Pretty->helpMeEnd(); ?>

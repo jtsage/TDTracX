@@ -16,6 +16,50 @@ class PayrollsController extends AppController
         parent::initialize();
         $this->loadComponent('UserPerm');
     }
+
+    /**
+     * Index by user
+     *
+     * @return void
+    */
+    public function indexuser() 
+    {
+        if ( ! $this->Auth->user('is_admin')) {
+            $this->Flash->error(__('You may not view payroll by user'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $this->loadModel('ShowUserPerms');
+
+        $ulist = $this->ShowUserPerms->find('list', ['valueField' => 'fullname', 'keyField' => 'user_id'])
+            ->contain(['Users'])
+            ->select(['fullname' => 'concat(Users.first, " ", Users.last)', 'ShowUserPerms.user_id'])
+            ->where(['Users.is_active' => 1])
+            ->where(['is_paid' => 1])
+            ->group(['user_id'])
+            ->order(['Users.last' => 'ASC', 'Users.first' => 'ASC']);
+        
+        $this->set('ulist', $ulist);
+
+        $buddy = $this->Payrolls->find('all')
+            ->where(['user_id IN' => array_keys($ulist->toArray())])
+            ->select([
+                'user_id' => 'Payrolls.user_id',
+                'totalwork' => 'sum(Payrolls.worked)',
+                'is_paid' => 'Payrolls.is_paid'
+            ])
+            ->group('user_id')
+            ->group('is_paid')
+            ->order(['user_id' => 'ASC']);
+
+        $this->set('buddy', $buddy);
+
+        $this->set('crumby', [
+            ["/", "Home"],
+            [null, "User Payroll Lists"]
+        ]);
+
+    }
     /**
      * Index method
      *
@@ -89,7 +133,7 @@ class PayrollsController extends AppController
 
         $this->set('crumby', [
             ["/", "Home"],
-            [null, "Payroll Lists"]
+            [null, "Show Payroll Lists"]
         ]);
     }
 
@@ -118,6 +162,12 @@ class PayrollsController extends AppController
             $userlist = [ $this->Auth->user('id') ];
         }
         if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_pay_admin') ) {
+            $auth = true;
+            $this->set('show_add', true);
+            $this->set('edit_all', true);
+            $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
+        }
+        if ( $this->Auth->user('is_admin') ) {
             $auth = true;
             $this->set('show_add', true);
             $this->set('edit_all', true);
@@ -238,9 +288,11 @@ class PayrollsController extends AppController
      */
     public function viewbyuser($id = null)
     {
-        if ( ! $this->Auth->user('is_admin')) {
-            $this->Flash->error(__('You may not view payroll by user'));
-            return $this->redirect(['action' => 'index']);
+        if ( ! $this->Auth->user('is_admin') ) {
+            if ( $id <> $this->Auth->user('id')) {
+                $this->Flash->error(__('You may not view other user\'s payroll'));
+                return $this->redirect(['action' => 'viewbyuser', $this->Auth->user('id')]);                
+            }
         }
 
         $this->loadModel('Users');
@@ -264,6 +316,7 @@ class PayrollsController extends AppController
             ->where(['user_id' => $id])
             ->order(['Shows.is_active' => 'DESC', 'Shows.end_date' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
 
+        $this->set('adminView', $this->Auth->user('is_admin'));
         $this->set('payrolls', $payrolls);
     }
 
