@@ -12,7 +12,8 @@
         "cakephp/plugin-installer": "*",
         "twbs/bootstrap": "^3.3@dev",
         "friendsofcake/bootstrap-ui": "~0.3",
-        "friendsofcake/cakephp-csvview": "~2.0"
+        "friendsofcake/cakephp-csvview": "~2.0",
+        "gourmet/whoops": "~1.0"
     },
     "require-dev": {
         "psy/psysh": "@stable",
