@@ -13,6 +13,10 @@ Main Items:
  * e-mail system
 
  * i18n is a mess.  cleaning will likely take a while.
+   * users done
+   * budgets done
+   * shows done
+   
 
 Desired features (highly likely):
  * cron e-mails
