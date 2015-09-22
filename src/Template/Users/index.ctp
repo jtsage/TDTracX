@@ -83,7 +83,7 @@
 <?= $this->Html->nestedList([
         $this->Pretty->helpButton('eye', 'default', __('Eye Button'), __('View a detailed user record')),
         $this->Pretty->helpButton('lock', 'default', __('Lock Button'), __('Change the user\'s password')),
-        $this->Pretty->helpButton('pencil-square-o', 'default', __('Pencil Button'), __('Edit the user record')),
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the user record')),
         $this->Pretty->helpButton('trash', 'danger', __('Trash Button'), __('Permanantly remove the user from the system, and all historical data about them.  Very, very destructive - use with extream caution.'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>

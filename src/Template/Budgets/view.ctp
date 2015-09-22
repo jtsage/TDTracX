@@ -112,7 +112,7 @@
 
 <p><?= __("For each budget item, there are two buttoms:") ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('pencil-square-o', 'default', __('Pencil Button'), __('Edit this budget expense')),
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit this budget expense')),
         $this->Pretty->helpButton('trash', 'danger', __('Trash Button'), __('Remove this budget expense'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>

@@ -86,7 +86,7 @@
 <p><?= __("This display shows details of the show record, along with the currently assigned permissions"); ?></p>
 <p><?= __("Near the show title, you may see two buttons:"); ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('pencil-square-o', 'default', __('Pencil Button'), __('Edit the show record (admin only)')),
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the show record (admin only)')),
         $this->Pretty->helpButton('cogs', 'warning', __('Gears Button'), __('Change the show permission lists (admin only)'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>

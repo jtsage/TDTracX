@@ -91,7 +91,7 @@
 <p><?= _("For each show, you may see up to four buttons:") ?></p>
 <?= $this->Html->nestedList([
         $this->Pretty->helpButton('eye', 'default', __('Eye Button'), __('View a detailed show record')),
-        $this->Pretty->helpButton('pencil-square-o', 'default', __('Pencil Button'), __('Edit the show record')),
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the show record')),
         $this->Pretty->helpButton('cogs', 'warning', __('Gears Button'), __('Change the show\'s permission sets')),
         $this->Pretty->helpButton('trash', 'danger', __('Trash Button'), __('Permanantly remove the show from the system, and all historical data about it.  Very, very destructive - use with extream caution.'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']

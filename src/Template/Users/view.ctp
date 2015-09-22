@@ -137,7 +137,7 @@
 <p><?= __('This display shows details of the user record, along with the currently assigned permissions') ?></p>
 <p><?= __('Near the user\'s full name, you will see two buttons:') ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('pencil-square-o', 'default', __('Pencil Button'), __('Edit the user')),
+        $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the user')),
         $this->Pretty->helpButton('lock', 'default', __('Lock Button'), __('Change the user\'s password'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
