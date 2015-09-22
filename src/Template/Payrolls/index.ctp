@@ -206,7 +206,7 @@
     </div>
 <?php endif; ?>
 
-<?= $this->Pretty->helpMeStart(__('View Budgets')); ?>
+<?= $this->Pretty->helpMeStart(__('View Payrolls')); ?>
 <p><?= __("This display shows the payroll reports of the shows you have access, along with the current amount of hours paid out and still owed."); ?></p>
 <p><?= __("The display includes the following categories - note that if you are a payroll admin on a show you also get paid on, a show may appear in more than one listing.") ?></p>
 <table class="table table-condensed helptable">

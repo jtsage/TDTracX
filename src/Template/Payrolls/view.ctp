@@ -1,9 +1,9 @@
 <div class="shows view large-10 medium-9 columns">
     <h3>
-        <?= h($show->name) . _(" Payroll Expenditure") ?>
+        <?= h($show->name) . __(" Payroll Expenditure") ?>
         <div class='btn-group'>
         <?= ( isset($show_add) && $show_add ) ? $this->Html->link(
-                $this->Pretty->iconAdd($show->name . " " . _("Payroll Item")),
+                $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
                 ['action' => 'addtoshow', $show->id],
                 ['escape' => false, 'class' => 'btn btn-success btn-sm']
             ) : "" ?>
@@ -14,7 +14,7 @@
                 ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm']) : "";
         ?>
         <?= $this->Html->link(
-                $this->Pretty->iconDL($show->name . " " . _("Payroll Item")),
+                $this->Pretty->iconDL($show->name . " " . __("Payroll Item")),
                 ['action' => 'viewbyshowcsv', $show->id],
                 ['escape' => false, 'class' => 'btn btn-default btn-sm']);
         ?>
@@ -124,14 +124,14 @@
 <p><?= __("After the show name, you may see the following buttons: (<em>Note: only payroll admin's my add direct to a show or mark records as paid</em>)") ?></p>
 <?= $this->Html->nestedList([
         $this->Pretty->helpButton('plus', 'success', __('Plus Button'), __('Add a payroll record to the show')),
-        $this->Pretty->helpButton('ok', 'warning', __('Check Button'), __('Mark ALL payroll records paid')),
-        $this->Pretty->helpButton('download', 'default', __('Download Button'), __('Download a CSV file for offline printing or editing'))
+        $this->Pretty->helpButton('check', 'warning', __('Check Button'), __('Mark ALL payroll records paid')),
+        $this->Pretty->helpButton('cloud-download', 'default', __('Download Button'), __('Download a CSV file for offline printing or editing'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']
 ); ?>
 
 <p><?= __("For each entry, you may see these three buttons:") ?></p>
 <?= $this->Html->nestedList([
-        $this->Pretty->helpButton('ok', 'warning', __('Check Button'), __('Mark the payroll record paid')),
+        $this->Pretty->helpButton('check', 'warning', __('Check Button'), __('Mark the payroll record paid')),
         $this->Pretty->helpButton('pencil', 'default', __('Pencil Button'), __('Edit the payroll record')),
         $this->Pretty->helpButton('trash', 'danger', __('Trash Button'), __('Remove the payroll record'))
     ], ['class' => 'list-group'], ['class' => 'list-group-item']

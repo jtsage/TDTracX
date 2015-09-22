@@ -17,11 +17,11 @@ class PrettyHelper extends Helper
     }
     public function iconEdit($name)
     {
-        return PrettyHelper::makeIcon($name, 'pencil-square-o', __('Edit'));
+        return PrettyHelper::makeIcon($name, 'pencil', __('Edit'));
     }
     public function iconMark($name)
     {
-        return PrettyHelper::makeIcon($name, 'check-circle-o', __('Mark Paid'));
+        return PrettyHelper::makeIcon($name, 'check', __('Mark Paid'));
     }
     public function iconLock($name)
     {
