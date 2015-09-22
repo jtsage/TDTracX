@@ -26,7 +26,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-3">
-                    <i class="fa fa-bar-chart fa-5x"></i>
+                    <i class="fa fa-line-chart fa-5x"></i>
                 </div>
                 <div class="col-xs-9 text-right">
                     <div class="huge"><?= $item->name ?></div>
@@ -92,7 +92,7 @@
         <div class="panel-heading">
             <div class="row">
                 <div class="col-xs-3">
-                    <i class="fa fa-bar-chart fa-5x"></i>
+                    <i class="fa fa-line-chart fa-5x"></i>
                 </div>
                 <div class="col-xs-9 text-right">
                     <div class="huge"><?= $item->name ?></div>
@@ -167,7 +167,7 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
-                        <i class="fa fa-bar-chart fa-5x"></i>
+                        <i class="fa fa-line-chart fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
                         <div class="huge"><?= $item->name ?></div>
@@ -206,21 +206,15 @@
     </div>
 <?php endif; ?>
 
-<?= $this->Pretty->helpMeStart('View Budgets'); ?>
+<?= $this->Pretty->helpMeStart(__('View Budgets')); ?>
 <p><?= __("This display shows the payroll reports of the shows you have access, along with the current amount of hours paid out and still owed."); ?></p>
 <p><?= __("The display includes the following categories - note that if you are a payroll admin on a show you also get paid on, a show may appear in more than one listing.") ?></p>
-<?= $this->Html->nestedList([
-    "<strong>Your Payroll Shows</strong>: Shows that you get paid on, you can add hours for yourself.",
-    "<strong>Your Administrated Shows</strong>: Shows that you are a payroll administrator of, you can add hours for anyone who is paid on this show.",
-    "<strong>Other Shows</strong>: Shows that you are neither paid on, or the payroll administrator of. This is only shown for system administrators, and you may only view the payroll record."
-    ], ['class' => 'list-group'], ['class' => 'list-group-item']
-); ?>
-<p>For each show, you will see up to three buttons:</p>
-<?= $this->Html->nestedList([
-        $this->Pretty->helpButton('plus', 'success', __('Plus Button'), __('Add payroll expense to show')),
-        $this->Pretty->helpButton('usd', 'default', __('Money Button'), __('View UNPAID hours in show')),
-        $this->Pretty->helpButton('eye-open', 'default', __('Eye Button'), __('View detailed payroll report for show'))
-    ], ['class' => 'list-group'], ['class' => 'list-group-item']
-); ?>
+<table class="table table-condensed helptable">
+<?= $this->Html->tableCells([
+    [__("Your Payroll Shows"),       __("Shows that you get paid on, you can add hours for yourself.")],
+    [__("Your Administrated Shows"), __("Shows that you are a payroll administrator of, you can add hours for anyone who is paid on this show.")],
+    [__("Other Shows"),              __("Shows that you are neither paid on, or the payroll administrator of. This is only shown for system administrators, and you may only view the payroll record.")]
+]); ?>
+</table>
 
 <?= $this->Pretty->helpMeEnd(); ?>
