@@ -62,4 +62,103 @@ class PagesController extends AppController
             throw new NotFoundException();
         }
     }
+
+    public function dash()
+    {
+        $this->loadComponent('UserPerm');
+
+        $this->loadModel('Payrolls');
+        $this->loadModel('Budgets');
+        $this->loadModel('Users');
+        $this->loadModel('Shows');
+
+        $shows = $this->Shows->find()
+            ->contain([
+                'ShowUserPerms' => function ($q) {
+                   return $q
+                        ->select([
+                            'show_id',
+                            'paidTotal' => 'sum(is_paid)',
+                            'admnTotal' => 'sum(is_pay_admin)',
+                            'budgTotal' => 'sum(is_budget)'
+                        ])
+                        ->group('show_id');
+                }
+            ])
+            ->contain(['ShowUserPerms'])
+            ->where(['is_active' => '1'])
+            ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
+
+        $this->set('shows', $shows);
+        $this->set('showcnt', $shows->count());
+
+        $user = $this->Users->get($this->Auth->user('id'));
+        $this->set('user', $user);
+
+        $usercnt = $this->Users->find()->where(['is_active' => 1])->count();
+        $this->set('usercnt', $usercnt);
+
+        $permListAdmn = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_pay_admin');
+        $permListPaid = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_paid');
+        $permListBdgt = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_budget');
+
+        $payrollAdmShows = $this->Payrolls->find()
+            ->contain(['Shows'])
+            ->select([
+                 'showName' => 'Shows.name',
+                 'workTotal' => 'sum(Payrolls.worked)',
+                 'show_id' 
+            ])
+            ->where(['Shows.is_active' => 1])
+            ->where(['show_id IN' => $permListAdmn])
+            ->group('show_id')
+            ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
+
+        $payrollSelfShows = $this->Payrolls->find()
+            ->contain(['Shows'])
+            ->select([
+                 'showName' => 'Shows.name',
+                 'workTotal' => 'sum(Payrolls.worked)',
+                 'show_id' 
+            ])
+            ->where(['Shows.is_active' => 1])
+            ->where(['show_id IN' => $permListPaid])
+            ->where(['user_id' => $this->Auth->user('id')])
+            ->group('show_id')
+            ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
+
+        $payrollAdmUsers = $this->Payrolls->find()
+            ->contain(['Users', 'Shows'])
+            ->select([
+                 'fullName' => 'concat(Users.first, " ", Users.last)',
+                 'workTotal' => 'sum(Payrolls.worked)',
+                 'user_id' 
+            ])
+            ->where(['Shows.is_active' => 1])
+            ->where(['show_id IN' => $permListPaid])
+            ->where(['user_id <>' => $this->Auth->user('id')])
+            ->group('user_id')
+            ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
+
+        $budgetAdmin = $this->Budgets->find()
+            ->contain(['Shows'])
+            ->select([
+                 'showName' => 'Shows.name',
+                 'priceTotal' => 'sum(price)',
+                 'show_id' 
+            ])
+            ->where(['Shows.is_active' => 1])
+            ->where(['show_id IN' => $permListBdgt])
+            ->group('show_id')
+            ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
+
+        $this->set('payrollSelfShows', $payrollSelfShows);
+        $this->set('payrollAdmShows', $payrollAdmShows);
+        $this->set('payrollAdmUsers', $payrollAdmUsers);
+        $this->set('budgetAdmin', $budgetAdmin);
+
+        $this->set('_serialize', [$permListPaid, $permListBdgt, $permListBdgt]);
+        $this->set('yo', 'yoyo');
+        $this->render('dashboard');
+    }
 }
