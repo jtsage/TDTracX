@@ -51,6 +51,8 @@ class BudgetsController extends AppController
                 ->where(['id' => $permList], ['id' => 'integer[]'])
                 ->order(['end_date' => 'ASC']);
             $this->set('inactshows', $inactshows);
+        } else {
+            $this->set('inactshows', []);
         }
 
         $this->set('crumby', [

@@ -135,8 +135,9 @@ class PagesController extends AppController
                  'user_id' 
             ])
             ->where(['Shows.is_active' => 1])
-            ->where(['show_id IN' => $permListPaid])
+            ->where(['show_id IN' => $permListAdmn])
             ->where(['user_id <>' => $this->Auth->user('id')])
+            ->where(['Users.is_active' => 1])
             ->group('user_id')
             ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
 
