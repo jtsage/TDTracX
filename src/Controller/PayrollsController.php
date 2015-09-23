@@ -212,7 +212,7 @@ class PayrollsController extends AppController
             ])
             ->where(['user_id IN' => $userlist])
             ->where(['show_id' => $id])
-            ->order(['Users.last' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
+            ->order(['Users.last' => 'ASC', 'Users.first' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
 
         if ( $this->Auth->user('is_admin') ) {
             $orphans = $this->Payrolls->find()
