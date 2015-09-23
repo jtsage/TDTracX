@@ -1,5 +1,4 @@
 Main Items:
- * dashboard
  * e-mail system
 
  * i18n is a mess.  cleaning will likely take a while.
@@ -7,6 +6,7 @@ Main Items:
    * budgets done
    * shows done
    * payrolls done
+   * NEED I18N ON BREADCRUMBS
 
 Desired features (highly likely):
  * cron e-mails

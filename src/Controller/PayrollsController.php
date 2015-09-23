@@ -176,21 +176,16 @@ class PayrollsController extends AppController
         $auth = false;
         if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_paid') ) {
             $auth = true;
-            $this->set('edit_all', false);
             $this->set('adminView', false);
             $userlist = [ $this->Auth->user('id') ];
         }
         if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_pay_admin') ) {
             $auth = true;
-            $this->set('show_add', true);
-            $this->set('edit_all', true);
             $this->set('adminView', true);
             $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
         }
         if ( $this->Auth->user('is_admin') ) {
             $auth = true;
-            $this->set('show_add', true);
-            $this->set('edit_all', true);
             $this->set('adminView', true);
             $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
         }
@@ -220,7 +215,7 @@ class PayrollsController extends AppController
             ->order(['Users.last' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
 
         if ( $this->Auth->user('is_admin') ) {
-            $orphans = $this->Payrolls->find('all')
+            $orphans = $this->Payrolls->find()
                 ->contain(['Users'])
                 ->select([
                     'user_id', 
@@ -228,6 +223,7 @@ class PayrollsController extends AppController
                 ])
                 ->where(['user_id NOT IN' => $userlist])
                 ->where(['show_id' => $id])
+                ->group(['user_id'])
                 ->order(['Users.last' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
             if ( $orphans->count() > 0 ) { $this->set('orphans', $orphans); }
         }
@@ -327,6 +323,7 @@ class PayrollsController extends AppController
                 ])
                 ->where(['user_id' => $id])
                 ->where(['show_id NOT IN' => $permListUser])
+                ->group(['show_id'])
                 ->order(['Shows.is_active' => 'DESC', 'Shows.end_date' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
             if ( $orphans->count() > 0 ) { $this->set('orphans', $orphans); }
         }

@@ -157,8 +157,6 @@ class PagesController extends AppController
         $this->set('payrollAdmUsers', $payrollAdmUsers);
         $this->set('budgetAdmin', $budgetAdmin);
 
-        $this->set('_serialize', [$permListPaid, $permListBdgt, $permListBdgt]);
-        $this->set('yo', 'yoyo');
         $this->render('dashboard');
     }
 }

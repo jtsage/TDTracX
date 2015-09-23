@@ -115,11 +115,11 @@
             echo "This show has orphaned payroll records by: ";
             foreach ( $orphans as $orphan ) { $list[] = $orphan->fullname; }
             echo join(', ', $list);
-            echo '. <a class="alert-link" href="/shows/editperm/<?= $show->id ?>">Fix It</a>';
+            echo '. <a class="alert-link" href="/shows/editperm/' . $show->id . '">Fix It</a>';
             break;
         case "user":
             echo "This user has orphaned payroll records in: ";
-            foreach ( $orphans as $orphan ) { $list[] = "<a class='alert-link' href='/shows/editperm/" . $orphan->id . "'>" . $orphan->showname . "</a>"; }
+            foreach ( $orphans as $orphan ) { $list[] = "<a class='alert-link' href='/shows/editperm/" . $orphan->show_id . "'>" . $orphan->showname . "</a>"; }
             echo join(', ', $list);
             break;
     }
