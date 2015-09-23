@@ -1,3 +1,8 @@
+<?php if ($WhoAmI): ?>
+<div class="row">
+<div class="col-lg-8">
+<?php endif; ?>
+
 <div class="row">
     <div class="col-md-4">
         <div class="panel panel-primary">
@@ -114,7 +119,7 @@
                         <i class="fa fa-bar-chart fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
-                        <div class="huge"><?= __("Budgets") ?></div>
+                        <div class="huge"><?= __("Budget") ?></div>
                         <div><?= __("A listing of active system shows that you have budget access to.") ?></div>
                     </div>
                 </div>
@@ -149,8 +154,9 @@
 </div>
 
 <?php if ($WhoAmI): ?>
-<div class="row">
-    <div class="col-md-6">
+</div>
+<div class="col-lg-4">
+
         <div class="panel panel-yellow">
             <div class="panel-heading">
                 <div class="row">
@@ -183,8 +189,7 @@
                 </div>
             </a>
         </div>
-    </div>
-    <div class="col-md-6">
+
         <div class="panel panel-yellow">
             <div class="panel-heading">
                 <div class="row">
@@ -240,9 +245,9 @@
             </a>
             <?php endforeach; ?>
         </div>
-    </div>
-</div>
 
+</div>
+</div>
 <?php endif; ?>
 
 <?= $this->Pretty->helpMeStart(__('Dashboard')); ?>
