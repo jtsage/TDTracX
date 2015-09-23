@@ -162,6 +162,8 @@ class PayrollsController extends AppController
      */
     public function viewbyshow($id = null, $csv = false)
     {
+        $this->set('viewMode', 'show');
+
         $this->loadModel('Shows');
 
         $show = $this->Shows->findById($id)->first();
@@ -175,18 +177,21 @@ class PayrollsController extends AppController
         if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_paid') ) {
             $auth = true;
             $this->set('edit_all', false);
+            $this->set('adminView', false);
             $userlist = [ $this->Auth->user('id') ];
         }
         if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_pay_admin') ) {
             $auth = true;
             $this->set('show_add', true);
             $this->set('edit_all', true);
+            $this->set('adminView', true);
             $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
         }
         if ( $this->Auth->user('is_admin') ) {
             $auth = true;
             $this->set('show_add', true);
             $this->set('edit_all', true);
+            $this->set('adminView', true);
             $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
         }
 
@@ -231,8 +236,10 @@ class PayrollsController extends AppController
 
         $this->set('crumby', [
             ["/", "Home"],
-            [null, "User Payroll Lists"]
+            ["/payrolls/", "Show Payroll Lists"],
+            [null, $show->name]
         ]);
+
         if ( $csv == "csv" ) {
             $csvdata = [];
             foreach ( $payrolls as $item ) {
@@ -271,6 +278,8 @@ class PayrollsController extends AppController
      */
     public function viewbyuser($id = null, $csv = false)
     {
+        $this->set('viewMode', 'user');
+
         $this->loadModel('Users');
 
         $user = $this->Users->findById($id)->first();
@@ -328,7 +337,7 @@ class PayrollsController extends AppController
         $this->set('crumby', [
             ["/", "Home"],
             ["/payrolls/indexuser/", "User Payroll Lists"],
-            [null, "Payroll for: " . $user->first . " " . $user->last]
+            [null, $user->first . " " . $user->last]
         ]);
 
         if ( $csv == "csv" ) {
@@ -354,6 +363,8 @@ class PayrollsController extends AppController
             $this->response->download($filename);
             $this->viewClass = 'CsvView.Csv';
             $this->set(compact('csvdata', '_serialize', '_header'));
+        } else {
+            $this->render('view');
         }
     }
 
@@ -366,6 +377,8 @@ class PayrollsController extends AppController
      */
     public function unpaidbyuser($csv = false)
     {
+        $this->set('viewMode', 'unpaiduser');
+
         $permListPaid = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_paid');
         $permListAdmn = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_pay_admin');
 
@@ -422,6 +435,8 @@ class PayrollsController extends AppController
             $this->response->download($filename);
             $this->viewClass = 'CsvView.Csv';
             $this->set(compact('csvdata', '_serialize', '_header'));
+        } else {
+            $this->render('view');
         }
     }
 
@@ -434,6 +449,8 @@ class PayrollsController extends AppController
      */
     public function unpaidbyshow($csv = false)
     {
+        $this->set('viewMode', 'unpaidshow');
+
         $permListPaid = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_paid');
         $permListAdmn = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_pay_admin');
 
@@ -442,7 +459,9 @@ class PayrollsController extends AppController
             ->select([
                 'id', 'date_worked', 'start_time', 'end_time', 'worked', 'is_paid', 'notes', 
                 'showname' => 'Shows.name',
-                'fullname' => 'concat(Users.first, " ", Users.last)'
+                'fullname' => 'concat(Users.first, " ", Users.last)',
+                'activeshow' => 'Shows.is_active',
+                'Shows.end_date'
             ])
             ->where(['is_paid' => 0])
             ->where(['Shows.is_active' => 1])
@@ -490,6 +509,8 @@ class PayrollsController extends AppController
             $this->response->download($filename);
             $this->viewClass = 'CsvView.Csv';
             $this->set(compact('csvdata', '_serialize', '_header'));
+        } else {
+            $this->render('view');
         }
     }
     /**
@@ -771,6 +792,10 @@ class PayrollsController extends AppController
                 $this->Flash->success(__('The payroll has been saved.'));
                 if ( $from == 1 ) {
                     return $this->redirect(['action' => 'viewbyuser', $payroll->user_id]);
+                } elseif ($from == 2 ) {
+                    return $this->redirect(['action' => 'unpaidbyshow']);  
+                } elseif ($from == 3 ) {
+                    return $this->redirect(['action' => 'unpaidbyuser']);  
                 } else {
                     return $this->redirect(['action' => 'viewbyshow', $payroll->show_id]);
                 }
@@ -812,9 +837,13 @@ class PayrollsController extends AppController
             $this->UserPerm->checkShow($this->Auth->user('id'), $payroll->show_id, 'is_pay_admin') ||
             ( $this->Auth->user('id') == $payroll->user_id && (!$payroll->is_paid) )
          ) ) {
-            $this->Flash->error(__('You can delete this payroll item'));
+            $this->Flash->error(__('You can not delete this payroll item'));
             if ( $from == 1 ) {
                 return $this->redirect(['action' => 'viewbyuser', $payroll->user_id]);
+            } elseif ($from == 2 ) {
+                return $this->redirect(['action' => 'unpaidbyshow']);  
+            } elseif ($from == 3 ) {
+                return $this->redirect(['action' => 'unpaidbyuser']);  
             } else {
                 return $this->redirect(['action' => 'viewbyshow', $payroll->show_id]);
             }
@@ -828,6 +857,10 @@ class PayrollsController extends AppController
         }
         if ( $from == 1 ) {
             return $this->redirect(['action' => 'viewbyuser', $payroll->user_id]);
+        } elseif ($from == 2 ) {
+            return $this->redirect(['action' => 'unpaidbyshow']);  
+        } elseif ($from == 3 ) {
+            return $this->redirect(['action' => 'unpaidbyuser']);  
         } else {
             return $this->redirect(['action' => 'viewbyshow', $payroll->show_id]);
         }
@@ -870,6 +903,10 @@ class PayrollsController extends AppController
         }
         if ( $from == 1 ) {
             return $this->redirect(['action' => 'viewbyuser', $payroll->user_id]);
+        } elseif ($from == 2 ) {
+            return $this->redirect(['action' => 'unpaidbyshow']);  
+        } elseif ($from == 3 ) {
+            return $this->redirect(['action' => 'unpaidbyuser']);  
         } else {
             return $this->redirect(['action' => 'viewbyshow', $payroll->show_id]);
         }
