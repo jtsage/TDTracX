@@ -15,7 +15,7 @@
         ?>
         <?= $this->Html->link(
                 $this->Pretty->iconDL($show->name . " " . __("Payroll Item")),
-                ['action' => 'viewbyshowcsv', $show->id],
+                ['action' => 'viewbyshow', $show->id, 'csv'],
                 ['escape' => false, 'class' => 'btn btn-default btn-sm']);
         ?>
         </div>

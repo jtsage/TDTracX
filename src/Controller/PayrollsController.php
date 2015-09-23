@@ -159,7 +159,7 @@ class PayrollsController extends AppController
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
-    public function viewbyshow($id = null)
+    public function viewbyshow($id = null, $csv = false)
     {
         $this->loadModel('Shows');
 
@@ -205,6 +205,8 @@ class PayrollsController extends AppController
             ->contain(['Users'])
             ->select([
                 'id', 'date_worked', 'start_time', 'end_time', 'worked', 'is_paid', 'notes', 
+                'fname' => 'Users.first',
+                'lname' => 'Users.last',
                 'fullname' => 'concat(Users.first, " ", Users.last)'
             ])
             ->where(['user_id IN' => $userlist])
@@ -230,86 +232,32 @@ class PayrollsController extends AppController
             ["/", "Home"],
             [null, "User Payroll Lists"]
         ]);
+        if ( $csv == "csv" ) {
+            $csvdata = [];
+            foreach ( $payrolls as $item ) {
+                $csvdata[] = [
+                    $item->date_worked->i18nFormat('EEE, MMM dd, yyyy', 'UTC'),
+                    $item->fname,
+                    $item->lname,
+                    $item->notes,
+                    $item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+                    $item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+                    $item->worked,
+                    (($item->is_paid)? "yes":"NO")
+                ];
+            }
+            $headers = [];
 
-        $this->render('view');
-    }
+            $_serialize = 'csvdata';
+            $_header = ['Date', 'First Name', 'Last Name', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
 
-    /**
-     * View method - by show (CSV) - open to all
-     *
-     * @param string|null $id Show id.
-     * @return void
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function viewbyshowcsv($id = null)
-    {
-        $this->loadModel('Shows');
-
-        $show = $this->Shows->findById($id)->first();
-
-        if ( ! $show ) {
-            $this->Flash->error(__('Show not found!'));
-            return $this->redirect(['action' => 'index']); 
+            $filename = "payroll-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
+            $this->response->download($filename);
+            $this->viewClass = 'CsvView.Csv';
+            $this->set(compact('csvdata', '_serialize', '_header'));
+        } else {
+            $this->render('view');
         }
-
-        $auth = false;
-        if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_paid') ) {
-            $auth = true;
-            $this->set('edit_all', false);
-            $userlist = [ $this->Auth->user('id') ];
-        }
-        if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_pay_admin') ) {
-            $auth = true;
-            $this->set('show_add', true);
-            $this->set('edit_all', true);
-            $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
-        }
-
-        if ( ! $auth ) {
-            $this->Flash->error(__('You do not have access to this show'));
-            return $this->redirect(['action' => 'index']);
-        }
-
-        if ( $show->is_active < 1 && ! $this->Auth->user('is_admin') ) {
-            $this->Flash->error(__('Sorry, this show is now closed.'));
-            return $this->redirect(['action' => 'index']);   
-        }
-
-        $this->set('show', $show);
-
-        $payrolls = $this->Payrolls->find('all')
-            ->contain(['Users'])
-            ->select([
-                'id', 'date_worked', 'start_time', 'end_time', 'worked', 'is_paid', 'notes', 
-                'fname' => 'Users.first',
-                'lname' => 'Users.last'
-            ])
-            ->where(['user_id IN' => $userlist])
-            ->where(['show_id' => $id])
-            ->order(['Users.last' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
-
-        $csvdata = [];
-        foreach ( $payrolls as $item ) {
-            $csvdata[] = [
-                $item->date_worked->i18nFormat('EEE, MMM dd, yyyy', 'UTC'),
-                $item->fname,
-                $item->lname,
-                $item->notes,
-                $item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
-                $item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
-                $item->worked,
-                (($item->is_paid)? "yes":"NO")
-            ];
-        }
-        $headers = [];
-
-        $_serialize = 'csvdata';
-        $_header = ['Date', 'First Name', 'Last Name', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
-
-        $filename = "payroll-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
-        $this->response->download($filename);
-        $this->viewClass = 'CsvView.Csv';
-        $this->set(compact('csvdata', '_serialize', '_header'));
     }
 
     /**
