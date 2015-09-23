@@ -13,4 +13,14 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 ?>
-<?= $content ?>
+<h3>This contains the current list of users needing payed.</h3>
+<p>Please visit the database to set these hours as paid.</p>
+
+<table style="width: 100%">
+<thead>
+<?= $this->Html->tableHeaders($headers); ?>
+</thead>
+<tbody>
+<?= $this->Html->tableCells($tabledata); ?>
+</tbody>
+</table>

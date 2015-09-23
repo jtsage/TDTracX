@@ -192,7 +192,10 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'tdtracx@localhost',
+            'from' => 'tdtracx@tdtrac.com',
+            'layout' => 'Gourmet/Email.default',
+            'helpers' => ['Html', 'Gourmet/Email.Email'],
+            'emailFormat' => 'both',
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
         ],

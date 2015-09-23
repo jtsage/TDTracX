@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "24b7769f8bae7894f22ee6391523eea5",
+    "hash": "e842344ae66dcb2996a0fd6a54689b27",
     "packages": [
         {
             "name": "aura/installer-default",
@@ -467,6 +467,55 @@
                 "view"
             ],
             "time": "2015-08-02 17:52:45"
+        },
+        {
+            "name": "gourmet/email",
+            "version": "v3.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gourmet/email.git",
+                "reference": "195cf1a68982770f8235423719a5f57bf6576768"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gourmet/email/zipball/195cf1a68982770f8235423719a5f57bf6576768",
+                "reference": "195cf1a68982770f8235423719a5f57bf6576768",
+                "shasum": ""
+            },
+            "require-dev": {
+                "cakephp/cakephp": "3.0.*",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "cakephp-plugin",
+            "autoload": {
+                "psr-4": {
+                    "Gourmet\\Email\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Others",
+                    "homepage": "https://github.com/gourmet/email/graphs/contributors"
+                },
+                {
+                    "name": "Jad Bitar",
+                    "homepage": "http://jadb.io",
+                    "role": "Author"
+                }
+            ],
+            "description": "Gourmet Email Plugin for rapid CakePHP application development.",
+            "homepage": "https://github.com/gourmet/email",
+            "keywords": [
+                "cakephp",
+                "email",
+                "gourmet",
+                "plugin"
+            ],
+            "time": "2015-07-14 04:23:07"
         },
         {
             "name": "gourmet/whoops",
