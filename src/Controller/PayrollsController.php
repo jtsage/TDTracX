@@ -153,9 +153,10 @@ class PayrollsController extends AppController
     }
 
     /**
-     * View method - by show - open to all
+     * View method - by show
      *
      * @param string|null $id Show id.
+     * @param string|null $csv CSV Download
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
@@ -261,9 +262,10 @@ class PayrollsController extends AppController
     }
 
     /**
-     * View method - by user - open to admin only
+     * View method - by user
      *
      * @param string|null $id User id.
+     * @param string|null $csv CSV Download
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
@@ -355,10 +357,10 @@ class PayrollsController extends AppController
         }
     }
 
-     /**
-     * View method - unpaid by user - open to admin only
+    /**
+     * View method - unpaid by user
      *
-     * @param string|null $id User id.
+     * @param string|null $csv CSV Download
      * @return void
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
      */
@@ -374,8 +376,8 @@ class PayrollsController extends AppController
                 'showname' => 'Shows.name',
                 'fullname' => 'concat(Users.first, " ", Users.last)'
             ])
+            ->where(['is_paid' => 0])
             ->where(['Shows.is_active' => 1])
-            //->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'DESC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC', 'Users.last' => 'ASC', 'Users.first' => 'ASC']);
             ->order(['Users.last' => 'ASC', 'Users.first' => 'ASC', 'Shows.end_date' => 'ASC', 'Shows.id' => 'DESC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
             
         if ( empty($permListAdmn) && !$this->Auth->user('is_admin') ) {
@@ -423,6 +425,73 @@ class PayrollsController extends AppController
         }
     }
 
+    /**
+     * View method - unpaid by show
+     *
+     * @param string|null $csv CSV Download
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function unpaidbyshow($csv = false)
+    {
+        $permListPaid = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_paid');
+        $permListAdmn = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_pay_admin');
+
+        $payrolls = $this->Payrolls->find('all')
+            ->contain(['Shows', 'Users'])
+            ->select([
+                'id', 'date_worked', 'start_time', 'end_time', 'worked', 'is_paid', 'notes', 
+                'showname' => 'Shows.name',
+                'fullname' => 'concat(Users.first, " ", Users.last)'
+            ])
+            ->where(['is_paid' => 0])
+            ->where(['Shows.is_active' => 1])
+            ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'DESC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC', 'Users.last' => 'ASC', 'Users.first' => 'ASC']);
+            
+        if ( empty($permListAdmn) && !$this->Auth->user('is_admin') ) {
+            $payrolls->where(['show_id IN' => $permListPaid]);
+            $payrolls->where(['user_id' => $this->Auth->user('id')]);
+            $this->set('adminView', false);
+        } elseif ( !empty($permListAdmn) && !$this->Auth->user('is_admin') ) {
+            $payrolls->where(['show_id IN' => $permListAdmn]);
+            $this->set('adminView', true);
+        } else {
+            $this->set('adminView', 2);
+        }
+
+        $this->set('payrolls', $payrolls);
+
+        $this->set('crumby', [
+            ["/", "Home"],
+            ["/payrolls/indexuser/", "Show Payroll Lists"],
+            [null, "Unpaid by Show"]
+        ]);
+
+        if ( $csv == "csv" ) {
+            $csvdata = [];
+            foreach ( $payrolls as $item ) {
+                $csvdata[] = [
+                    $item->showname,
+                    $item->fullname,
+                    $item->date_worked->i18nFormat('EEE, MMM dd, yyyy', 'UTC'),
+                    $item->notes,
+                    $item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+                    $item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+                    $item->worked,
+                    (($item->is_paid)? "yes":"NO")
+                ];
+            }
+            $headers = [];
+
+            $_serialize = 'csvdata';
+            $_header = ['Show', 'User Name', 'Date', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
+
+            $filename = "payroll-unpaid_by_show-" . date('Ymd') . ".csv";
+            $this->response->download($filename);
+            $this->viewClass = 'CsvView.Csv';
+            $this->set(compact('csvdata', '_serialize', '_header'));
+        }
+    }
     /**
      * Add method - by show
      *

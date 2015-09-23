@@ -19,7 +19,6 @@
                     'off-color' => 'danger'
                 ]);
             }
-            
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
