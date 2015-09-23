@@ -45,8 +45,8 @@ class ShowsController extends AppController
         }
 
         $this->set('crumby', [
-            ["/", "Home"],
-            [null, "Show List"]
+            ["/", __("Dashboard")],
+            [null, __("Show List")]
         ]);
 
         $this->set('isAdmin', $this->Auth->user('is_admin'));
@@ -91,8 +91,8 @@ class ShowsController extends AppController
         }
 
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/shows/", "Shows"],
+            ["/", __("Dashboard")],
+            ["/shows/", __("Shows")],
             [null, $show->name]
         ]);
 
@@ -173,8 +173,8 @@ class ShowsController extends AppController
         }
 
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/shows/", "Shows"],
+            ["/", __("Dashboard")],
+            ["/shows/", __("Shows")],
             ["/shows/view/" . $show->id, $show->name],
             [null, "Edit Permissions"]
         ]);
@@ -212,9 +212,9 @@ class ShowsController extends AppController
             }
         }
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/shows/", "Shows"],
-            [null, "Add Show"]
+            ["/", __("Dashboard")],
+            ["/shows/", __("Shows")],
+            [null, __("Add Show")]
         ]);
 
         $this->set(compact('show'));
@@ -254,10 +254,10 @@ class ShowsController extends AppController
         }
         
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/shows/", "Shows"],
+            ["/", __("Dashboard")],
+            ["/shows/", __("Shows")],
             ["/shows/view/" . $show->id, $show->name],
-            [null, "Edit Show"]
+            [null, __("Edit Show")]
         ]);
 
         $this->set(compact('show'));

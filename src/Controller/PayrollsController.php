@@ -69,8 +69,8 @@ class PayrollsController extends AppController
         $this->set('buddy', $buddy);
 
         $this->set('crumby', [
-            ["/", "Home"],
-            [null, "User Payroll Lists"]
+            ["/", __("Dashboard")],
+            [null, __("User Payroll Lists")]
         ]);
 
     }
@@ -147,8 +147,8 @@ class PayrollsController extends AppController
         $this->set('payPadmin', $payPadmin);
 
         $this->set('crumby', [
-            ["/", "Home"],
-            [null, "Show Payroll Lists"]
+            ["/", __("Dashboard")],
+            [null, __("Show Payroll Lists")]
         ]);
     }
 
@@ -231,8 +231,8 @@ class PayrollsController extends AppController
         $this->set('payrolls', $payrolls);
 
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/payrolls/", "Show Payroll Lists"],
+            ["/", __("Dashboard")],
+            ["/payrolls/", __("Show Payroll Lists")],
             [null, $show->name]
         ]);
 
@@ -332,8 +332,8 @@ class PayrollsController extends AppController
         $this->set('payrolls', $payrolls);
 
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/payrolls/indexuser/", "User Payroll Lists"],
+            ["/", __("Dashboard")],
+            ["/payrolls/indexuser/", __("User Payroll Lists")],
             [null, $user->first . " " . $user->last]
         ]);
 
@@ -415,9 +415,9 @@ class PayrollsController extends AppController
         $this->set('payrolls', $payrolls);
 
         $this->set('crumby', [
-            ["/", "Home"],
-            (($mode == 'show') ? ["/payrolls/", "Show Payroll Lists"] : ["/payrolls/indexuser/", "User Payroll Lists"] ),
-            [null, "Unpaid by " . ($mode == 'show' ? "Show" : "User")]
+            ["/", __("Dashboard")],
+            (($mode == 'show') ? ["/payrolls/", __("Show Payroll Lists")] : ["/payrolls/indexuser/", __("User Payroll Lists")] ),
+            [null, __("Unpaid by ") . ($mode == 'show' ? __("Show") : __("User"))]
         ]);
 
         if ( $csv == "csv" ) {
@@ -512,9 +512,9 @@ class PayrollsController extends AppController
         $shows = [$show->id => $show->name];
 
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/payrolls/", "Show Payroll Lists"],
-            [null, 'Add to show: ' . $show->name ]
+            ["/", __("Dashboard")],
+            ["/payrolls/", __("Show Payroll Lists")],
+            [null, __('Add to show: {0}', $show->name) ]
         ]);
         $this->set(compact('payroll', 'users', 'shows'));
         $this->set('_serialize', ['payroll']);
@@ -549,24 +549,16 @@ class PayrollsController extends AppController
 
         $payroll = $this->Payrolls->newEntity();
         if ($this->request->is('post')) {
-            $time = Time::createFromFormat(
-                 'Y-m-d',
-                 $this->request->data['date_worked'],
-                 'UTC'
-            );
+                        
+            $time = Time::createFromFormat('Y-m-d',$this->request->data['date_worked'],'UTC');
             $this->request->data['date_worked'] = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['start_time'],
-                 'UTC'
-            );
+
+            $time = Time::createFromFormat('H:i',$this->request->data['start_time'],'UTC');
             $this->request->data['start_time'] = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['end_time'],
-                 'UTC'
-            );
+
+            $time = Time::createFromFormat('H:i',$this->request->data['end_time'],'UTC');
             $this->request->data['end_time'] = $time;
+
             $fixed_data = array_merge($this->request->data, ['show_id' => $show->id, 'user_id' => $this->Auth->user('id'), 'is_paid' => 0]);
             $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
             if ($this->Payrolls->save($payroll)) {
@@ -580,9 +572,9 @@ class PayrollsController extends AppController
         $users = [$this->Auth->user('id') => $this->Auth->user('first') . " " . $this->Auth->user('last')];
         $shows = [$show->id => $show->name];
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/payrolls/", "Show Payroll Lists"],
-            [null, 'Add to yourself: ' . $this->Auth->user('first') . " " . $this->Auth->user('last') ]
+            ["/", __("Dashboard")],
+            ["/payrolls/", __("Show Payroll Lists")],
+            [null, __('Add to yourself: {0} {1}', $this->Auth->user('first'), $this->Auth->user('last')) ]
         ]);
         $this->set(compact('payroll', 'users', 'shows'));
         $this->set('_serialize', ['payroll']);
@@ -619,6 +611,7 @@ class PayrollsController extends AppController
             $this->Flash->error(__('You are not the payroll admin for any of this user\'s shows'));
             return $this->redirect(['action' => 'indexuser']);
         }
+        $this->set('shows', $showsValid);
 
         $payroll = $this->Payrolls->newEntity();
         if ($this->request->is('post')) {
@@ -629,24 +622,16 @@ class PayrollsController extends AppController
                     $this->Flash->error(__('You can not add payroll to that show for that user'));
                     return $this->redirect(['action' => 'indexuser']);
             }
-            $time = Time::createFromFormat(
-                 'Y-m-d',
-                 $this->request->data['date_worked'],
-                 'UTC'
-            );
+            
+            $time = Time::createFromFormat('Y-m-d',$this->request->data['date_worked'],'UTC');
             $this->request->data['date_worked'] = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['start_time'],
-                 'UTC'
-            );
+
+            $time = Time::createFromFormat('H:i',$this->request->data['start_time'],'UTC');
             $this->request->data['start_time'] = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['end_time'],
-                 'UTC'
-            );
+
+            $time = Time::createFromFormat('H:i',$this->request->data['end_time'],'UTC');
             $this->request->data['end_time'] = $time;
+
             $fixed_data = array_merge($this->request->data, ['user_id' => $user->id, 'is_paid' => 0]);
             $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
             if ($this->Payrolls->save($payroll)) {
@@ -660,9 +645,9 @@ class PayrollsController extends AppController
         $users = [$user->id => $user->first . " " . $user->last];
 
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/payrolls/indexuser", "User Payroll Lists"],
-            [null, 'Add to user: ' . $user->first . " " . $user->last ]
+            ["/", __("Dashboard")],
+            ["/payrolls/indexuser", __("User Payroll Lists")],
+            [null, __('Add to user: {0} {1}', $user->first, $user->last) ]
         ]);
         $this->set(compact('payroll', 'users', 'shows'));
         $this->set('_serialize', ['payroll']);
@@ -702,24 +687,16 @@ class PayrollsController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $time = Time::createFromFormat(
-                 'Y-m-d',
-                 $this->request->data['date_worked'],
-                 'UTC'
-            );
+
+            $time = Time::createFromFormat('Y-m-d',$this->request->data['date_worked'],'UTC');
             $this->request->data['date_worked'] = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['start_time'],
-                 'UTC'
-            );
+
+            $time = Time::createFromFormat('H:i',$this->request->data['start_time'],'UTC');
             $this->request->data['start_time'] = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['end_time'],
-                 'UTC'
-            );
+
+            $time = Time::createFromFormat('H:i',$this->request->data['end_time'],'UTC');
             $this->request->data['end_time'] = $time;
+
             $payroll = $this->Payrolls->patchEntity($payroll, $this->request->data, [
                 'fieldList' => $flist
             ]);

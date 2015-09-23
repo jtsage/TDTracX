@@ -54,8 +54,8 @@ class BudgetsController extends AppController
         }
 
         $this->set('crumby', [
-            ["/", "Home"],
-            [null, "Budget Lists"]
+            ["/", __("Dashboard")],
+            [null, __("Budget Lists")]
         ]);
 
         $this->set('shows', $shows);
@@ -102,9 +102,9 @@ class BudgetsController extends AppController
             ->order(['category' => 'ASC', 'date' => 'ASC']);
 
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/budgets/", "Budget Lists"],
-            [null, $show->name . " Budget"]
+            ["/", __("Dashboard")],
+            ["/budgets/", __("Budget Lists")],
+            [null, __("{0} Budget", $show->name)]
         ]);
 
         $this->set('show', $show);
@@ -218,10 +218,10 @@ class BudgetsController extends AppController
         $cat = json_encode($catq->extract('category'));
 
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/budgets/", "Budget Lists"],
-            ["/budgets/view/" . $show->id, $show->name . " Budget"],
-            [null, "Add Expense"]
+            ["/", __("Dashboard")],
+            ["/budgets/", __("Budget Lists")],
+            ["/budgets/view/" . $show->id, __("{0} Budget", $show->name)],
+            [null, __("Add Expense")]
         ]);
 
         $shows = [$show->id => $show->name];
@@ -292,9 +292,9 @@ class BudgetsController extends AppController
         $cat = json_encode($catq->extract('category'));
 
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/budgets/", "Budget Lists"],
-            ["/budgets/view/" . $show->id, $show->name . " Budget"],
+            ["/", __("Dashboard")],
+            ["/budgets/", __("Budget Lists")],
+            ["/budgets/view/" . $show->id, __("{0} Budget", $show->name)],
             [null, "Edit Expense"]
         ]);
 

@@ -157,6 +157,10 @@ class PagesController extends AppController
         $this->set('payrollAdmUsers', $payrollAdmUsers);
         $this->set('budgetAdmin', $budgetAdmin);
 
+        $this->set('crumby', [
+            [null, __("Dashboard")]
+        ]);
+
         $this->render('dashboard');
     }
 }

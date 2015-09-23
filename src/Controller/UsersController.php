@@ -105,14 +105,14 @@ class UsersController extends AppController
 
         if ( $this->Auth->user('is_admin')) {
             $this->set('crumby', [
-                ["/", "Home"],
-                ["/users/", "Users"],
-                [null, "View User"]
+                ["/", __("Dashboard")],
+                ["/users/", __("Users")],
+                [null, __("View User")]
             ]);
         } else {
             $this->set('crumby', [
-                ["/", "Home"],
-                [null, "Your Profile"]
+                ["/", __("Dashboard")],
+                [null, __("Your Profile")]
             ]);
         }
 
@@ -143,9 +143,9 @@ class UsersController extends AppController
             }
         }
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/users/", "Users"],
-            [null, "Add User"]
+            ["/", __("Dashboard")],
+            ["/users/", __("Users")],
+            [null, __("Add User")]
         ]);
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
@@ -179,10 +179,10 @@ class UsersController extends AppController
             }
         }
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/users/", "Users"],
+            ["/", __("Dashboard")],
+            ["/users/", __("Users")],
             ["/users/view/" . $user->id, $user->first . " " . $user->last],
-            [null, "Edit User"]
+            [null, __("Edit User")]
         ]);
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
@@ -209,9 +209,9 @@ class UsersController extends AppController
             }
         }
         $this->set('crumby', [
-            ["/", "Home"],
-            ["/users/view/" . $user->id, "Your Profile"],
-            [null, "Edit Profile"]
+            ["/", __("Dashboard")],
+            ["/users/view/" . $user->id, __("Your Profile")],
+            [null, __("Edit Profile")]
         ]);
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
@@ -237,16 +237,16 @@ class UsersController extends AppController
         }
         if ( $this->Auth->user('is_admin') ) {
             $this->set('crumby', [
-                ["/", "Home"],
-                ["/users/", "User List"],
+                ["/", __("Dashboard")],
+                ["/users/", __("User List")],
                 ["/users/view/" . $user->id, $user->first . " " . $user->last],
-                [null, "Change Password"]
+                [null, __("Change Password")]
             ]);
         } else {
             $this->set('crumby', [
-                ["/", "Home"],
-                ["/users/view/" . $user->id, "Your Profile"],
-                [null, "Change Your Password"]
+                ["/", __("Dashboard")],
+                ["/users/view/" . $user->id, __("Your Profile")],
+                [null, __("Change Your Password")]
             ]);
         }
         $this->set(compact('user'));
