@@ -874,4 +874,81 @@ class PayrollsController extends AppController
             return $this->redirect(['action' => 'viewbyshow', $payroll->show_id]);
         }
     }
+
+    /**
+     * Mark (show) method
+     *
+     * @param string|null $id Show id.
+     * @return void Redirects to index.
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function markshowpaid($id = null)
+    {
+        if ( !(
+            $this->Auth->user('is_admin') || 
+            $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_pay_admin')
+         ) ) {
+            $this->Flash->error(__('You cannot mark this show paid'));
+            return $this->redirect(['action' => 'viewbyshow', $id]);
+        }
+
+        $query = $this->Payrolls->query();
+        $query->update()
+            ->set(['is_paid' => 1])
+            ->where(['show_id' => $id])
+            ->execute();
+
+        $this->Flash->success(__('The show has been marked paid.'));
+        return $this->redirect(['action' => 'viewbyshow', $id]);
+    }
+
+    /**
+     * Mark (user) method
+     *
+     * @param string|null $id User id.
+     * @return void Redirects to index.
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function markuserpaid($id = null)
+    {
+        if ( !(
+            $this->Auth->user('is_admin') 
+         ) ) {
+            $this->Flash->error(__('You cannot mark this user paid'));
+            return $this->redirect(['action' => 'viewbyuser', $id]);
+        }
+
+        $query = $this->Payrolls->query();
+        $query->update()
+            ->set(['is_paid' => 1])
+            ->where(['user_id' => $id])
+            ->execute();
+
+        $this->Flash->success(__('The user has been marked paid.'));
+        return $this->redirect(['action' => 'viewbyuser', $id]);
+    }
+
+    /**
+     * Mark (all) method
+     *
+     * @return void Redirects to index.
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function markallpaid()
+    {
+        if ( !(
+            $this->Auth->user('is_admin') 
+         ) ) {
+            $this->Flash->error(__('You cannot mark all paid'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        $query = $this->Payrolls->query();
+        $query->update()
+            ->set(['is_paid' => 1])
+            ->execute();
+
+        $this->Flash->success(__('All records have been marked paid.'));
+        return $this->redirect(['action' => 'index']);
+    }
 }
