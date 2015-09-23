@@ -101,8 +101,6 @@ class UsersController extends AppController
             'contain' => ['Messages', 'ShowUserPerms' => ['Shows']]
         ]);
 
-        if ( $this->Auth->user('is_admin')) { $this->set('showpay', true); }
-
         if ( $this->Auth->user('is_admin')) {
             $this->set('crumby', [
                 ["/", __("Dashboard")],

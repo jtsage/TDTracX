@@ -7,7 +7,6 @@
             echo $this->Form->input('first', ['label' => __("First Name")]);
             echo $this->Form->input('last', ['label' => __("Last Name")]);
             echo $this->Form->input('phone', ['label' => __("Phone Number")]);
-            echo $this->Form->input('pay_rate', ['label' => __("Pay Rate")]);
         ?>
         <div class="form-group"><label class="control-label"><?= __("Time Zone") ?></label>
         <?php
@@ -66,7 +65,6 @@
     [__("First Name"),      __("User's first name")],
     [__("Last Name"),       __("User's last name")],
     [__("Phone Number"),    __("User's 10-digit phone number, no punctuation.")],
-    [__("Pay Rate"),        __("User's Pay Rate.")],
     [__("Time Zone"),       __("User's time zone. Defaults to EST/EDT (USA).")],
     [__("Is Active"),       __("When checked, the user can login.")],
     [__("Is Pass Expired"), __("When checked, the user will be reminded to change their password on login - but not forced.")],

@@ -95,10 +95,6 @@ class UsersTable extends Table
             ->allowEmpty('phone');
 
         $validator
-            ->add('payrate', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('payrate');
-
-        $validator
             ->add('is_active', 'valid', ['rule' => 'boolean']);
 
         $validator
