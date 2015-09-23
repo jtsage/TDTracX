@@ -17,7 +17,7 @@ class PrettyHelper extends Helper
     }
     public function iconEdit($name)
     {
-        return PrettyHelper::makeIcon($name, 'pencil', __('Edit'));
+        return PrettyHelper::makeIcon($name, 'pencil-square-o', __('Edit'));
     }
     public function iconMark($name)
     {

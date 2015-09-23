@@ -22,6 +22,19 @@
     </h3>
 </div>
 
+<?php if( isset($orphans) ) : ?>
+<div role="alert" class="alert alert-dismissible fade in alert-warning"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>This show has orphaned payroll records by:
+<?php
+    $list = [];
+    foreach ( $orphans as $orphan ) {
+        $list[] = $orphan->fullname;
+    }
+    echo join(', ', $list);
+?>
+. <a class="alert-link" href="/shows/editperm/<?= $show->id ?>">Fix It</a>
+</div>
+<?php endif; ?>
+
 <table class="table table-striped table-bordered">
     <thead>
         <?= $this->Html->tableHeaders([
@@ -139,4 +152,6 @@
 
 <p><?= __("Only payroll admin's may mark records paid.  Regular payroll users may only edit or delete payroll records that have not yet been marked paid.") ?></p>
 
+<h4><?= __("Orphaned Records Warning") ?></h4>
+<p><?= __("System administrators may see a warning about orphaned records.  This is caused when a user adds payroll records and is later denied access to a show.  These records will not print on any reports, but they will cause the totals on the dashboard to be incorrect.  To fix these, you will need to re-grant access to that user before removing those records.") ?></p>
 <?= $this->Pretty->helpMeEnd(); ?>

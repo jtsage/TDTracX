@@ -216,5 +216,7 @@
     [__("Other Shows"),              __("Shows that you are neither paid on, or the payroll administrator of. This is only shown for system administrators, and you may only view the payroll record.")]
 ]); ?>
 </table>
+<h3><?= __("Why doesn't my total match?") ?></h3>
+<p><?= __("When you are a payroll admin, it is possible that the total number of paid and outstanding hours do not match the total shown in the detailed report.  The cause of this is a user entered payroll for this show, but was then removed from the access list.  This is why setting your access lists properly is important - to correct the discrepancy, the system administrator will need to re-grant access to that show, then remove the payroll items, folled with again denying access.  Note that denying access at a later time <strong>will</strong> hide that user in the detailed report"); ?></p>
 
 <?= $this->Pretty->helpMeEnd(); ?>

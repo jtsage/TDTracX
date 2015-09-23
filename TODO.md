@@ -1,7 +1,6 @@
 Main Items:
  * payroll et all
-   * add clean interface
-   * add check permissions
+   * view by user by self or payadmin
    * edit set permissions, set interface
    * delete set permissions
    * mark individual (all)

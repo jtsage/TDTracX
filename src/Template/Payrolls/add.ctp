@@ -1,5 +1,5 @@
 <div class="payrolls form large-10 medium-9 columns">
-    <?= $this->Form->create($payroll) ?>
+    <?= $this->Form->create($payroll, ['data-toggle' => 'validator']) ?>
     <fieldset>
         <legend><?= __('Add Payroll Item') ?></legend>
         <?php

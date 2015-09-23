@@ -39,6 +39,13 @@
                 </div>
             </div>
         </div>
+        <a href="/payrolls/addtouser/<?= $id; ?>">
+            <div class="panel-footer">
+                <span class="pull-left"><?= __('Add Payroll Item'); ?></span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        </a>
         <a href="/payrolls/viewbyuser/<?= $id; ?>">
             <div class="panel-footer">
                 <span class="pull-left"><?= __('View Details'); ?></span>
@@ -52,5 +59,5 @@
 </div>
 
 <?= $this->Pretty->helpMeStart(__('View Payroll by User')); ?>
-<p><?= __("This display shows the payroll reports of all active users in the system.  This display is only available to system administrators.") ?></p>
+<p><?= __("This display shows the payroll reports of all active users, in shows you administer.  This display shows all active payroll users for system administrators.") ?></p>
 <?= $this->Pretty->helpMeEnd(); ?>
