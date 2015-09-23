@@ -5,7 +5,7 @@ return [
 			'className' => 'Cake\Database\Connection',
 			'driver' => 'Cake\Database\Driver\Mysql',
 			'persistent' => false,
-			'host' => 'mysql.jtsage.com',
+			'host' => 'localhost',
 			'username' => 'tdtracx',
 			'password' => 'xcartdt',
 			'database' => 'tdtracx',
