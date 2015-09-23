@@ -26,3 +26,15 @@ without modification, but you may charge for installation or use of this code on
 If you find this especially useful, or make a ton of money off this though, please drop me a line
 as I would love to see what you have put together.  Also, if you use this code as a basis of a new
 project, I would also like to see what you come up with.
+
+
+### Installation
+
+
+## The Demo
+
+If you want to run your own version of the demo, you can run the 'DemoReset' shell script. (This is totally destructive to the PRODUCTION database - you have been warned.)
+
+To run it, you will need to be able to read and understand the php file, located at:
+
+/src/Shell/DemoResetShell.php

@@ -20,6 +20,14 @@ class DemoResetShell extends Shell
     public function main($doit = null) 
     {
     	if ( $doit <> "yesdoit" ) {
+    		// This is a the magic parameter.  Seriously, running this is a bad idea
+    		// and I really don't think you should do it.
+    		//
+    		// No, really - this *nukes* *all* data in the database, creates 3 fake users,
+    		// 2 fake shows, gives out some permissions, and finally creates a slew of fake
+    		// payroll and budget data, before finally wiping out any saved session information.
+    		//
+    		// Don't do it.
     		throw new InternalErrorException("Required parameter missing, read the docs please.");
     	}
 
