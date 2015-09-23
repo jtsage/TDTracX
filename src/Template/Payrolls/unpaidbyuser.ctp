@@ -1,52 +1,34 @@
 <div class="shows view large-10 medium-9 columns">
     <h3>
-        <?= h($user->first) . " " . h($user->last) . __("'s Payroll Expenditure") ?>
+        <?= __("Unpaid by User Payroll Expenditure") ?>
         <div class='btn-group'>
-        <?= ( $adminView  ) ?
-            $this->Html->link(
-                $this->Pretty->iconAdd($user->first . " " . $user->last . " " . __("Payroll Item")),
-                ['action' => 'addtouser', $user->id],
-                ['escape' => false, 'class' => 'btn btn-success btn-sm']
-            ) : "";
-        ?>
-        <?= ( $adminView  ) ? 
+        <?= ( $adminView == 2 ) ? 
             $this->Form->postLink(
-                $this->Pretty->iconMark($user->first . " " . $user->last),
-                ['action' => 'markuserpaid', $user->id],
-                ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $user->first . " " . $user->last),  'class' => 'btn btn-warning btn-sm']) : "";
+                $this->Pretty->iconMark('ALL'),
+                ['action' => 'markallpaid'],
+                ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL Payroll items paid?'),  'class' => 'btn btn-warning btn-sm']) : "";
         ?>
         <?= $this->Html->link(
                 $this->Pretty->iconDL(
-                    $user->first . " " . $user->last . __('&#39;s Payroll Report')
+                    __('Unpaid by User Payroll Report')
                 ),
-                ['action' => 'viewbyuser', $user->id, 'csv'],
+                ['action' => 'unpaidbyuser', 'csv'],
                 ['escape' => false, 'class' => 'btn btn-default btn-sm']);
         ?>
         </div>
     </h3>
 </div>
 
-<?php if( isset($orphans) ) : ?>
-<div role="alert" class="alert alert-dismissible fade in alert-warning"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>This user has orphaned payroll records in:
-<?php
-    $list = [];
-    foreach ( $orphans as $orphan ) {
-        $list[] = "<a class='alert-link' href='/shows/editperm/" . $orphan->id . "'>" . $orphan->showname . "</a>";
-    }
-    echo join(', ', $list);
-?>
-</div>
-<?php endif; ?>
 
 <table class="table table-striped table-bordered">
     <thead>
         <?= $this->Html->tableHeaders([
+            __("Show"),
             __("Date Worked"),
             __("Note"),
             [__("Start Time") => ['class' => 'text-right']],
             [__("End Time") => ['class' => 'text-right']],
             [__("Hours Worked") => ['class' => 'text-right']],
-            [__("Is Paid?") => ['class' => 'text-center']],
             [__("Actions") => ['class' => 'text-center']]
         ]); ?>
     </thead>
@@ -58,41 +40,34 @@
         $lastuser = "";
 
         foreach ( $payrolls as $item ) {
-            if ( $item->showname <> $lastuser ) {
+            if ( $item->fullname <> $lastuser ) {
                 if ( $subtotal > 0 ) {
                     echo $this->Html->tableCells([
                         [
-                            [ __('Show Sub-Total') . ": " . $lastuser , ['colspan' => 4]],
+                            [ __('User Sub-Total') . ": " . $lastuser , ['colspan' => 5]],
                             [number_format($subtotal,2), ['class' => 'text-right']],
-                            [ "", ['colspan' => 2]]
+                            [ "", ['colspan' => 1]]
                         ]
                     ], ['class' => 'success bold'], null, 1, false);  
                 }
                 echo $this->Html->tableCells([
                     [
-                        [ __('Show') . ": " . $item->showname . ( ( ! $item->activeshow ) ? "<strong> [" . _('closed') . "]</strong>" : " [" . __("Ending") . ": " . $item->show->end_date->i18nFormat('yyyy-MM-dd', 'UTC') . "]" ) , ['colspan' => 7]]
+                        [ __('User') . ": " . $item->fullname, ['colspan' => 7]]
                     ]
                 ], ['class' => 'info bold'], null, 1, false); 
 
                 $subtotal = 0;
-                $lastuser = $item->showname;
+                $lastuser = $item->fullname;
             }
 
              echo $this->Html->tableCells([
                 [
+                    $item->showname,
                     $item->date_worked->i18nFormat('EEE, MMM dd, yyyy', 'UTC'),
                     $item->notes,
                     [$item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'), ['class' => 'text-right']],
                     [$item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'), ['class' => 'text-right']],
                     [ number_format($item->worked, 2), ['class' => 'text-right']],
-                    [
-                        ( ( $adminView && !$item->is_paid ) ?
-                            $this->Form->postLink(
-                                $this->Pretty->iconMark($item->notes),
-                                ['action' => 'markpaid', $item->id, 1],
-                                ['escape' => false, 'confirm' => __('Are you sure you want to mark paid # {0}?', $item->id), 'class' => 'btn btn-warning btn-sm']) : "" ) . " " .
-                        $this->Bool->prefYes($item->is_paid), ['class' => 'text-center']
-                    ],
                     [
                         ( ( $adminView || !$item->is_paid ) ?
                             $this->Html->link(
@@ -115,17 +90,17 @@
         if ( $total > 0 ) {
             echo $this->Html->tableCells([
                 [
-                    [ __('Show Sub-Total') . ": " . $lastuser , ['colspan' => 4]],
+                    [ __('Show Sub-Total') . ": " . $lastuser , ['colspan' => 5]],
                     [number_format($subtotal,2), ['class' => 'text-right']],
-                    [ "", ['colspan' => 2]]
+                    [ "", ['colspan' => 1]]
                 ]
             ], ['class' => 'success bold'], null, 1, false);  
 
             echo $this->Html->tableCells([
                 [
-                    [ __('Total Hours'), ['colspan' => 4]],
+                    [ __('Total Hours'), ['colspan' => 5]],
                     [number_format($total,2), ['class' => 'text-right']],
-                    [ "", ['colspan' => 2]]
+                    [ "", ['colspan' => 1]]
                 ]
             ], ['class' => 'danger bold'], null, 1, false);
         }
