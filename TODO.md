@@ -1,6 +1,7 @@
 Main Items:
  * messageing system - add hours
 
-Desired features (highly likely):
- * cron e-mails
-   * partial, needs documented
+Documentation:
+ * installation
+ * cron e-mail
+ * shell tools

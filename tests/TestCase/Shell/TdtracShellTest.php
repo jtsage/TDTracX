@@ -1,13 +1,13 @@
 <?php
 namespace App\Test\TestCase\Shell;
 
-use App\Shell\InstallerShell;
+use App\Shell\TdtracShell;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Shell\InstallerShell Test Case
+ * App\Shell\TdtracShell Test Case
  */
-class InstallerShellTest extends TestCase
+class TdtracShellTest extends TestCase
 {
 
     /**
@@ -19,7 +19,7 @@ class InstallerShellTest extends TestCase
     {
         parent::setUp();
         $this->io = $this->getMock('Cake\Console\ConsoleIo');
-        $this->Installer = new InstallerShell($this->io);
+        $this->Tdtrac = new TdtracShell($this->io);
     }
 
     /**
@@ -29,7 +29,7 @@ class InstallerShellTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Installer);
+        unset($this->Tdtrac);
 
         parent::tearDown();
     }

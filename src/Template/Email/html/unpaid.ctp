@@ -16,7 +16,7 @@
 <h3>This contains the current list of users needing payed.</h3>
 <p>Please visit the database to set these hours as paid.</p>
 
-<table style="width: 100%">
+<table border="1" style="width: 100%">
 <thead>
 <?= $this->Html->tableHeaders($headers); ?>
 </thead>
