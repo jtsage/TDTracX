@@ -72,6 +72,11 @@ class UsersController extends AppController
                     return $this->redirect(['controller' => 'Users', 'action' => 'changepass', $this->Auth->user('id')]); 
                 }
 
+                if ( ! $this->Auth->user('is_active')) {
+                    $this->Flash->error(__("Your account is disabled, please contact your system adminitrator"));
+                    return $this->redirect($this->Auth->logout());
+                }
+
                 return $this->redirect($this->Auth->redirectUrl());
             }
             $this->Flash->error('Your username or password is incorrect.');

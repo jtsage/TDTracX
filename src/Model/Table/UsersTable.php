@@ -58,7 +58,7 @@ class UsersTable extends Table
     {
         $query
             ->select(['id', 'username', 'password'])
-            ->where(['Users.active' => 1]);
+            ->where(['Users.is_active' => 1]);
 
         return $query;
     }
