@@ -4,6 +4,7 @@
 namespace App\View\Helper;
 
 use Cake\View\Helper;
+use Cake\I18n\Time;
 
 class PrettyHelper extends Helper
 {
@@ -70,37 +71,34 @@ class PrettyHelper extends Helper
 
     public function clockPicker( $name, $label, $time=null ) {
         if ( !is_null($time) ) { 
-            $realtime = " value=\"" . $time . "\"";
+            $time = Time::createFromFormat('H:i',$time,'UTC');
+            $val = $time->i18nFormat('H:mm', 'UTC');
+            $pretval = $time->i18nFormat('h:mm a', 'UTC');
         } else {
-            $realtime = "";
+            $val = "";
+            $pretval = "";
         }
 
         $retty  = '<div class="form-group required">';
         $retty .= '<label class="control-label">' . $label . '</label>';
-        $retty .= '<div class="input-group clockpicker">';
-        $retty .= '<span class="input-group-addon"><i class="fa fa-clock-o"></i></span>';
-        $retty .= '<input type="text" readonly name="' . $name . '" id="' . $name . '" class="form-control"' . $realtime . '>';
-        $retty .= '</div></div>';
+        $retty .= '<input type="text" data-role="datebox" data-datebox-mode="timeflipbox" id="' . $name . '-dbox" class="form-control" value="' . $pretval . '" data-options=\'{"linkedField": "#' . $name . '", "overrideTimeFormat": 12, "overrideTimeOutput": "%-I:%M %p", "linkedFieldFormat": "%H:%M", "minuteStep": 15 }\'>';
+        $retty .= '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $val . '" /></div>';
         return $retty;
     }
 
     public function datePicker( $name, $label, $time=null ) {
         if ( !is_null($time) ) { 
-            $realtime = $time->i18nFormat('YYYY-MM-dd') . "T00:00:00Z";
             $val = $time->i18nFormat('YYYY-MM-dd');
             $pretval = $time->i18nFormat('MMMM d, YYYY');
         } else {
-            $realtime = date('Y-m-d') . "T00:00:00Z";
             $val = date('Y-m-d');
-            $pretval = date('F d, Y');
+            $pretval = date('F j, Y');
         }
 
         $retty  = '<div class="form-group required">';
         $retty .= '<label class="control-label">' . $label . '</label>';
-        $retty .= '<div class="input-group date datepicker" data-date="' . $realtime . '" data-date-format="MM d, yyyy" data-link-field="' . $name . '" data-link-format="yyyy-mm-dd">';
-        $retty .= '<span class="input-group-addon"><i class="fa fa-calendar"></i></span>';
-        $retty .= '<input class="form-control" size="16" type="text" value="' . $pretval . '" readonly>';
-        $retty .= '</div><input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $val . '" /></div>';
+        $retty .= '<input class="form-control" data-role="datebox" data-datebox-mode="calbox" type="text" id="'.$name.'-dbox" value="' . $pretval . '" data-options=\'{"linkedField": "#' . $name . '", "overrideDateFormat": "%B %-d, %Y", "linkedFieldFormat": "%Y-%m-%d" }\'>';
+        $retty .= '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $val . '" /></div>';
         return $retty;
     }
 

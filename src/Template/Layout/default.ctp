@@ -32,9 +32,8 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     <?php
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css');
-       echo $this->Html->css('bootstrap-clockpicker.min');
        echo $this->Html->css('bootstrap-switch.min');
-       echo $this->Html->css('bootstrap-datetimepicker.min');
+       echo $this->Html->css('http://cdn.jtsage.com/jtsage-datebox/4.0.0/jtsage-datebox-4.0.0.bootstrap.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
        echo $this->Html->css('tdtracx');
     ?>
@@ -129,9 +128,10 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js');
     echo $this->Html->script('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js');
     echo $this->Html->script('bootstrap3-typeahead.min');
-    echo $this->Html->script('bootstrap-clockpicker.min');
     echo $this->Html->script('bootstrap-switch.min');
-    echo $this->Html->script('bootstrap-datetimepicker.min');
+    echo $this->Html->script('jquery-ui.min');
+    echo $this->Html->script('http://cdn.jtsage.com/jtsage-datebox/4.0.0/jtsage-datebox-4.0.0.bootstrap.min.js');
+    echo $this->Html->script('http://cdn.jtsage.com/external/jquery.mousewheel.min.js');
     echo $this->Html->script('validator.min');
   ?>
 
