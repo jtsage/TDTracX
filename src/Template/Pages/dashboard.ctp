@@ -203,7 +203,7 @@
                 </div>
             </div>
 
-            <a href="/users/">
+            <a href="/shows/">
                 <div class="panel-footer"><strong>
                     <span class="pull-left">View Show List</span>
                     <span class="pull-right">
@@ -214,7 +214,7 @@
                 </strong></div>
             </a>
 
-            <a href="/users/add/">
+            <a href="/shows/add/">
                 <div class="panel-footer">
                     <span class="pull-left">Add Show</span>
                     <span class="pull-right"><i class="fa fa-lg fa-arrow-right"></i></span>
