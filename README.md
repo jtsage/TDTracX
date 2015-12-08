@@ -30,11 +30,48 @@ project, I would also like to see what you come up with.
 
 ### Installation
 
+1.) Clone GIT repository into your hosting folder, and change into that directory.
+
+2.) Run composer:
+
+```
+$ composer install
+```
+
+3.) Run initial migration:
+
+```
+$ ./bin/cake migrations migrate
+```
+
+4.) Run TDTracX installer:
+
+```
+$ ./bin/cake tdtrac install
+```
+
+5.) Log in, change user e-mail, name, and password.
+
+
+#### Lighttpd Redirects:
+
+```
+$HTTP["host"] =~ "demox\.tdtrac\.com" {
+    server.document-root = "/home/tdtracx/webroot/"
+    url.rewrite-once =(
+        "/(favicon.ico)" => "/$1",
+        "/(fonts|css|files|img|js|php)/(.*)" => "/$1/$2",
+        "^([^\?]*)(\?(.+))?$" => "/index.php?url=$1&$3"
+    )
+}
+```
 
 ## The Demo
 
-If you want to run your own version of the demo, you can run the 'DemoReset' shell script. (This is totally destructive to the PRODUCTION database - you have been warned.)
+If you want to run your own version of the demo, you can run the shell script. (This is totally destructive to the PRODUCTION database - you have been warned.)
 
 To run it, you will need to be able to read and understand the php file, located at:
 
-/src/Shell/DemoResetShell.php
+```
+$ ./bin/cake tdtrac demoreset
+```
