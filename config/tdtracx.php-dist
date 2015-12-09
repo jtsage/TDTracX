@@ -1,5 +1,6 @@
 <?php
 return [ 
+	'debug' => true,
 	'Datasources' => [
         'default' => [
 			'className' => 'Cake\Database\Connection',
@@ -13,6 +14,10 @@ return [
 			'timezone' => 'UTC',
 			'cacheMetadata' => true,
         ],
+    ],
+    'Security' => [
+    	// CHANGE THIS!
+        'salt' => '4c5243a39f4b256a39c0db40125ffb010a52dcaba639a2eb493fd43a9dd91d63',
     ],
 ];
 ?>

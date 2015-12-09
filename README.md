@@ -66,6 +66,12 @@ $HTTP["host"] =~ "demox\.tdtrac\.com" {
 }
 ```
 
+#### Improve performance?
+
+```
+$ php composer.phar dumpautoload -o
+```
+
 ## The Demo
 
 If you want to run your own version of the demo, you can run the shell script. (This is totally destructive to the PRODUCTION database - you have been warned.)

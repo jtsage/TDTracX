@@ -9,7 +9,7 @@ return [
      * Development Mode:
      * true: Errors and warnings shown.
      */
-    'debug' => true,
+    'debug' => false,
 
     /**
      * Configure basic information about the application.
@@ -61,9 +61,7 @@ return [
      *   The salt value is also used as the encryption key.
      *   You should treat it as extremely sensitive data.
      */
-    'Security' => [
-        'salt' => '4c5243a39f4b256a39c0db40125ffb010a52dcaba639a2eb493fd43a9dd91d63',
-    ],
+    
 
     /**
      * Apply timestamps with the last modified time to static assets (js, css, images).
