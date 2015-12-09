@@ -15,6 +15,8 @@ if ($mysqli->connect_errno) {
     echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
 
+$users = array();
+
 echo "-- TDTrac DataBase Updater v.4.0.0\n\n";
 echo "/*\nDANGER DANGER DANGER DANGER\n";
 echo "\nThis utility DOES NOT SET PASSWORDS correctly.  Best idea is not to overwrite your admin\n";
@@ -33,6 +35,7 @@ $next = false;
 while ( $row = $res->fetch_assoc()) {
 	if ( $next ) { echo ","; } $next = true;
 	echo "\n( {$row['userid']}, '{$row['email']}', '{$DEFAULT_NEW_PASSWORD}', '{$row['first']}', '{$row['last']}', {$row['phone']}, 1, 1, '{$row['since']}' )";
+	$users[] = array($row['email'], $row['password']);
 }
 echo ";\n";
 
@@ -45,7 +48,7 @@ echo "\nINSERT INTO `shows` ( `id`, `name`, `location`, `is_active`, `end_date` 
 $next = false;
 while ( $row = $res->fetch_assoc()) {
 	if ( $next ) { echo ","; } $next = true;
-	echo "\n( {$row['showid']}, '{$row['showname']}', '{$row['company']} @ {$row['venue']}', 1, '{$today}' )";
+	echo "\n( {$row['showid']}, '" . $mysqli->real_escape_string($row['showname']) . "', '" . $mysqli->real_escape_string($row['company']) . " @ " . $mysqli->real_escape_string($row['venue']) . "', 1, '{$today}' )";
 }
 echo ";\n";
 
@@ -60,7 +63,7 @@ while ( $row = $res->fetch_assoc()) {
 }
 echo ";\n";
 
-$res = $mysqli->query("SELECT * FROM {$MYSQL_PREFIX}hours WHERE showid IN (SELECT showid FROM {$MYSQL_PREFIX}shows WHERE closed = 0)");
+$res = $mysqli->query("SELECT * FROM {$MYSQL_PREFIX}hours WHERE showid IN (SELECT showid FROM {$MYSQL_PREFIX}shows WHERE closed = 0) AND userid IN (SELECT userid FROM {$MYSQL_PREFIX}users WHERE active = 1)");
 
 echo "\n\n-- PAYROLLS Table\n";
 echo "\nINSERT INTO `payrolls` ( `date_worked`, `start_time`, `end_time`, `is_paid`, `notes`, `user_id`, `show_id` ) VALUES ";
@@ -80,10 +83,17 @@ while ( $row = $res->fetch_assoc()) {
 	$endtime = new DateTime("00:00:00");
 	$endtime->add($timeamount);
 	$noty = (is_null($row['note']) ? " " : $row['note']);
+	$noty = $mysqli->real_escape_string($noty);
 
-	echo "\n( '{$row['date']}', " . $starttime->format("H:i:00") . "', '" . $endtime->format("H:i:00") . "', {$row['submitted']}, '{$noty}', {$row['userid']}, {$row['showid']} )";
+	echo "\n( '{$row['date']}', '" . $starttime->format("H:i:00") . "', '" . $endtime->format("H:i:00") . "', {$row['submitted']}, '{$noty}', {$row['userid']}, {$row['showid']} )";
 }
 echo ";\n";
+
+echo "\n/*\nUser Password Fixes:\n\n";
+foreach ( $users as $user ) {
+	echo "./bin/cake tdtrac resetpass {$user[0]} {$user[1]}\n";
+}
+echo "*/\n";
 
 
 ?>
