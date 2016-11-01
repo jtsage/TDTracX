@@ -81,3 +81,12 @@ To run it, you will need to be able to read and understand the php file, located
 ```
 $ ./bin/cake tdtrac demoreset
 ```
+
+## Periodic Emails
+
+```
+0 6 * * * /home/tdtrac/bin/cake sendunpaid user@host 0 14 2015-12-06 
+```
+
+This will send every 2 weeks on sunday.
+
