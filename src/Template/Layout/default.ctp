@@ -80,6 +80,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
             </li>
 
             <li><a href="/budgets/"><?= __("Budget") ?></a></li>
+            <li><a href="/tasks/"><?= __("Tasks") ?></a></li>
             <li><a href="/shows/"><?= __("Shows") ?></a></li>
             <li><a href="/users/"><?= ($WhoAmI) ? __("Users") : __("My Account") ?></a></li>
             <li><a href="/users/logout/"><?= __("Logout") ?></a></li>

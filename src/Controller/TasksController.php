@@ -40,53 +40,71 @@ class TasksController extends AppController
             ->where(['id' => $permListU], ['id' => 'integer[]'])
             ->order(['end_date' => 'ASC']);
 
-        $tasktotal = $this->Tasks->find('all')
+        $tasktotal = $this->Shows->find('all')
             ->select([
-                'show_id' => 'Tasks.show_id',
-                'total' => 'count(id)'
+                'show_id' => 'Shows.id',
+                'show_name' => 'Shows.name',
+                'total' => 'count(Tasks.id)'
             ])
-            ->group('show_id');
-
-        $taskdone = $this->Tasks->find('all')
+            ->join([
+                'table' => 'tasks',
+                'alias' => 'Tasks',
+                'type' => 'LEFT',
+                'conditions' => ['Shows.id = Tasks.show_id'],
+            ])
+            ->group('Shows.id');
+        
+        $taskdone = $this->Shows->find('all')
             ->select([
-                'total' => 'count(id)',
-                'show_id' => 'Tasks.show_id'
+                'show_id' => 'Shows.id',
+                'show_name' => 'Shows.name',
+                'total' => 'count(Tasks.id)'
             ])
-            ->where(['Tasks.task_done' => 1])
-            ->group('show_id');
+            ->join([
+                'table' => 'tasks',
+                'alias' => 'Tasks',
+                'type' => 'LEFT',
+                'conditions' => ['Shows.id = Tasks.show_id', 'Tasks.task_done = 1'],
+            ])
+            ->group('Shows.id');
 
-        $taskacceptnotdone = $this->Tasks->find('all')
-            ->where(['Tasks.task_accepted' => 1])
-            ->where(['Tasks.task_done' => 0 ])
+        $tasknotdone = $this->Shows->find('all')
             ->select([
-                'total' => 'count(id)',
-                'show_id' => 'Tasks.show_id'
+                'show_id' => 'Shows.id',
+                'show_name' => 'Shows.name',
+                'total' => 'count(Tasks.id)'
             ])
-            ->group('show_id');
+            ->join([
+                'table' => 'tasks',
+                'alias' => 'Tasks',
+                'type' => 'LEFT',
+                'conditions' => ['Shows.id = Tasks.show_id', 'Tasks.task_done = 0', 'Tasks.task_accepted = 1'],
+            ])
+            ->group('Shows.id');
 
-        $showtask = [];
+        $showtask = ['total' => [], 'done' => [], 'accept_notdone' => []];
 
         foreach ( $tasktotal as $show ) {
-            $showtask['total'] = [$show->show_id => $show->total];
+            $showtask['total'][$show->show_id] = $show->total;
         }
         foreach ( $taskdone as $show ) {
-            $showtask['done'] = [$show->show_id => $show->total];
+            $showtask['done'][$show->show_id] = $show->total;
         }
-        foreach ( $taskacceptnotdone as $show ) {
-            $showtask['accept_notdone'] = [$show->show_id => $show->total];
+        foreach ( $tasknotdone as $show ) {
+            $showtask['accept_notdone'][$show->show_id] = $show->total;
         }
 
         $this->set('showtask', $showtask);
 
-        if ( $this->Auth->user('is_admin') ) {
-            $inactshows = $this->Shows->find('all')
-                ->where(['Shows.is_active' => 0])
-                ->where(['id' => $permListA], ['id' => 'integer[]'])
-                ->order(['end_date' => 'ASC']);
-            $this->set('inactshows', $inactshows);
-        } else {
-            $this->set('inactshows', []);
-        }
+        // if ( $this->Auth->user('is_admin') ) {
+        //     $inactshows = $this->Shows->find('all')
+        //         ->where(['Shows.is_active' => 0])
+        //         ->where(['id' => $permListA], ['id' => 'integer[]'])
+        //         ->order(['end_date' => 'ASC']);
+        //     $this->set('inactshows', $inactshows);
+        // } else {
+        //     $this->set('inactshows', []);
+        // }
 
         $this->set('crumby', [
             ["/", __("Dashboard")],

@@ -14,12 +14,17 @@
                 </div>
                 <div class="col-xs-9 text-right">
                     <div class="huge"><?= $show->name ?></div>
-                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total of {0}{4}{1} tasks", [
+                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total of {0}{4}{1} tasks, ", [
                         "<strong>",
                         "</strong>",
                         $show->location,
                         $show->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
-                        0 #$this->Number->currency($total)
+                        $showtask['total'][$show->id]
+                    ]); ?><?= __("with {0}{2}{1} pending and {0}{3}{1} done.", [
+                        "<strong>",
+                        "</strong>",
+                        $showtask['done'][$show->id],
+                        $showtask['accept_notdone'][$show->id]
                     ]); ?></div>
                 </div>
             </div>
@@ -59,12 +64,17 @@
                 </div>
                 <div class="col-xs-9 text-right">
                     <div class="huge"><?= $show->name ?></div>
-                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total of {0}{4}{1} tasks", [
+                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total of {0}{4}{1} tasks, ", [
                         "<strong>",
                         "</strong>",
                         $show->location,
                         $show->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
-                        0 #$this->Number->currency($total)
+                        $showtask['total'][$show->id]
+                    ]); ?><?= __("with {0}{2}{1} pending and {0}{3}{1} done.", [
+                        "<strong>",
+                        "</strong>",
+                        $showtask['done'][$show->id],
+                        $showtask['accept_notdone'][$show->id]
                     ]); ?></div>
                 </div>
             </div>
