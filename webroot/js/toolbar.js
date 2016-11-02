@@ -24,6 +24,7 @@
 	};
 
 	var onReady = function() {
+
 		if (!win.__debug_kit_id) {
 			return;
 		}
@@ -86,3 +87,5 @@
 			'that supports addEventListener().')
 	}
 }(window, document));
+
+

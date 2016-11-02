@@ -67,6 +67,16 @@ class ShowUserPermsTable extends Table
             ->requirePresence('is_budget', 'create')
             ->notEmpty('is_budget');
 
+        $validator
+            ->add('is_task_admin', 'valid', ['rule' => 'boolean'])
+            ->requirePresence('is_task_admin', 'create')
+            ->notEmpty('is_task_admin');
+
+        $validator
+            ->add('is_task_user', 'valid', ['rule' => 'boolean'])
+            ->requirePresence('is_task_user', 'create')
+            ->notEmpty('is_task_user');
+
         return $validator;
     }
 

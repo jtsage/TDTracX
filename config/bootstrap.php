@@ -206,3 +206,5 @@ Type::build('datetime')->useLocaleParser();
 Plugin::load('BootstrapUI');
 Plugin::load('CsvView');
 Plugin::load('Gourmet/Email');
+
+Plugin::load('DebugKit');

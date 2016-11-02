@@ -122,7 +122,7 @@ class ShowsController extends AppController
         $show = $this->Shows->get($id);
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $insertCol = [ "user_id", "show_id", "is_pay_admin", "is_paid", "is_budget" ];
+            $insertCol = [ "user_id", "show_id", "is_pay_admin", "is_paid", "is_budget", "is_task_admin", "is_task_user" ];
             $removeSql = $this->ShowUserPerms->query();
             $removeSql->delete()
                 ->where(['show_id' => $id])
@@ -136,6 +136,8 @@ class ShowsController extends AppController
                     'is_pay_admin' => ((isset($this->request->data['padmin'][$user]) && $this->request->data['padmin'][$user]) ? 1 : 0 ),
                     'is_paid' => ((isset($this->request->data['paid'][$user]) && $this->request->data['paid'][$user]) ? 1 : 0 ),
                     'is_budget' => ((isset($this->request->data['budget'][$user]) && $this->request->data['budget'][$user]) ? 1 : 0 ),
+                    'is_task_admin' => ((isset($this->request->data['task_admin'][$user]) && $this->request->data['task_admin'][$user]) ? 1 : 0 ),
+                    'is_task_user' => ((isset($this->request->data['task_user'][$user]) && $this->request->data['task_user'][$user]) ? 1 : 0 ),
                 ];
             }
 
@@ -159,7 +161,9 @@ class ShowsController extends AppController
                     $user['perms'] = array(
                         'is_pay_admin' => $perm->is_pay_admin,
                         'is_budget' => $perm->is_budget,
-                        'is_paid' => $perm->is_paid
+                        'is_paid' => $perm->is_paid,
+                        'is_task_admin' => $perm->is_task_admin,
+                        'is_task_user' => $perm->is_task_user
                     );
                 }
             }
@@ -167,7 +171,9 @@ class ShowsController extends AppController
                 $user['perms'] = array(
                     'is_pay_admin' => false,
                     'is_budget' => false,
-                    'is_paid' => false
+                    'is_paid' => false,
+                    'is_task_admin' => false,
+                    'is_task_user' => false
                 );
             }
         }

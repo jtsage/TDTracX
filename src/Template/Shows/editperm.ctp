@@ -79,6 +79,40 @@
                     "</div>"
                     => ['class' => 'success text-center' ]
                 ],
+
+                [ __("Task Admin") . ' ' . "<div class='btn-group'>" .
+                    $this->Pretty->jqButton(
+                        'toggle-on',
+                        'default',
+                        'paidAllOn',
+                        'toggleState',
+                        __('Toggle All YES') ) .
+                    $this->Pretty->jqButton(
+                        'toggle-off',
+                        'default',
+                        'paidAllOff',
+                        'toggleState',
+                        __('Toggle All NO') ) .
+                    "</div>"
+                    => ['class' => 'warning text-center' ]
+                ],
+
+                [ __("Task User") . ' ' . "<div class='btn-group'>" .
+                    $this->Pretty->jqButton(
+                        'toggle-on',
+                        'default',
+                        'paidAllOn',
+                        'toggleState',
+                        __('Toggle All YES') ) .
+                    $this->Pretty->jqButton(
+                        'toggle-off',
+                        'default',
+                        'paidAllOff',
+                        'toggleState',
+                        __('Toggle All NO') ) .
+                    "</div>"
+                    => ['class' => 'warning text-center' ]
+                ],
             ]); ?>
         </thead>
         <tbody>
@@ -123,6 +157,30 @@
                                 ]
                             ), ['class' => 'text-center']
                         ],
+                        [
+                            $this->Pretty->check(
+                                'task_admin[' . $user->id . ']',
+                                $user->perms['is_task_admin'],
+                                [
+                                    'on-text' => __('YES'),
+                                    'off-text' => __('NO'),
+                                    'on-color' => 'success',
+                                    'off-color' => 'danger'
+                                ]
+                            ), ['class' => 'text-center']
+                        ],
+                        [
+                            $this->Pretty->check(
+                                'task_user[' . $user->id . ']',
+                                $user->perms['is_task_user'],
+                                [
+                                    'on-text' => __('YES'),
+                                    'off-text' => __('NO'),
+                                    'on-color' => 'success',
+                                    'off-color' => 'danger'
+                                ]
+                            ), ['class' => 'text-center']
+                        ],
                     ]
                 ]);
             }
@@ -149,6 +207,8 @@
     [[__("Budget User"), ['class' => 'info']],          __("Budget Users have the ability to add, edit, and delete budget items from the show.")],
     [[__("Payroll Admin"), ['class' => 'danger']],      __("Payroll admin's have the ability to add, edit, and delete payroll items for any \"Payroll User\" of the show.  Most useful for group supervisors that do not need full system administrator access.  Payroll admin's may also view the payroll report from the show. System administrators can not automatically add payroll items, although they may view any payroll report from any show.")],
     [[__("Payroll User"), ['class' => 'success']],      __("Payroll users may add payroll items to the show.  They may edit or delete those payroll hours that have not yet been marked as \"paid\". Only payroll users appear on the payroll report for the show.")],
+    [[__("Task Admin"), ['class' => 'success']],      __("Task admins can accept, edit, and mark tasks finished.")],
+    [[__("Task User"), ['class' => 'success']],      __("Task users can add tasks for later acceptance and action. They can edit their own tasks.")],
 ]); ?>
 </table>
 

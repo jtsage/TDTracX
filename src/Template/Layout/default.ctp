@@ -30,12 +30,18 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     <?= $this->Html->meta('icon') ?>
 
     <?php
+
+       echo $this->fetch('meta');
+       echo $this->fetch('css');
+       echo $this->fetch('script');
+      
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css');
        echo $this->Html->css('bootstrap-switch.min');
        echo $this->Html->css('http://cdn.jtsage.com/jtsage-datebox/4.0.0/jtsage-datebox-4.0.0.bootstrap.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
        echo $this->Html->css('tdtracx');
+
     ?>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->

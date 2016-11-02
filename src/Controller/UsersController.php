@@ -66,6 +66,7 @@ class UsersController extends AppController
                 if ( $waitingmessage > 0 ) {
                     $this->Flash->success(__("You have waiting messages. View them in your account details."));
                 }
+                $this->set('UserTemp', $this->Auth->user('is_active'));
 
                 if ( $this->Auth->user('is_password_expired')) {
                     $this->Flash->error(__("Your password has expired, please change it!"));
