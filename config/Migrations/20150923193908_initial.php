@@ -91,12 +91,12 @@ class Initial extends AbstractMigration
                 'null' => false,
             ])
             ->addColumn('start_time', 'time', [
-                'default' => null,
+                'default' => "08:00:00",
                 'limit' => null,
                 'null' => false,
             ])
             ->addColumn('end_time', 'time', [
-                'default' => null,
+                'default' => "0000-00-00 15:00:00",
                 'limit' => null,
                 'null' => false,
             ])
