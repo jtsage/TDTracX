@@ -1,64 +1,80 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Task'), ['action' => 'edit', $task->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Task'), ['action' => 'delete', $task->id], ['confirm' => __('Are you sure you want to delete # {0}?', $task->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Tasks'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Task'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Shows'), ['controller' => 'Shows', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Show'), ['controller' => 'Shows', 'action' => 'add']) ?> </li>
-    </ul>
-</nav>
-<div class="tasks view large-9 medium-8 columns content">
-    <h3><?= h($task->id) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th scope="row"><?= __('Show') ?></th>
-            <td><?= $task->has('show') ? $this->Html->link($task->show->name, ['controller' => 'Shows', 'action' => 'view', $task->show->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Category') ?></th>
-            <td><?= h($task->category) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Id') ?></th>
-            <td><?= $this->Number->format($task->id) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Created By') ?></th>
-            <td><?= $this->Number->format($task->created_by) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Assigned To') ?></th>
-            <td><?= $this->Number->format($task->assigned_to) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Priority') ?></th>
-            <td><?= $this->Number->format($task->priority) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Task Accepted') ?></th>
-            <td><?= $this->Number->format($task->task_accepted) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Task Done') ?></th>
-            <td><?= $this->Number->format($task->task_done) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Due') ?></th>
-            <td><?= h($task->due) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Created At') ?></th>
-            <td><?= h($task->created_at) ?></td>
-        </tr>
-        <tr>
-            <th scope="row"><?= __('Updated At') ?></th>
-            <td><?= h($task->updated_at) ?></td>
-        </tr>
-    </table>
-    <div class="row">
-        <h4><?= __('Note') ?></h4>
-        <?= $this->Text->autoParagraph(h($task->note)); ?>
-    </div>
+<h3><?= $show->name ?> Tasks</h3>
+
+<ol class="breadcrumb">
+	<li><strong>Sort By: </strong></li>
+	<li><a <?= ($sort == "due") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/due">Due Date</a></li>
+	<li><a <?= ($sort == "new") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/new">New Items</a></li>
+	<li><a <?= ($sort == "created") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/created">Created Date</a></li>
+	<li><a <?= ($sort == "updated") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/updated">Updated Date</a></li>
+	<li><a <?= ($sort == "priority") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/priority">Assigned Priority</a></li>
+</ol>
+
+<?php foreach ($tasks as $task) : ?>
+
+<?php 
+if ( $task->task_done ) { $panel_class = "panel-success"; }
+elseif ( $task->is_overdue ) { $panel_class = "panel-danger"; }
+elseif ( ! $task->task_accepted ) { $panel_class = "panel-info"; }
+elseif ( $task->task_accepted ) { $panel_class = "panel-warning"; }
+else { $panel_class = "panel-danger" ;}
+?>
+
+<div class="panel <?= $panel_class ?>">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-xs-3">
+				<i class="fa fa-tasks fa-5x"></i>
+			</div>
+			<div class="col-xs-9 text-right">
+				<div class="huge"><?php
+    				for ( $i = 1; $i <= $task->priority; $i++ ) {
+    					echo '<i class="fa fa-bell" aria-hidden="true"></i>';
+    				} echo " " . $task->title ?></div>
+				<div><?= __("{3}due on {0}{2}{1}", [
+					"<strong>",
+					"</strong>",
+					$task->due->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
+					(($task->is_overdue) ? "was " : "is ")
+				]); ?></div>
+			</div>
+		</div>
+	</div>
+	<table class="table table-bordered">
+    	<tr><th>Created By</th><td><?= h($task->created_name) ?></td></tr>
+    	<tr><th>Asssigned To</th><td><?= h($task->assigned_name) ?></td></tr>
+    	<tr><th>Priority</th><td>
+    	<?php 
+    		for ( $i = 1; $i <= $task->priority; $i++ ) {
+    			echo '<i class="fa fa-bell" aria-hidden="true"></i>';
+    		}
+    		switch ( $task->priority ) {
+    			case 0:
+    				echo "Missable"; break;
+    			case 1:
+    				echo " Normal"; break;
+    			case 2:
+    				echo " High"; break;
+    			case 3:
+    				echo " Critical"; break;
+    		}
+    	?></td></tr>
+    	<tr><th>Category</th><td><?= h($task->category) ?></td></tr>
+    	<tr><th>Task Accepted</th><td class="<?= ($task->task_accepted) ? "success" : "warning" ?>"><?= ($task->task_accepted) ? "yes" : "no" ?></td></tr>
+    	<tr><th>Task Complete</th><td class="<?= ($task->task_done) ? "success" : ($task->is_overdue ? "danger" : "warning") ?>"><?= ($task->task_done) ? "YES" : "no" ?></td></tr>
+    	<tr><th>Created / Edited</th><td><?= h($task->created_at) ?> &nbsp;/ &nbsp;<?= h($task->updated_at) ?></td></tr>
+    	<tr><th colspan="2">Description</th></tr>
+  	</table>
+	<div class="panel-body">
+		<?= $this->Text->autoParagraph(h($task->note)); ?>
+	</div>
+
+	<a href="/tasks/edit/<?= $task->id; ?>">
+		<div class="panel-footer">
+			<span class="pull-left"><?= __('Edit Task Item'); ?></span>
+			<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+			<div class="clearfix"></div>
+		</div>
+	</a>
 </div>
+
+<?php endforeach; ?>

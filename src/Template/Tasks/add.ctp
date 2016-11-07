@@ -8,24 +8,26 @@
             echo $this->Form->input('priority', ['label' => __('Priority'), 'options' => [0 => 'Missable', 1 => 'Normal', 2 => 'High', 3 => 'Critical' ]]);
             echo $this->Pretty->datePicker('due', __('Due / Event / Opening Date'));
             echo $this->Form->input('category', ['label' => __('Task Category'), 'autocomplete' => 'off', 'data-provide' => 'typeahead', 'data-source' => $cat]);
-            echo $this->Form->input('note');
+            echo $this->Form->input('title', ['label' => __('Task Title')]);
+            echo $this->Form->input('note', ['label' => __('Description')]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit'), ['class' => 'btn-default']) ?>
     <?= $this->Form->end() ?>
 </div>
 
-<?= $this->Pretty->helpMeStart(__('Add Budget Item')); ?>
-<p><?= __("This display allows you to add a new budget item.") ?></p>
+<?= $this->Pretty->helpMeStart(__('Add Task Item')); ?>
+<p><?= __("This display allows you to add a new task item.") ?></p>
 
 <table class="table table-condensed helptable">
 <?= $this->Html->tableCells([
     [__("Show"),               __("locked to the current show.")],
-    [__("Budget Category"),    __("A grouping category for this budget expense.")],
-    [__("Store or Vendor"),    __("The Vendor this budget expense was transacted with.")],
-    [__("Description"),        __("A description of the expense.")],
-    [__("Price"),              __("Price, without dollar sign of the expense.")],
-    [__("Date"),               __("Date of the expense.  Defaults to today.")]
+    [__("Assign To"),          __("User who is responsible for carring out this task")],
+    [__("Priority"),           __("Priority of the task.")],
+    [__("Due"),                __("Due date of the task.  Defaults to today.")],
+    [__("Task Category"),      __("A grouping category for this task.")],
+    [__("Task Title"),         __("A brief title for the task")],
+    [__("Description"),        __("A description of the task.")],
 ]); ?>
 </table>
 

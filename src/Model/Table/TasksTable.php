@@ -97,6 +97,10 @@ class TasksTable extends Table
             ->requirePresence('note', 'create')
             ->notEmpty('note');
 
+        $validator
+            ->requirePresence('title', 'create')
+            ->notEmpty('title');
+
 
         return $validator;
     }

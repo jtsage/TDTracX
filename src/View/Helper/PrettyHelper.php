@@ -102,7 +102,7 @@ class PrettyHelper extends Helper
         return $retty;
     }
 
-    public function check($name, $check=false, $other=null, $size="normal") {
+    public function check($name, $check=false, $other=null, $size="normal", $dis=false) {
         $outtie  = '<div class="form-group">';
         $outtie .= '<input type="hidden" name="' . $name . '" value="0">';
         $outtie .= '<input type="checkbox" name="' . $name . '" ';
@@ -114,7 +114,7 @@ class PrettyHelper extends Helper
                 $outtie .= "data-" . $key . '="' . $value . '" ';
             }
         }
-        $outtie .= '></div>';
+        $outtie .= ($dis ? " disabled" : "") . '></div>';
         return $outtie;
     }
 
