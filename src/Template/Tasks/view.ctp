@@ -78,3 +78,23 @@ else { $panel_class = "panel-danger" ;}
 </div>
 
 <?php endforeach; ?>
+
+<?= $this->Pretty->helpMeStart(__('View Task List by Show')); ?>
+<p><?= __("This display allows you to add a view task items.") ?></p>
+
+<table class="table table-condensed helptable">
+<?= $this->Html->tableCells([
+    [__("Title"),              __("Title of the task")],
+    [__("Due"),                __("Due date of the task.  Defaults to today.")],
+    [__("Created By"),         __("User who is responsible for creating this task")],
+    [__("Assign To"),          __("User who is responsible for carring out this task")],
+    [__("Priority"),           __("Priority of the task.")],
+    [__("Category"),           __("A grouping category for this task.")],
+    [__("Task Accepted"),      __("The task list administrator has seen and accepted this task")],
+    [__("Task Completed"),     __("The task list administrator has marked this task completed")],
+    [__("Created / Edited"),   __("The creation and last edit date for this task")],
+    [__("Description"),        __("A description of the task.")],
+]); ?>
+</table>
+
+<?= $this->Pretty->helpMeEnd(); ?>

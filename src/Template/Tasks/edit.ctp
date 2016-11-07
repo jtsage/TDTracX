@@ -34,7 +34,7 @@
     <?= $this->Form->end() ?>
 </div>
 
-<?= $this->Pretty->helpMeStart(__('Add Task Item')); ?>
+<?= $this->Pretty->helpMeStart(__('Edit Task Item')); ?>
 <p><?= __("This display allows you to add a new task item.") ?></p>
 
 <table class="table table-condensed helptable">
@@ -42,7 +42,7 @@
     [__("Show"),               __("locked to the current show.")],
     [__("Assign To"),          __("User who is responsible for carring out this task")],
     [__("Priority"),           __("Priority of the task.")],
-    [__("Due"),                __("Due date of the task.  Defaults to today.")],
+    [__("Due"),                __("Due date of the task.")],
     [__("Task Category"),      __("A grouping category for this task.")],
     [__("Description"),        __("A description of the task.")],
     [__("Task Accepted"),      __("The task has been accepted by the administrator")],
