@@ -104,6 +104,35 @@ class Zerozeroten extends AbstractMigration
                 ]
             )
             ->create();
+        $this->table('tasks')
+             ->addForeignKey(
+                 'assigned_to',
+                 'users',
+                 'id',
+                 [
+                     'update' => 'CASCADE',
+                     'delete' => 'SET_NULL'
+                 ]
+             )
+             ->addForeignKey(
+                 'created_by',
+                 'users',
+                 'id',
+                 [
+                     'update' => 'CASCADE',
+                     'delete' => 'SET_NULL'
+                 ]
+             )
+             ->addForeignKey(
+                 'show_id',
+                 'shows',
+                 'id',
+                 [
+                     'update' => 'CASCADE',
+                     'delete' => 'CASCADE'
+                 ]
+             )
+             ->update();
         $table = $this->table('show_user_perms')
             ->addColumn('is_task_admin', 'boolean', [
                 'default' => false,
