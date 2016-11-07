@@ -66,11 +66,13 @@ class PagesController extends AppController
     public function dash()
     {
         $this->loadComponent('UserPerm');
+        $this->loadComponent('TaskUtil');
 
         $this->loadModel('Payrolls');
         $this->loadModel('Budgets');
         $this->loadModel('Users');
         $this->loadModel('Shows');
+        $this->loadModel('Tasks');
 
         $shows = $this->Shows->find()
             ->contain([
@@ -80,7 +82,10 @@ class PagesController extends AppController
                             'show_id',
                             'paidTotal' => 'sum(is_paid)',
                             'admnTotal' => 'sum(is_pay_admin)',
-                            'budgTotal' => 'sum(is_budget)'
+                            'budgTotal' => 'sum(is_budget)',
+                            'taskTotal' => 'sum(is_task_user)',
+                            'tadmTotal' => 'sum(is_task_admin)'
+
                         ])
                         ->group('show_id');
                 }
@@ -101,6 +106,23 @@ class PagesController extends AppController
         $permListAdmn = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_pay_admin');
         $permListPaid = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_paid');
         $permListBdgt = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_budget');
+        $permListTadm = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_task_user');
+        $permListTask = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_task_admin');
+
+
+        $tasksAdm = $this->Shows->find('all')
+            ->where(['Shows.is_active' => 1])
+            ->where(['id' => $permListTadm], ['id' => 'integer[]'])
+            ->order(['end_date' => 'ASC']);
+
+        $tasksUser = $this->Shows->find('all')
+            ->where(['Shows.is_active' => 1])
+            ->where(['id' => $permListTask], ['id' => 'integer[]'])
+            ->order(['end_date' => 'ASC']);
+
+        $this->set('tasksAdm', $tasksAdm);
+        $this->set('tasksUser', $tasksUser);
+        $this->set('showtask', $this->TaskUtil->getAllCounts());
 
         $payrollAdmShows = $this->Payrolls->find()
             ->contain(['Shows'])

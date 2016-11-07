@@ -89,7 +89,7 @@ class PayrollsController extends AppController
         $showsPaid = $this->Shows->find('all')
             ->where(['Shows.is_active' => 1])
             ->where(['id' => $permListPaid], ['id' => 'integer[]'])
-            ->order(['end_date' => 'ASC']);
+            ->order(['end_date' => 'ASC']);        
 
         $showsPadmin = $this->Shows->find('all')
             ->where(['Shows.is_active' => 1])

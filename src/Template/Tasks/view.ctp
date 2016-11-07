@@ -75,6 +75,13 @@ else { $panel_class = "panel-danger" ;}
 			<div class="clearfix"></div>
 		</div>
 	</a>
+    <?php if ( $opsok ) {
+    echo $this->Form->postLink(
+        '<div class="panel-footer"><span class="pull-left">' . __('Delete Task Item'). '</span><span class="pull-right"><i class="fa fa-trash"></i></span><div class="clearfix"></div></div>',
+        ['action' => 'delete', $task->id],
+        ['escape' => false, 'confirm' => __('Are you sure you want to delete {0}?', $task->title) ] );
+    } ?>
+   
 </div>
 
 <?php endforeach; ?>

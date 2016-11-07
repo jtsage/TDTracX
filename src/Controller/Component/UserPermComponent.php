@@ -24,7 +24,11 @@ class UserPermComponent extends Component
             'conditions' => ['ShowUserPerms.user_id' => $id, 'ShowUserPerms.' . $perm => 1]
         ]);
 
-        return $perms->toArray();
+        if ( $perms->Count() > 0 ) {
+            return $perms->toArray();
+        } else {
+            return [0];
+        }
 	}
 	/**
      * checkShow

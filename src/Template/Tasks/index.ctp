@@ -109,7 +109,7 @@
 <div class="row">
 <?php $rowcount = 0; ?>
 
-<?php foreach ($showsA as $show): ?>
+<?php foreach ($inactshows as $show): ?>
 <?php if ( $rowcount == 2 ) { echo "</div><div class='row'>"; $rowcount=0; } $rowcount++; ?>
 <div class="col-md-6">
     <div class="panel panel-red">

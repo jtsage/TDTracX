@@ -27,20 +27,17 @@ class Zerozeroten extends AbstractMigration
             ->addColumn('created_by', 'integer', [
                 'default' => null,
                 'limit' => 10,
-                'null' => true,
-                'signed' => false,
+                'null' => false,
             ])
             ->addColumn('assigned_to', 'integer', [
                 'default' => null,
                 'limit' => 10,
-                'null' => true,
-                'signed' => false,
+                'null' => false,
             ])
             ->addColumn('show_id', 'integer', [
                 'default' => null,
                 'limit' => 10,
                 'null' => false,
-                'signed' => false,
             ])
             ->addColumn('due', 'date', [
                 'default' => null,

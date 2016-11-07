@@ -5,6 +5,64 @@
 
 <div class="row">
     <div class="col-md-4">
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-tasks fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><?= __("Tasks") ?></div>
+                        <div><?= __("A listing of active system shows that you have task list access to.") ?></div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="/tasks/">
+                <div class="panel-footer"><strong>
+                    <span class="pull-left">View Show List</span>
+                    <span class="pull-right"><i class="fa fa-lg fa-arrow-right"></i></span>
+                    <div class="clearfix"></div>
+                </strong></div>
+            </a>
+
+            <div class="panel-footer text-center">
+                <strong><?= __("Your Administrated Shows"); ?></strong>
+            </div>
+
+            <?php foreach ( $tasksAdm as $item ): ?>
+            <a href="/tasks/view/<?= $item->id ?>">
+                <div class="panel-footer">
+                    <span class="pull-left"><?= $item->name ?></span>
+                    <span class="pull-right">
+                        <span class="badge"><?= $showtask['total'][$item->id] ?></span> 
+                        <i class="fa fa-lg fa-arrow-right"></i>
+                    </span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <?php endforeach; ?>
+
+            <div class="panel-footer text-center">
+                <strong><?= __("Your Shows"); ?></strong>
+            </div>
+
+            <?php foreach ( $tasksUser as $item ): ?>
+            <a href="/tasks/view/<?= $item->id ?>">
+                <div class="panel-footer">
+                    <span class="pull-left"><?= $item->name ?></span>
+                    <span class="pull-right">
+                        <span class="badge"><?= $showtask['total'][$item->id] ?></span> 
+                        <i class="fa fa-lg fa-arrow-right"></i>
+                    </span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+    <div class="col-md-4">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="row">
@@ -151,6 +209,8 @@
             <?php endforeach; ?>
         </div>
     </div>
+
+
 </div>
 
 <?php if ($WhoAmI): ?>
@@ -223,7 +283,7 @@
             </a>
 
             <div class="panel-footer text-center">
-                <strong><?= __("Open Shows (Budget/Admin/Paid)"); ?></strong>
+                <strong><?= __("Open Shows (Budget/Admin/Paid/TaskUsr/TaskAdm)"); ?></strong>
             </div>
 
             <?php foreach ( $shows as $item ): ?>
@@ -235,7 +295,9 @@
                             <?= 
                                 $item->show_user_perms[0]->budgTotal . "/" .
                                 $item->show_user_perms[0]->admnTotal . "/" .
-                                $item->show_user_perms[0]->paidTotal
+                                $item->show_user_perms[0]->paidTotal . "/" .
+                                $item->show_user_perms[0]->taskTotal . "/" .
+                                $item->show_user_perms[0]->tadmTotal
                             ?>
                         </span> 
                         <i class="fa fa-lg fa-arrow-right"></i>

@@ -5,7 +5,9 @@
 <div class="row">
 <?php $rowcount = 0; ?>
 
+
 <?php foreach ($showsPaid as $item): ?>
+    <?php exit(1); ?>
 <?php if ( $rowcount == 2 ) { echo "</div><div class='row'>"; $rowcount=0; } $rowcount++; ?>
 <div class="col-md-6">
     <?php
@@ -62,6 +64,7 @@
     </div>
 </div>
 <?php endforeach; ?>
+
 </div>
 
 
