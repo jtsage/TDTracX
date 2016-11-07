@@ -111,7 +111,7 @@ class Zerozeroten extends AbstractMigration
                 'default' => true,
                 'limit' => null,
                 'null' => false,
-            ]);
+            ])->update();
     }
 }
 
