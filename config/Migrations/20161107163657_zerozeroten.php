@@ -10,8 +10,11 @@ class Zerozeroten extends AbstractMigration
      * http://docs.phinx.org/en/latest/migrations.html#the-change-method
      * @return void
      */
+    public $autoId = false;
+
     public function change()
     {
+
         $this->table('tasks')
             ->addColumn('id', 'integer', [
                 'autoIncrement' => true,
