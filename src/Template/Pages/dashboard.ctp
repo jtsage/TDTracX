@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div class="panel panel-yellow">
+        <div class="panel panel-purple">
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">

@@ -101,3 +101,21 @@ fieldset { margin-top: 20px; }
 .panel-yellow a:hover {
     color: #df8a13;
 }
+
+.panel-purple {
+    border-color: #7a548e;
+}
+
+.panel-purple .panel-heading {
+    border-color: #7a548e;
+    color: #fff;
+    background-color: #724788;
+}
+
+.panel-purple a {
+    color: #7a548e;
+}
+
+.panel-purple a:hover {
+    color: #b94ef0;
+}
