@@ -41,7 +41,7 @@ class TasksController extends AppController
             ->where(['id' => $permListU], ['id' => 'integer[]'])
             ->order(['end_date' => 'ASC']);
 
-        $this->set('showtask', $this->TaskUtil->getAllCounts());
+        $this->set('showtask', $this->TaskUtil->getAllCounts($this->Auth->user('id')));
 
         if ( $this->Auth->user('is_admin') ) {
             $inactshows = $this->Shows->find('all')

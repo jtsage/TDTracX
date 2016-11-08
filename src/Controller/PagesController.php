@@ -106,8 +106,8 @@ class PagesController extends AppController
         $permListAdmn = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_pay_admin');
         $permListPaid = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_paid');
         $permListBdgt = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_budget');
-        $permListTadm = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_task_user');
-        $permListTask = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_task_admin');
+        $permListTadm = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_task_admin');
+        $permListTask = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_task_user');
 
 
         $tasksAdm = $this->Shows->find('all')
@@ -122,7 +122,7 @@ class PagesController extends AppController
 
         $this->set('tasksAdm', $tasksAdm);
         $this->set('tasksUser', $tasksUser);
-        $this->set('showtask', $this->TaskUtil->getAllCounts());
+        $this->set('showtask', $this->TaskUtil->getAllCounts($this->Auth->user('id')));
 
         $payrollAdmShows = $this->Payrolls->find()
             ->contain(['Shows'])

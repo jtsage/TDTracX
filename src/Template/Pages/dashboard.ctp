@@ -4,7 +4,7 @@
 <?php endif; ?>
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="panel panel-yellow">
             <div class="panel-heading">
                 <div class="row">
@@ -27,7 +27,7 @@
             </a>
 
             <div class="panel-footer text-center">
-                <strong><?= __("Your Administrated Shows"); ?></strong>
+                <strong><?= __("Your Administrated Shows<br />(Overdue / New / Pending / Total) "); ?></strong>
             </div>
 
             <?php foreach ( $tasksAdm as $item ): ?>
@@ -35,7 +35,7 @@
                 <div class="panel-footer">
                     <span class="pull-left"><?= $item->name ?></span>
                     <span class="pull-right">
-                        <span class="badge"><?= $showtask['total'][$item->id] ?></span> 
+                        <span class="badge"><?= $showtask['overdue'][$item->id] ?> / <?= $showtask['new'][$item->id] ?> / <?= $showtask['accept_notdone'][$item->id] ?> / <?= $showtask['total'][$item->id] ?></span> 
                         <i class="fa fa-lg fa-arrow-right"></i>
                     </span>
                     <div class="clearfix"></div>
@@ -44,7 +44,7 @@
             <?php endforeach; ?>
 
             <div class="panel-footer text-center">
-                <strong><?= __("Your Shows"); ?></strong>
+                <strong><?= __("Your Shows (Your Created Tasks)"); ?></strong>
             </div>
 
             <?php foreach ( $tasksUser as $item ): ?>
@@ -52,7 +52,7 @@
                 <div class="panel-footer">
                     <span class="pull-left"><?= $item->name ?></span>
                     <span class="pull-right">
-                        <span class="badge"><?= $showtask['total'][$item->id] ?></span> 
+                        <span class="badge"><?= $showtask['yours'][$item->id] ?></span> 
                         <i class="fa fa-lg fa-arrow-right"></i>
                     </span>
                     <div class="clearfix"></div>
@@ -61,8 +61,49 @@
             <?php endforeach; ?>
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="panel panel-green">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-bar-chart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><?= __("Budget") ?></div>
+                        <div><?= __("A listing of active system shows that you have budget access to.") ?></div>
+                    </div>
+                </div>
+            </div>
 
-    <div class="col-md-4">
+            <a href="/budgets/">
+                <div class="panel-footer"><strong>
+                    <span class="pull-left">View Show List</span>
+                    <span class="pull-right"><i class="fa fa-lg fa-arrow-right"></i></span>
+                    <div class="clearfix"></div>
+                </strong></div>
+            </a>
+
+            <div class="panel-footer text-center">
+                <strong><?= __("Your Shows"); ?></strong>
+            </div>
+
+            <?php foreach ( $budgetAdmin as $item ): ?>
+            <a href="/budgets/view/<?= $item->show_id ?>">
+                <div class="panel-footer">
+                    <span class="pull-left"><?= $item->showName ?></span>
+                    <span class="pull-right">
+                        <span class="badge"><?= $this->Number->currency($item->priceTotal); ?></span> 
+                        <i class="fa fa-lg fa-arrow-right"></i>
+                    </span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="row">
@@ -121,7 +162,7 @@
     </div>
 
 
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="row">
@@ -169,46 +210,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="panel panel-green">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <i class="fa fa-bar-chart fa-5x"></i>
-                    </div>
-                    <div class="col-xs-9 text-right">
-                        <div class="huge"><?= __("Budget") ?></div>
-                        <div><?= __("A listing of active system shows that you have budget access to.") ?></div>
-                    </div>
-                </div>
-            </div>
-
-            <a href="/budgets/">
-                <div class="panel-footer"><strong>
-                    <span class="pull-left">View Show List</span>
-                    <span class="pull-right"><i class="fa fa-lg fa-arrow-right"></i></span>
-                    <div class="clearfix"></div>
-                </strong></div>
-            </a>
-
-            <div class="panel-footer text-center">
-                <strong><?= __("Your Shows"); ?></strong>
-            </div>
-
-            <?php foreach ( $budgetAdmin as $item ): ?>
-            <a href="/budgets/view/<?= $item->show_id ?>">
-                <div class="panel-footer">
-                    <span class="pull-left"><?= $item->showName ?></span>
-                    <span class="pull-right">
-                        <span class="badge"><?= $this->Number->currency($item->priceTotal); ?></span> 
-                        <i class="fa fa-lg fa-arrow-right"></i>
-                    </span>
-                    <div class="clearfix"></div>
-                </div>
-            </a>
-            <?php endforeach; ?>
-        </div>
-    </div>
+    
 
 
 </div>

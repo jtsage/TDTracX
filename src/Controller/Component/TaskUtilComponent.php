@@ -13,7 +13,7 @@ class TaskUtilComponent extends Component
      *
      * @return Array of arrays, (done/total/accept_notdone/overdue) via show ID
      */
-    public function getAllCounts() {
+    public function getAllCounts($usrNum = 0) {
         $this->Shows = TableRegistry::get('Shows');
 
         $tasktotal = $this->Shows->find('all')
@@ -58,6 +58,20 @@ class TaskUtilComponent extends Component
             ])
             ->group('Shows.id');
 
+        $tasknew = $this->Shows->find('all')
+            ->select([
+                'show_id' => 'Shows.id',
+                'show_name' => 'Shows.name',
+                'total' => 'count(Tasks.id)'
+            ])
+            ->join([
+                'table' => 'tasks',
+                'alias' => 'Tasks',
+                'type' => 'LEFT',
+                'conditions' => ['Shows.id = Tasks.show_id', 'Tasks.task_accepted = 0', 'Tasks.due < "' . date('Y-m-d') . '"'],
+            ])
+            ->group('Shows.id');
+
         $taskoverdue = $this->Shows->find('all')
             ->select([
                 'show_id' => 'Shows.id',
@@ -72,6 +86,20 @@ class TaskUtilComponent extends Component
             ])
             ->group('Shows.id');
 
+        $taskyours = $this->Shows->find('all')
+            ->select([
+                'show_id' => 'Shows.id',
+                'show_name' => 'Shows.name',
+                'total' => 'count(Tasks.id)'
+            ])
+            ->join([
+                'table' => 'tasks',
+                'alias' => 'Tasks',
+                'type' => 'LEFT',
+                'conditions' => ['Shows.id = Tasks.show_id', 'Tasks.created_by = ' . $usrNum],
+            ])
+            ->group('Shows.id');
+
         $showtask = ['total' => [], 'done' => [], 'accept_notdone' => [], 'overdue' => []];
 
         foreach ( $tasktotal as $show ) {
@@ -80,11 +108,17 @@ class TaskUtilComponent extends Component
         foreach ( $taskdone as $show ) {
             $showtask['done'][$show->show_id] = $show->total;
         }
+        foreach ( $tasknew as $show ) {
+            $showtask['new'][$show->show_id] = $show->total;
+        }
         foreach ( $tasknotdone as $show ) {
             $showtask['accept_notdone'][$show->show_id] = $show->total;
         }
         foreach ( $taskoverdue as $show ) {
             $showtask['overdue'][$show->show_id] = $show->total;
+        }
+        foreach ( $taskyours as $show ) {
+            $showtask['yours'][$show->show_id] = $show->total;
         }
 
         return $showtask;

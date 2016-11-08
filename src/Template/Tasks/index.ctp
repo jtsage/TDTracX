@@ -14,22 +14,21 @@
                 </div>
                 <div class="col-xs-9 text-right">
                     <div class="huge"><?= $show->name ?></div>
-                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total of {0}{4}{1} task(s), ", [
+                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}.", [
                         "<strong>",
                         "</strong>",
                         $show->location,
-                        $show->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
-                        $showtask['total'][$show->id]
-                    ]); ?><?= __("with {0}{2}{1} pending and {0}{3}{1} done.", [
-                        "<strong>",
-                        "</strong>",
-                        $showtask['done'][$show->id],
-                        $showtask['accept_notdone'][$show->id]
-                    ]); ?><?=  ($showtask['overdue'][$show->id] > 0 ) ? " There are <strong>{$showtask['overdue'][$show->id]}</strong> overdue task(s)." : ""
-                    ?></div>
+                        $show->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC')
+                    ]); ?></div>
                 </div>
             </div>
         </div>
+        <table class="table table-bordered">
+            <tr><th>Total Tasks</th><td style="text-align: center"><?= $showtask['total'][$show->id] ?></td></tr>
+            <tr><th>Overdue Tasks</th><td style="text-align: center"><?= $showtask['overdue'][$show->id] ?></td></tr>
+            <tr><th>New Tasks</th><td style="text-align: center"><?= $showtask['new'][$show->id] ?></td></tr>
+            <tr><th>Pending Tasks</th><td style="text-align: center"><?= $showtask['accept_notdone'][$show->id] ?></td></tr>
+        </table>
         <a href="/tasks/add/<?= $show->id; ?>">
             <div class="panel-footer">
                 <span class="pull-left"><?= __('Add Task Item'); ?></span>
@@ -65,21 +64,18 @@
                 </div>
                 <div class="col-xs-9 text-right">
                     <div class="huge"><?= $show->name ?></div>
-                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total of {0}{4}{1} tasks, ", [
+                    <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}.", [
                         "<strong>",
                         "</strong>",
                         $show->location,
                         $show->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
-                        $showtask['total'][$show->id]
-                    ]); ?><?= __("with {0}{2}{1} pending and {0}{3}{1} done.", [
-                        "<strong>",
-                        "</strong>",
-                        $showtask['done'][$show->id],
-                        $showtask['accept_notdone'][$show->id]
                     ]); ?></div>
                 </div>
             </div>
         </div>
+        <table class="table table-bordered">
+            <tr><th>Your Tasks</th><td style="text-align: center"><?= $showtask['yours'][$show->id] ?></td></tr>
+        </table>
         <a href="/tasks/add/<?= $show->id; ?>">
             <div class="panel-footer">
                 <span class="pull-left"><?= __('Add Task Item'); ?></span>
