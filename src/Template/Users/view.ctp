@@ -88,6 +88,33 @@
         </div>
 
     </div>
+        <div class="row">
+        <div class="col-md-4">
+            <ul class="list-group">
+            <li class="list-group-item label-warning"><?= __("Task User") ?></li>
+            <?php foreach ($user->show_user_perms as $showUserPerms) {
+                if ($showUserPerms->is_task_user) { 
+                    echo "<li class='list-group-item'>";
+                    echo h($showUserPerms->show->name);
+                    echo "</li>";
+                }
+            } ?>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <ul class="list-group">
+            <li class="list-group-item label-warning"><?= __("Task Admin") ?></li>
+            <?php foreach ($user->show_user_perms as $showUserPerms) {
+                if ($showUserPerms->is_task_admin) { 
+                    echo "<li class='list-group-item'>";
+                    echo h($showUserPerms->show->name);
+                    echo "</li>";
+                }
+            } ?>
+            </ul>
+        </div>
+
+    </div>
 
     <?php endif; ?>
     </div>
