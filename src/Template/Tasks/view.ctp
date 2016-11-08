@@ -40,11 +40,12 @@ else { $panel_class = "panel-danger" ;}
     				for ( $i = 1; $i <= $task->priority; $i++ ) {
     					echo '<i class="fa fa-bell" aria-hidden="true"></i>';
     				} echo " " . $task->title ?></div>
-				<div><?= __("{3}due on {0}{2}{1}", [
+				<div><?= __("{3}due on {0}{2}{1} with {0}{4}{1} priority", [
 					"<strong>",
 					"</strong>",
 					$task->due->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
-					(($task->is_overdue) ? "was " : "is ")
+					(($task->is_overdue) ? "was " : "is "),
+                    ["Missable","Normal","High","Critical"][$task->priority]
 				]); ?></div>
 			</div>
 		</div>
@@ -52,25 +53,12 @@ else { $panel_class = "panel-danger" ;}
 	<table class="table table-bordered">
     	<tr><th style="width: 30%">Created By</th><td><?= h($task->created_name) ?></td></tr>
     	<tr><th>Asssigned To</th><td><?= h($task->assigned_name) ?></td></tr>
-    	<tr><th>Priority</th><td>
-    	<?php 
-    		for ( $i = 1; $i <= $task->priority; $i++ ) {
-    			echo '<i class="fa fa-bell" aria-hidden="true"></i>';
-    		}
-    		switch ( $task->priority ) {
-    			case 0:
-    				echo "Missable"; break;
-    			case 1:
-    				echo " Normal"; break;
-    			case 2:
-    				echo " High"; break;
-    			case 3:
-    				echo " Critical"; break;
-    		}
-    	?></td></tr>
     	<tr><th>Category</th><td><?= h($task->category) ?></td></tr>
+        <?php if ( ! $task->task_done ) : ?>
     	<tr><th>Task Accepted</th><td class="<?= ($task->task_accepted) ? "success" : "warning" ?>"><?= ($task->task_accepted) ? "yes" : "no" ?></td></tr>
+        <?php endif; ?>
     	<tr><th>Task Complete</th><td class="<?= ($task->task_done) ? "success" : ($task->is_overdue ? "danger" : "warning") ?>"><?= ($task->task_done) ? "YES" : "no" ?></td></tr>
+        
         <?php if ( $opsok || $task->created_by == $opid ) : ?>
     	<tr><th>Created / Edited</th><td><?= h($task->created_at) ?> &nbsp;/ &nbsp;<?= h($task->updated_at) ?></td></tr>
         <?php endif; ?>
@@ -91,7 +79,7 @@ else { $panel_class = "panel-danger" ;}
     <?php endif; ?>
     <?php if ( $opsok ) {
     echo $this->Form->postLink(
-        '<div class="panel-footer"><span class="pull-left">' . __('Delete Task Item'). '</span><span class="pull-right"><i class="fa fa-trash"></i></span><div class="clearfix"></div></div>',
+        '<div class="panel-footer"><span class="pull-left">' . __('Delete Task Item'). '</span><span class="pull-right"><i class="fa fa-trash"></i></span><div class="clearfix" ></div></div>',
         ['action' => 'delete', $task->id],
         ['escape' => false, 'confirm' => __('Are you sure you want to delete {0}?', $task->title) ] );
     } ?>
