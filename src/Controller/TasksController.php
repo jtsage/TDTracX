@@ -126,7 +126,7 @@ class TasksController extends AppController
 
         $tasks = $this->Tasks->find('all')
             ->where(['show_id' => $id])
-            ->where($extraWhere)
+            //->where($extraWhere)
             ->join([
                 'assigned' => [
                     'table' => 'users',
@@ -157,6 +157,7 @@ class TasksController extends AppController
         $this->set('sort', $srtorder);
         $this->set('show', $show);
         $this->set('tasks', $tasks);
+        $this->set('opid', $this->Auth->user('id'));
         $this->set('_serialize', ['tasks']);
 
     }

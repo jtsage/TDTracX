@@ -50,7 +50,7 @@ else { $panel_class = "panel-danger" ;}
 		</div>
 	</div>
 	<table class="table table-bordered">
-    	<tr><th>Created By</th><td><?= h($task->created_name) ?></td></tr>
+    	<tr><th style="width: 30%">Created By</th><td><?= h($task->created_name) ?></td></tr>
     	<tr><th>Asssigned To</th><td><?= h($task->assigned_name) ?></td></tr>
     	<tr><th>Priority</th><td>
     	<?php 
@@ -71,13 +71,16 @@ else { $panel_class = "panel-danger" ;}
     	<tr><th>Category</th><td><?= h($task->category) ?></td></tr>
     	<tr><th>Task Accepted</th><td class="<?= ($task->task_accepted) ? "success" : "warning" ?>"><?= ($task->task_accepted) ? "yes" : "no" ?></td></tr>
     	<tr><th>Task Complete</th><td class="<?= ($task->task_done) ? "success" : ($task->is_overdue ? "danger" : "warning") ?>"><?= ($task->task_done) ? "YES" : "no" ?></td></tr>
+        <?php if ( $opsok || $task->created_by == $opid ) : ?>
     	<tr><th>Created / Edited</th><td><?= h($task->created_at) ?> &nbsp;/ &nbsp;<?= h($task->updated_at) ?></td></tr>
+        <?php endif; ?>
     	<tr><th colspan="2">Description</th></tr>
   	</table>
 	<div class="panel-body">
 		<?= $this->Text->autoParagraph(h($task->note)); ?>
 	</div>
 
+    <?php if ( $opsok || $task->created_by == $opid ) : ?>
 	<a href="/tasks/edit/<?= $task->id; ?>">
 		<div class="panel-footer">
 			<span class="pull-left"><?= __('Edit Task Item'); ?></span>
@@ -85,6 +88,7 @@ else { $panel_class = "panel-danger" ;}
 			<div class="clearfix"></div>
 		</div>
 	</a>
+    <?php endif; ?>
     <?php if ( $opsok ) {
     echo $this->Form->postLink(
         '<div class="panel-footer"><span class="pull-left">' . __('Delete Task Item'). '</span><span class="pull-right"><i class="fa fa-trash"></i></span><div class="clearfix"></div></div>',
