@@ -17,6 +17,7 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Network\Exception\NotFoundException;
 use Cake\View\Exception\MissingTemplateException;
+use Cake\ORM\TableRegistry;
 
 /**
  * Static content controller
@@ -73,6 +74,7 @@ class PagesController extends AppController
         $this->loadModel('Users');
         $this->loadModel('Shows');
         $this->loadModel('Tasks');
+        $this->loadModel('UserPerms');
 
         $shows = $this->Shows->find()
             ->contain([
@@ -124,55 +126,90 @@ class PagesController extends AppController
         $this->set('tasksUser', $tasksUser);
         $this->set('showtask', $this->TaskUtil->getAllCounts($this->Auth->user('id')));
 
-        $payrollAdmShows = $this->Payrolls->find()
-            ->contain(['Shows'])
+        $payrollAdmShows = $this->Shows->find()
             ->select([
                  'showName' => 'Shows.name',
                  'workTotal' => 'sum(Payrolls.worked)',
-                 'show_id' 
+                 'show_id' => 'Shows.id'
+            ])
+            ->join([
+                'table' => 'payrolls',
+                'alias' => 'Payrolls',
+                'type' => 'LEFT',
+                'conditions' => ['Shows.id = Payrolls.show_id'],
             ])
             ->where(['Shows.is_active' => 1])
-            ->where(['show_id IN' => $permListAdmn])
-            ->group('show_id')
+            ->where(['Shows.id IN' => $permListAdmn])
+            ->group('Shows.id')
             ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
 
-        $payrollSelfShows = $this->Payrolls->find()
-            ->contain(['Shows'])
+        $payrollSelfShows = $this->Shows->find()
             ->select([
                  'showName' => 'Shows.name',
                  'workTotal' => 'sum(Payrolls.worked)',
-                 'show_id' 
+                 'show_id' => 'Shows.id'
+            ])
+            ->join([
+                'table' => 'payrolls',
+                'alias' => 'Payrolls',
+                'type' => 'LEFT',
+                'conditions' => ['Shows.id = Payrolls.show_id', 'Payrolls.user_id' => $this->Auth->user('id')],
             ])
             ->where(['Shows.is_active' => 1])
-            ->where(['show_id IN' => $permListPaid])
-            ->where(['user_id' => $this->Auth->user('id')])
-            ->group('show_id')
+            ->where(['Shows.id IN' => $permListPaid])
+            ->group('Shows.id')
             ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
 
-        $payrollAdmUsers = $this->Payrolls->find()
-            ->contain(['Users', 'Shows'])
-            ->select([
-                 'fullName' => 'concat(Users.first, " ", Users.last)',
-                 'workTotal' => 'sum(Payrolls.worked)',
-                 'user_id' 
-            ])
-            ->where(['Shows.is_active' => 1])
-            ->where(['show_id IN' => $permListAdmn])
-            ->where(['user_id <>' => $this->Auth->user('id')])
-            ->where(['Users.is_active' => 1])
-            ->group('user_id')
-            ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
+        $this->ShowUserPerms = TableRegistry::get('ShowUserPerms');
 
-        $budgetAdmin = $this->Budgets->find()
+        $activeShowsObj = $this->Shows->find('list', [
+            'keyfield' => 'id',
+            'valueField' => 'id',
+            'conditions' => ['Shows.is_active = 1', 'Shows.id IN' => $permListAdmn]
+        ]);
+
+        $activeShows = (( $activeShowsObj->Count() > 0 ) ? $activeShowsObj->toArray() : [0] );
+
+        $this->set('activeShows', $activeShows);
+
+        $payrollAdmUsers = $this->ShowUserPerms->find()
             ->contain(['Shows'])
             ->select([
+                'fullName' => 'concat(Users.first, " ", Users.last)',
+                'user_id' => 'Users.id',
+                'workTotal' => 'sum(Payrolls.worked)'
+            ])
+            ->join([
+                'table' => 'users',
+                'alias' => 'Users',
+                'type' => 'LEFT',
+                'conditions' => ['ShowUserPerms.user_id = Users.id', 'ShowUserPerms.is_paid = 1']
+            ])
+            ->join([
+                'table' => 'payrolls',
+                'alias' => 'Payrolls',
+                'type' => 'LEFT',
+                'conditions' => ['ShowUserPerms.user_id = Payrolls.user_id', 'Payrolls.show_id IN' => $activeShows]
+            ])
+            ->where(['ShowUserPerms.show_id IN' => $activeShows])
+            ->group('Users.id');
+
+
+        $budgetAdmin = $this->Shows->find()
+            ->select([
                  'showName' => 'Shows.name',
-                 'priceTotal' => 'sum(price)',
-                 'show_id' 
+                 'priceTotal' => 'sum(Budgets.price)',
+                 'show_id' => 'Shows.id'
+            ])
+            ->join([
+                'table' => 'budgets',
+                'alias' => 'Budgets',
+                'type' => 'LEFT',
+                'conditions' => ['Shows.id = Budgets.show_id'],
             ])
             ->where(['Shows.is_active' => 1])
-            ->where(['show_id IN' => $permListBdgt])
-            ->group('show_id')
+            ->where(['Shows.id IN' => $permListBdgt])
+            ->group('Shows.id')
             ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
 
         $this->set('payrollSelfShows', $payrollSelfShows);

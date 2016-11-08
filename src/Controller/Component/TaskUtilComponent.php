@@ -11,7 +11,7 @@ class TaskUtilComponent extends Component
      *
      * Grab a simple list of task counts per show.
      *
-     * @return Array of arrays, (done/total/accept_notdone/overdue) via show ID
+     * @return Array of arrays, (done/total/accept_notdone/overdue/new/yours) via show ID
      */
     public function getAllCounts($usrNum = 0) {
         $this->Shows = TableRegistry::get('Shows');
@@ -68,7 +68,7 @@ class TaskUtilComponent extends Component
                 'table' => 'tasks',
                 'alias' => 'Tasks',
                 'type' => 'LEFT',
-                'conditions' => ['Shows.id = Tasks.show_id', 'Tasks.task_accepted = 0', 'Tasks.due < "' . date('Y-m-d') . '"'],
+                'conditions' => ['Shows.id = Tasks.show_id', 'Tasks.task_accepted = 0', 'Tasks.due >= "' . date('Y-m-d') . '"'],
             ])
             ->group('Shows.id');
 
@@ -100,7 +100,7 @@ class TaskUtilComponent extends Component
             ])
             ->group('Shows.id');
 
-        $showtask = ['total' => [], 'done' => [], 'accept_notdone' => [], 'overdue' => []];
+        $showtask = ['yours' => [], 'new' => [], 'total' => [], 'done' => [], 'accept_notdone' => [], 'overdue' => []];
 
         foreach ( $tasktotal as $show ) {
             $showtask['total'][$show->show_id] = $show->total;

@@ -196,6 +196,7 @@
             </div>
 
             <?php foreach ( $payrollAdmUsers as $item ): ?>
+            <?php if ( $item->user_id > 0 ): ?>
             <a href="/payrolls/viewbyuser/<?= $item->user_id ?>">
                 <div class="panel-footer">
                     <span class="pull-left"><?= $item->fullName ?></span>
@@ -206,6 +207,7 @@
                     <div class="clearfix"></div>
                 </div>
             </a>
+            <?php endif; ?>
             <?php endforeach; ?>
         </div>
     </div>

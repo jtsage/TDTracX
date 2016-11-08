@@ -1,4 +1,14 @@
-<h3><?= $show->name ?> Tasks</h3>
+<h3>
+    <?= $show->name ?> Tasks
+    <div class="btn-group">
+        <?php echo $this->Html->link(
+            $this->Pretty->iconAdd($show->name . " " . __("Task Item")),
+            ['action' => 'add', $show->id],
+            ['escape' => false, 'class' => 'btn btn-success btn-sm']
+        ); ?>
+    </div>
+
+</h3>
 
 <ol class="breadcrumb">
 	<li><strong>Sort By: </strong></li>
