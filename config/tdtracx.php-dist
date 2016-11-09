@@ -1,6 +1,6 @@
 <?php
 return [ 
-	'debug' => true,
+	'debug' => true, // THIS OVERRIDES THE DEBUG VALUE IN app.php
 	'Datasources' => [
         'default' => [
 			'className' => 'Cake\Database\Connection',
