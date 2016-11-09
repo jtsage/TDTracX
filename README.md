@@ -57,10 +57,8 @@ $ ./bin/cake tdtrac install
 
 ```
 $HTTP["host"] =~ "demox\.tdtrac\.com" {
-    server.document-root = "/home/tdtracx/webroot/"
-    url.rewrite-once =(
-        "/(favicon.ico)" => "/$1",
-        "/(fonts|css|files|img|js|php)/(.*)" => "/$1/$2",
+    server.document-root = "/full/path/to/TDTracX/webroot/"
+    url.rewrite-if-not-file =(
         "^([^\?]*)(\?(.+))?$" => "/index.php?url=$1&$3"
     )
 }
