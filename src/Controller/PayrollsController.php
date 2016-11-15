@@ -456,6 +456,7 @@ class PayrollsController extends AppController
     public function addtoshow($id = null)
     {
         $this->loadModel('Shows');
+        $this->loadModel('Users');
 
         $show = $this->Shows->findById($id)->first();
 
@@ -476,6 +477,9 @@ class PayrollsController extends AppController
 
         $payroll = $this->Payrolls->newEntity();
         if ($this->request->is('post')) {
+            $toUser = $this->Users->findById($this->request->data['user_id'])->first();
+
+
             $time = Time::createFromFormat(
                  'Y-m-d',
                  $this->request->data['date_worked'],
@@ -500,6 +504,9 @@ class PayrollsController extends AppController
             }
             $fixed_data = array_merge($this->request->data, ['show_id' => $show->id, 'is_paid' => 0]);
             $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
+            
+            if ( $toUser->is_salary ) { $payroll->is_paid = 1; }
+            
             if ($this->Payrolls->save($payroll)) {
                 $this->Flash->success(__('The payroll has been saved.'));
                 return $this->redirect(['action' => 'indexuser', $show->id]);
@@ -529,6 +536,7 @@ class PayrollsController extends AppController
     public function addtoself($id = null)
     {
         $this->loadModel('Shows');
+        $this->loadModel('Users');
 
         $show = $this->Shows->findById($id)->first();
 
@@ -549,7 +557,8 @@ class PayrollsController extends AppController
 
         $payroll = $this->Payrolls->newEntity();
         if ($this->request->is('post')) {
-                        
+            $toUser = $this->Users->findById($this->request->data['user_id'])->first();
+
             $time = Time::createFromFormat('Y-m-d',$this->request->data['date_worked'],'UTC');
             $this->request->data['date_worked'] = $time;
 
@@ -561,6 +570,9 @@ class PayrollsController extends AppController
 
             $fixed_data = array_merge($this->request->data, ['show_id' => $show->id, 'user_id' => $this->Auth->user('id'), 'is_paid' => 0]);
             $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
+
+            if ( $toUser->is_salary ) { $payroll->is_paid = 1; }
+
             if ($this->Payrolls->save($payroll)) {
                 $this->Flash->success(__('The payroll has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -634,6 +646,9 @@ class PayrollsController extends AppController
 
             $fixed_data = array_merge($this->request->data, ['user_id' => $user->id, 'is_paid' => 0]);
             $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
+
+            if ( $toUser->is_salary ) { $payroll->is_paid = 1; }
+
             if ($this->Payrolls->save($payroll)) {
                 $this->Flash->success(__('The payroll has been saved.'));
                 return $this->redirect(['action' => 'index']);

@@ -71,7 +71,7 @@ class UserPermComponent extends Component
             ->where(['ShowUserPerms.show_id' => $showId])
             ->where(['is_paid' => true])
             ->contain(['Users'])
-            ->select(['fullname' => 'concat(Users.first, " ", Users.last)', 'ShowUserPerms.user_id'])
+            ->select(['fullname' => 'concat(Users.first, " ", Users.last, IF(Users.is_salary = 0, \'\', \' (salary employee)\'))', 'ShowUserPerms.user_id'])
             ->order(['Users.last' => 'ASC', 'Users.first' => 'DESC']);
 
         return $hooper->toArray();

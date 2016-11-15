@@ -14,6 +14,7 @@
             $this->Paginator->sort('last', __("Full Name")),
             __('Phone Number'),
             $this->Paginator->sort('is_active', __("Active User")),
+            __('Salary Employee'),
             $this->Paginator->sort('is_admin', __("Administrator"), ['direction' => 'desc']),
             $this->Paginator->sort('last_login_at', __("Last Login"), ['direction' => 'desc']),
             [__('Actions') => ['class' => 'text-center']]
@@ -28,6 +29,7 @@
                 h($user->first) . " " .  h($user->last),
                 $this->Pretty->phone($user->phone),
                 $this->Bool->prefYes($user->is_active),
+                $this->Bool->prefNo($user->is_salary),
                 $this->Bool->prefNo($user->is_admin),
                 $user->last_login_at->i18nFormat(null, $tz),
                 [  

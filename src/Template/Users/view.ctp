@@ -35,6 +35,8 @@
         <div class="col-md-4">
             <h4><span class="label label-success"><?= __('Active User?') ?></span></h4>
             <p><?= $this->Bool->prefYes($user->is_active) ?></p>
+            <h4><span class="label label-success"><?= __('Salary Employee?') ?></span></h4>
+            <p><?= $this->Bool->prefNo($user->is_salary) ?></p>
             <h4><span class="label label-success"><?= __('Expired Password?') ?></span></h4>
             <p><?= $this->Bool->prefNo($user->is_password_expired); ?></p>
             <h4><span class="label label-success"><?= __('Notifications Active?') ?></span></h4>

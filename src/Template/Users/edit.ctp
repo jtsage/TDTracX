@@ -27,6 +27,14 @@
                 'on-color' => 'success',
                 'off-color' => 'danger'
             ]);
+            echo $this->Pretty->check('is_salary', $user->is_salary, [
+                'label-width' => '100',
+                'label-text' => __('Is Salary'),
+                'on-text' => __('YES'),
+                'off-text' => __('NO'),
+                'on-color' => 'danger',
+                'off-color' => 'success'
+            ]);
             echo $this->Pretty->check('is_password_expired', $user->is_password_expired, [
                 'label-width' => '100',
                 'label-text' => __('Is Pass Expired'),
@@ -67,6 +75,7 @@
     [__("Phone Number"),    __("User's 10-digit phone number, no punctuation.")],
     [__("Time Zone"),       __("User's time zone. Defaults to EST/EDT (USA).")],
     [__("Is Active"),       __("When checked, the user can login.")],
+    [__("Is Salary"),          __("User is a salary employee, mark hours paid by default")],
     [__("Is Pass Expired"), __("When checked, the user will be reminded to change their password on login - but not forced.")],
     [__("Is Notified"),     __("User is notified when a payroll admin adds hours for this user, and when automatic \"payroll is due\" e-mails are sent.")],
     [__("Is Admin"),        __("User's is a system administrator. This grants addition tools, and the user will recieve automatic payroll reports.")]

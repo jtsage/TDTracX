@@ -8,6 +8,14 @@
             echo $this->Form->input('first', ['label' => __("First Name")]);
             echo $this->Form->input('last', ['label' => __("Last Name")]);
             echo $this->Form->input('phone', ['label' => __("Phone Number")]);
+            echo $this->Pretty->check('is_salary', 0, [
+                'label-width' => '100',
+                'label-text' => __('Is Salary'),
+                'on-text' => __('YES'),
+                'off-text' => __('NO'),
+                'on-color' => 'success',
+                'off-color' => 'danger'
+            ]);
         ?>
         <div class="form-group"><label class="control-label"><?= __("Time Zone") ?></label>
         <?php
@@ -33,7 +41,10 @@
     [__("First Name"),      __("User's first name")],
     [__("Last Name"),       __("User's last name")],
     [__("Phone Number"),    __("User's 10-digit phone number, no punctuation.")],
-    [__("Time Zone"),       __("User's time zone. Defaults to EST/EDT (USA).")]
+    [__("Is Salary"),          __("User is a salary employee, mark hours paid by default")],
+    [__("Time Zone"),       __("User's time zone. Defaults to EST/EDT (USA).")],
+
+
 ]); ?>
 </table>
 
