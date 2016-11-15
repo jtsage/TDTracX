@@ -25,3 +25,5 @@
 	<tr><th style="text-align: left; font-weight:bold" colspan="2">Description:</th></tr>
 	<tr><td><?=  nl2br($descrip) ?></td></tr>
 </table>
+
+<p>You can view this task at <a href="<?= $link ?>"><?= $link ?></a>.</p>

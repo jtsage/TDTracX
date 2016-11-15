@@ -216,6 +216,7 @@ class TasksController extends AppController
                         'creator' => $this->Auth->user('first') . " " . $this->Auth->user('last'),
                         'assign' => $userTo->first . " " . $userTo->last,
                         'title' => $task->title,
+                        'link' => "http://" . $_SERVER['HTTP_HOST'] . "/tasks/view/" . $show->id,
                         'due' => $time->i18nFormat([\IntlDateFormatter::FULL, \IntlDateFormatter::NONE], 'UTC'),
                         'descrip' => $task->note
                     ])
