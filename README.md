@@ -14,8 +14,7 @@ as open source.
 
 ### TDTracX
 
-This is the new version of TDTrac, completely refactored in CakePHP3 - it doesn't even almost
-run correctly yet.
+This is the new version of TDTrac, completely refactored in CakePHP3.
 
 ## LICENSE:
 
@@ -38,13 +37,13 @@ project, I would also like to see what you come up with.
 $ composer install
 ```
 
-3.) Run initial migration:
+3.) Run initial migration (this creates the empty database):
 
 ```
 $ ./bin/cake migrations migrate
 ```
 
-4.) Run TDTracX installer:
+4.) Run TDTracX installer (this creates the initial user, and sets up the datebase proceedures):
 
 ```
 $ ./bin/cake tdtrac install
