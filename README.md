@@ -82,8 +82,10 @@ $ ./bin/cake tdtrac demoreset
 
 ## Periodic Emails
 
+This module is buggy, at best.  Still a work in progress.
+
 ```
-0 6 * * * /home/tdtrac/bin/cake sendunpaid user@host 0 14 2015-12-06 
+0 6 * * * /home/tdtrac/bin/cake tdtrac sendunpaid user@host 0 14 2015-12-06 
 ```
 
 This will send every 2 weeks on sunday.

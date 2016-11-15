@@ -6,6 +6,7 @@ use Cake\Datasource\ConnectionManager;
 use Cake\Network\Exception\InternalErrorException;
 use Cake\I18n\Time;
 use Cake\Network\Email\Email;
+use Cake\ORM\TableRegistry;
 
 /**
  * Tdtrac shell command.
@@ -247,6 +248,8 @@ class TdtracShell extends Shell
             $this->loadModel('Budgets');
             $this->loadModel('Payrolls');
             $this->loadModel('Messages');
+            //$this->loadModel('Tasks');
+            $this->Tasks = TableRegistry::get('Tasks');
             $this->loadModel('ShowUserPerms');
 
             $this->out('Removing all records.');
@@ -256,6 +259,9 @@ class TdtracShell extends Shell
             }
             if ( $this->Budgets->deleteAll([1 => 1]) ) {
                 $this->out(' Delete: Budgets');
+            }
+            if ( $this->Tasks->deleteAll([1 => 1]) ) {
+                $this->out(' Delete: Tasks');
             }
             if ( $this->ShowUserPerms->deleteAll([1 => 1]) ) {
                 $this->out(' Delete: ShowUserPerms');
@@ -270,11 +276,13 @@ class TdtracShell extends Shell
                 $this->out(' Delete: Users');
             }
 
+
             $this->out($this->nl(1) . 'Resetting AUTO_INCREMENT');
 
             $conn->execute('ALTER TABLE `users` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `payrolls` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `budgets` AUTO_INCREMENT = 1');
+            $conn->execute('ALTER TABLE `tasks` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `shows` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `messages` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `show_user_perms` AUTO_INCREMENT = 1');
@@ -352,42 +360,54 @@ class TdtracShell extends Shell
                     'show_id' => $show1->id,
                     'is_pay_admin' => 1,
                     'is_paid' => 1,
-                    'is_budget' => 1
+                    'is_budget' => 1,
+                    'is_task_admin' => 1,
+                    'is_task_user' => 1
                 ],
                 [ 
                     'user_id' => $adminUser->id,
                     'show_id' => $show2->id,
                     'is_pay_admin' => 1,
                     'is_paid' => 1,
-                    'is_budget' => 1
+                    'is_budget' => 1,
+                    'is_task_admin' => 1,
+                    'is_task_user' => 1
                 ],
                 [ 
                     'user_id' => $managerUser->id,
                     'show_id' => $show1->id,
                     'is_pay_admin' => 1,
                     'is_paid' => 1,
-                    'is_budget' => 1
+                    'is_budget' => 1,
+                    'is_task_admin' => 0,
+                    'is_task_user' => 1
                 ],
                 [ 
                     'user_id' => $managerUser->id,
                     'show_id' => $show2->id,
                     'is_pay_admin' => 1,
                     'is_paid' => 1,
-                    'is_budget' => 1
+                    'is_budget' => 1,
+                    'is_task_admin' => 0,
+                    'is_task_user' => 1
                 ],
                 [ 
                     'user_id' => $regularUser->id,
                     'show_id' => $show1->id,
                     'is_pay_admin' => 0,
                     'is_paid' => 1,
-                    'is_budget' => 0
+                    'is_budget' => 0,
+                    'is_task_admin' => 0,
+                    'is_task_user' => 1
                 ],
                 [ 
                     'user_id' => $regularUser->id,
                     'show_id' => $show2->id,
                     'is_pay_admin' => 0,
                     'is_paid' => 1,
-                    'is_budget' => 0
+                    'is_budget' => 0,
+                    'is_task_admin' => 0,
+                    'is_task_user' => 1
                 ],
             ];
 
@@ -562,6 +582,65 @@ class TdtracShell extends Shell
             $insertQuery->insert($insertCol);
             $insertQuery->clause('values')->values($insertRow);
             $insertQuery->execute();
+
+
+            $this->out(' Creating Task Items');
+
+            $insertCol = [ "created_by", "assigned_to", "show_id", "due", "title", "category", "note", "task_accepted", "task_done" ];
+            
+            $insertRow = [
+                [ 
+                    'assigned_to' => $adminUser->id,
+                    'created_by' => $regularUser->id,
+                    'show_id' => $show1->id,
+                    'due' => Time::createFromFormat('Y-m-d', '2020-02-'.rand(10,28), 'UTC'),
+                    'title' => 'Random Title #' . rand(12,365),
+                    'category' => 'Category #1',
+                    'note' => 'Random (not accepted, not done) Description #' . rand(12,365),
+                    'task_accepted' => 0,
+                    'task_done' => 0
+                ],
+                [ 
+                    'assigned_to' => $adminUser->id,
+                    'created_by' => $regularUser->id,
+                    'show_id' => $show1->id,
+                    'due' => Time::createFromFormat('Y-m-d', '2010-02-'.rand(10,28), 'UTC'),
+                    'title' => 'Random Title #' . rand(12,365),
+                    'category' => 'Category #1',
+                    'note' => 'Random (overdue) Description #' . rand(12,365),
+                    'task_accepted' => 0,
+                    'task_done' => 0
+                ],
+                [ 
+                    'assigned_to' => $adminUser->id,
+                    'created_by' => $regularUser->id,
+                    'show_id' => $show1->id,
+                    'due' => Time::createFromFormat('Y-m-d', '2020-02-'.rand(10,28), 'UTC'),
+                    'title' => 'Random Title #' . rand(12,365),
+                    'category' => 'Category #1',
+                    'note' => 'Random (accepted, not done) Description #' . rand(12,365),
+                    'task_accepted' => 1,
+                    'task_done' => 0
+                ],
+                [ 
+                    'assigned_to' => $adminUser->id,
+                    'created_by' => $regularUser->id,
+                    'show_id' => $show1->id,
+                    'due' => Time::createFromFormat('Y-m-d', '2020-02-'.rand(10,28), 'UTC'),
+                    'title' => 'Random Title #' . rand(12,365),
+                    'category' => 'Category #1',
+                    'note' => 'Random (done) Description #' . rand(12,365),
+                    'task_accepted' => 1,
+                    'task_done' => 1
+                ],
+            ];
+
+            $insertQuery = $this->Tasks->query();
+
+            $insertQuery->insert($insertCol);
+            $insertQuery->clause('values')->values($insertRow);
+            $insertQuery->execute();
+
 
             $this->out($this->nl(1) . 'Resetting Sessions');
 

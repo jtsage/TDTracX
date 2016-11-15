@@ -1,4 +1,5 @@
 <?php
+/* This adds password resets to the app */
 use Migrations\AbstractMigration;
 
 class PWReset extends AbstractMigration
