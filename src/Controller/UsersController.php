@@ -3,6 +3,8 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
+use Cake\Mailer\Email;
+use Cake\I18n\Time;
 
 /**
  * Users Controller
@@ -14,7 +16,7 @@ class UsersController extends AppController
 
     public function beforeFilter(\Cake\Event\Event $event)
     {
-        $this->Auth->allow(['logout']);
+        $this->Auth->allow(['logout', 'forgot_password', 'reset_password']);
     }
     /**
      * Index method
@@ -55,6 +57,8 @@ class UsersController extends AppController
                 $goodUser = $this->Users->get($this->Auth->user('id'));
                 
                 $this->Users->touch($goodUser, 'Users.afterLogin');
+                $goodUser->reset_hash = null;
+                $goodUser->reset_hash_time = date('Y-m-d H:i:s', 1);
                 $this->Users->save($goodUser);
 
                 $this->loadModel('Messages');
@@ -279,4 +283,91 @@ class UsersController extends AppController
         }
         return $this->redirect(['action' => 'index']);
     }
+
+    function __genPassToken($user) {
+        if (empty($user)) { return null; }
+        
+        $token_raw = random_bytes(30);
+        $token_hex = bin2hex($token_raw);
+
+
+        $token_expire_timestamp = time() + (60*60*24);
+        $token_expire = date('Y-m-d H:i:s', $token_expire_timestamp);
+        
+        $user->reset_hash = $token_hex;
+        $user->reset_hash_time = $token_expire;
+        
+        return $user;
+    }
+
+    function forgot_password() {
+        if ( ! is_null($this->Auth->user('id'))) {
+            $this->Flash->error(__('You have not forgotten your password, you are logged in.'));
+            return $this->redirect('/');
+        }
+        if ($this->request->is(['post']) && !empty( $this->request->data(['username']) ) ) {
+
+            $userReset = $this->Users->findByUsername($this->request->data['username'])->first();
+
+            if ( empty($userReset) ) {
+                $this->Flash->error(__('Password reset instructions sent.  You have 24 hours to complete this request.'));
+                return $this->redirect('/');
+            } else {
+                $userReset = $this->__genPassToken($userReset);
+                if ( $this->Users->save($userReset) ) {
+                    $email = new Email('default');
+                    $email
+                        ->emailFormat('both')
+                        ->template('reset')
+                        ->to($userReset->username)
+                        ->subject('Password Reset Requested')
+                        ->viewVars([
+                            'username' => $userReset->username,
+                            'ip' => $_SERVER['REMOTE_ADDR'],
+                            'hash' => $userReset->reset_hash,
+                            'expire' => $userReset->reset_hash_time,
+                            'fullURL' => "http://" . $_SERVER['HTTP_HOST'] . "/users/reset_password/",
+                        ])
+                        ->send();
+                    $this->Flash->error(__('Password reset instructions sent.  You have 24 hours to complete this request.'));
+                    return $this->redirect('/');
+                }
+            }
+        }
+    }
+
+    function reset_password($hash) {
+        if ( ! is_null($this->Auth->user('id'))) {
+            $this->Flash->error(__('You have not forgotten your password, you are logged in.'));
+            return $this->redirect('/');
+        }
+        if ( empty($hash) ) {
+            $this->Flash->error(__('That link is invalid, sorry!'));
+            return $this->redirect('/');
+        } else {
+            $user = $this->Users->findByResetHash($hash)->first();
+            if ( empty($user) ) {
+                $this->Flash->error(__('That link is invalid, sorry!'));
+                return $this->redirect('/');
+            } elseif ( $user->reset_hash_time->isPast() ) {
+                $this->Flash->error(__('That Link has expired, sorry!'));
+                return $this->redirect('/users/forgot_password');
+            } else {
+                $this->set('user', $user);    
+                if ($this->request->is(['patch', 'post', 'put'])) {
+                    $user = $this->Users->patchEntity($user, $this->request->data, ['fieldList' => ['password', 'is_password_expired']]);
+                    $user->reset_hash = null;
+                    $user->reset_hash_time = date('Y-m-d H:i:s', 1);
+                    if ($this->Users->save($user)) {
+                        $this->Flash->success(__('Your password has been saved, please login now.'));
+                        return $this->redirect('/users/login');
+                    } else {
+                        $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                    }
+                }
+            }   
+        }
+    }
+
+
 }

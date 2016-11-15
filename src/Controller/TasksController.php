@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\I18n\Time;
+use Cake\Mailer\Email;
 
 /**
  * Tasks Controller
@@ -171,6 +172,7 @@ class TasksController extends AppController
     {
         $this->loadModel('Shows');
         $this->loadModel('ShowUserPerms');
+        $this->loadModel('Users');
 
         $show = $this->Shows->findById($id)->first();
 
@@ -201,6 +203,23 @@ class TasksController extends AppController
             $this->request->data['created_by'] = $this->Auth->user('id');
             $task = $this->Tasks->patchEntity($task, $this->request->data);
             if ($this->Tasks->save($task)) {
+                $userTo = $this->Users->findById($task->assigned_to)->first();
+                $email = new Email('default');
+                $email
+                    ->emailFormat('both')
+                    ->template('newtask')
+                    ->to($userTo->username)
+                    ->cc($this->Auth->user('username'))
+                    ->subject('New Task Created')
+                    ->viewVars([
+                        'title' => 'New Task Created',
+                        'creator' => $this->Auth->user('first') . " " . $this->Auth->user('last'),
+                        'assign' => $userTo->first . " " . $userTo->last,
+                        'title' => $task->title,
+                        'due' => $time->i18nFormat([\IntlDateFormatter::FULL, \IntlDateFormatter::NONE], 'UTC'),
+                        'descrip' => $task->note
+                    ])
+                    ->send();
                 $this->Flash->success(__('The task has been saved.'));
                 return $this->redirect(['action' => 'view', $show->id]);
             } else {
