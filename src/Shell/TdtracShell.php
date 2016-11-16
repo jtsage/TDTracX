@@ -309,7 +309,7 @@ class TdtracShell extends Shell
                 'phone' => 1234567890,
                 'first' => 'Administrative',
                 'last' => 'User',
-                'is_notified' => 1,
+                'is_notified' => 0,
                 'is_admin' => 1,
                 'time_zone' => 'America/Detroit'
             ]);
@@ -320,7 +320,7 @@ class TdtracShell extends Shell
                 'phone' => 1234567890,
                 'first' => 'Manager',
                 'last' => 'User',
-                'is_notified' => 1,
+                'is_notified' => 0,
                 'time_zone' => 'America/Detroit'
             ]);
 
@@ -330,7 +330,7 @@ class TdtracShell extends Shell
                 'phone' => 1234567890,
                 'first' => 'Regular',
                 'last' => 'User',
-                'is_notified' => 1,
+                'is_notified' => 0,
                 'time_zone' => 'America/Detroit'
             ]);
 
