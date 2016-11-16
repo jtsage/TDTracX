@@ -76,5 +76,17 @@ class UserPermComponent extends Component
 
         return $hooper->toArray();
     }
+    public function getShowPayAdmins($showId) {
+        $this->ShowUserPerms = TableRegistry::get('ShowUserPerms');
+
+        $hooper = $this->ShowUserPerms->find('list', ['valueField' => 'fullname', 'keyField' => 'user_id'])
+            ->where(['ShowUserPerms.show_id' => $showId])
+            ->where(['is_pay_admin' => true])
+            ->contain(['Users'])
+            ->select(['fullname' => 'concat(Users.first, " ", Users.last, IF(Users.is_salary = 0, \'\', \' (salary employee)\'))', 'ShowUserPerms.user_id'])
+            ->order(['Users.last' => 'ASC', 'Users.first' => 'DESC']);
+
+        return $hooper->toArray();
+    }
 }
 ?>

@@ -457,6 +457,7 @@ class PayrollsController extends AppController
     {
         $this->loadModel('Shows');
         $this->loadModel('Users');
+        $this->loadComponent('MailMsg');
 
         $show = $this->Shows->findById($id)->first();
 
@@ -479,6 +480,7 @@ class PayrollsController extends AppController
         if ($this->request->is('post')) {
             $toUser = $this->Users->findById($this->request->data['user_id'])->first();
 
+            
 
             $time = Time::createFromFormat(
                  'Y-m-d',
@@ -486,6 +488,7 @@ class PayrollsController extends AppController
                  'UTC'
             );
             $this->request->data['date_worked'] = $time;
+            $d_worked = $time;
             $time = Time::createFromFormat(
                  'H:i',
                  $this->request->data['start_time'],
@@ -508,6 +511,8 @@ class PayrollsController extends AppController
             if ( $toUser->is_salary ) { $payroll->is_paid = 1; }
             
             if ($this->Payrolls->save($payroll)) {
+                $this->MailMsg->sendIntNotify($this->Auth->user('id'), $payroll->user_id, "New Hours Added: " . $d_worked->i18nFormat([\IntlDateFormatter::FULL, \IntlDateFormatter::NONE], 'UTC'));
+
                 $this->Flash->success(__('The payroll has been saved.'));
                 return $this->redirect(['action' => 'indexuser', $show->id]);
             } else {
@@ -537,6 +542,7 @@ class PayrollsController extends AppController
     {
         $this->loadModel('Shows');
         $this->loadModel('Users');
+        $this->loadComponent('MailMsg');
 
         $show = $this->Shows->findById($id)->first();
 
@@ -561,6 +567,7 @@ class PayrollsController extends AppController
 
             $time = Time::createFromFormat('Y-m-d',$this->request->data['date_worked'],'UTC');
             $this->request->data['date_worked'] = $time;
+            $d_worked = $time;
 
             $time = Time::createFromFormat('H:i',$this->request->data['start_time'],'UTC');
             $this->request->data['start_time'] = $time;
@@ -574,6 +581,10 @@ class PayrollsController extends AppController
             if ( $toUser->is_salary ) { $payroll->is_paid = 1; }
 
             if ($this->Payrolls->save($payroll)) {
+                $toUsers = $this->UserPerm->getShowPayAdmins($id);
+                foreach ( $toUsers as $toUserID => $toUserName ) {
+                    $this->MailMsg->sendIntNotify($this->Auth->user('id'), $toUserID, "New Hours Added: " . $d_worked->i18nFormat([\IntlDateFormatter::FULL, \IntlDateFormatter::NONE], 'UTC'));
+                }
                 $this->Flash->success(__('The payroll has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {
@@ -602,6 +613,7 @@ class PayrollsController extends AppController
     {
         $this->loadModel('Users');
         $this->loadModel('Shows');
+        $this->loadComponent('MailMsg');
 
         $user = $this->Users->findById($id)->first();
 
@@ -637,6 +649,7 @@ class PayrollsController extends AppController
             
             $time = Time::createFromFormat('Y-m-d',$this->request->data['date_worked'],'UTC');
             $this->request->data['date_worked'] = $time;
+            $d_worked = $time;
 
             $time = Time::createFromFormat('H:i',$this->request->data['start_time'],'UTC');
             $this->request->data['start_time'] = $time;
@@ -650,6 +663,7 @@ class PayrollsController extends AppController
             if ( $toUser->is_salary ) { $payroll->is_paid = 1; }
 
             if ($this->Payrolls->save($payroll)) {
+                $this->MailMsg->sendIntNotify($this->Auth->user('id'), $payroll->user_id, "New Hours Added: " . $d_worked->i18nFormat([\IntlDateFormatter::FULL, \IntlDateFormatter::NONE], 'UTC'));
                 $this->Flash->success(__('The payroll has been saved.'));
                 return $this->redirect(['action' => 'index']);
             } else {

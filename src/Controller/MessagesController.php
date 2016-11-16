@@ -120,6 +120,22 @@ class MessagesController extends AppController
             $this->Flash->error(__("You cannont delete messages not addressed to you."));
         }
         
-        return $this->redirect(['controller' => 'Users', 'action' => 'view', $this->Auth->user('id')]);
+        return $this->redirect("/");
+    }
+
+    public function clear($id = null)
+    {
+
+        $this->request->allowMethod(['post', 'delete']);
+
+        if ( $id <> $this->Auth->user('id') ) {
+            $this->Flash->error(__('You can only clear your own messages!'));
+        } elseif ( $this->Messages->deleteAll(['user_id' => $this->Auth->user('id')]) ) {
+            $this->Flash->success(__('All messages have been cleared.'));
+        } else {
+            $this->Flash->error(__('Something went wrong.  Odd.'));
+        }
+        
+        return $this->redirect("/");
     }
 }

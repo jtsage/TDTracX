@@ -75,6 +75,7 @@ class PagesController extends AppController
         $this->loadModel('Shows');
         $this->loadModel('Tasks');
         $this->loadModel('UserPerms');
+        $this->loadModel('Messages');
 
         $shows = $this->Shows->find()
             ->contain([
@@ -211,6 +212,12 @@ class PagesController extends AppController
             ->where(['Shows.id IN' => $permListBdgt])
             ->group('Shows.id')
             ->order(['Shows.end_date' => 'ASC', 'Shows.id' => 'ASC']);
+
+        $messagesWaiting = $this->Messages->find()
+            ->where([ "Messages.user_id" => $this->Auth->user('id') ])
+            ->order([ "Messages.created_at" => "ASC" ]);
+
+        $this->set('messagesWaiting', $messagesWaiting->toArray());
 
         $this->set('payrollSelfShows', $payrollSelfShows);
         $this->set('payrollAdmShows', $payrollAdmShows);

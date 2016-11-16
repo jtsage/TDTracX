@@ -173,6 +173,7 @@ class TasksController extends AppController
         $this->loadModel('Shows');
         $this->loadModel('ShowUserPerms');
         $this->loadModel('Users');
+        $this->loadComponent('MailMsg');
 
         $show = $this->Shows->findById($id)->first();
 
@@ -203,24 +204,17 @@ class TasksController extends AppController
             $this->request->data['created_by'] = $this->Auth->user('id');
             $task = $this->Tasks->patchEntity($task, $this->request->data);
             if ($this->Tasks->save($task)) {
+                $this->MailMsg->sendIntNotify($this->Auth->user('id'), $task->assigned_to, "New Task Created: " . $task->title);
                 $userTo = $this->Users->findById($task->assigned_to)->first();
-                $email = new Email('default');
-                $email
-                    ->emailFormat('both')
-                    ->template('newtask')
-                    ->to($userTo->username)
-                    ->cc($this->Auth->user('username'))
-                    ->subject('New Task Created')
-                    ->viewVars([
-                        'title' => 'New Task Created',
-                        'creator' => $this->Auth->user('first') . " " . $this->Auth->user('last'),
-                        'assign' => $userTo->first . " " . $userTo->last,
-                        'title' => $task->title,
-                        'link' => "http://" . $_SERVER['HTTP_HOST'] . "/tasks/view/" . $show->id,
-                        'due' => $time->i18nFormat([\IntlDateFormatter::FULL, \IntlDateFormatter::NONE], 'UTC'),
-                        'descrip' => $task->note
-                    ])
-                    ->send();
+                $this->MailMsg->sendExtNotify($this->Auth->user('id'), $task->assigned_to, "newtask", "New Task Created", [
+                    'title' => 'New Task Created',
+                    'creator' => $this->Auth->user('first') . " " . $this->Auth->user('last'),
+                    'assign' => $userTo->first . " " . $userTo->last,
+                    'title' => $task->title,
+                    'link' => "http://" . $_SERVER['HTTP_HOST'] . "/tasks/view/" . $show->id,
+                    'due' => $time->i18nFormat([\IntlDateFormatter::FULL, \IntlDateFormatter::NONE], 'UTC'),
+                    'descrip' => $task->note
+                ]);
                 $this->Flash->success(__('The task has been saved.'));
                 return $this->redirect(['action' => 'view', $show->id]);
             } else {

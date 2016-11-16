@@ -1,3 +1,30 @@
+<?php if ( count($messagesWaiting) > 0 ) : ?>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h4>You have <?= sizeof($messagesWaiting) ?> message(s) waiting.
+        <div class="btn-group"><?php
+            echo $this->Form->postLink(
+                 $this->Pretty->iconDelete("Clear All Messages"),
+                 ['controller' => 'messages', 'action' => 'clear', $user->id],
+                 ['escape' => false, 'confirm' => __('Are you sure you want to clear all your messages?'), 'class' => 'btn btn-danger btn-sm']
+            );
+        ?></div></h4>
+    </div>
+    <table class="table table-bordered">
+        <?php foreach ($messagesWaiting as $message) : ?>
+            <tr><td><?= $message['note'] ?> <small>on <?= $message['created_at']->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT], 'UTC') ?></small></td><td style="text-align:center"><?php
+                echo $this->Form->postLink(
+                 $this->Pretty->iconMark("Delete Message #" . $message['id']),
+                 ['controller' => 'messages', 'action' => 'delete', $message['id']],
+                 ['escape' => false, 'confirm' => __('Are you sure you want to delete this message?'), 'class' => 'btn btn-warning btn-sm']
+            );
+            ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </table>
+</div>
+<?php endif; ?>
+
 <?php if ($WhoAmI): ?>
 <div class="row">
 <div class="col-lg-8">
