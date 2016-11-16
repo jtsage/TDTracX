@@ -79,13 +79,37 @@ To run it, you will need to be able to read and understand the php file, located
 $ ./bin/cake tdtrac demoreset
 ```
 
+## Other Console Commands
+
+$ ./bin/cake tdtrac [command]
+
+ * adduser - Add's a user.
+ * ban - Ban a user.
+ * unban - Un-Ban a user.
+ * resetpass - Reset a user password.
+
+All of these things can be done in the app itself, however, if for some reason you don't wish to maintain an admin account of your own, you could use this. Also great if 
+you forget your admin password.
+
 ## Periodic Emails
 
 This module is buggy, at best.  Still a work in progress.
 
 ```
-0 6 * * * /home/tdtrac/bin/cake tdtrac sendunpaid user@host 0 14 2015-12-06 
+0 21 * * * /home/tdtrac/bin/cake tdtrac sendunpaid user@host 0 14 2015-12-06 
 ```
 
-This will send every 2 weeks on sunday.
+This will send every 2 weeks on sunday (at 9pm) - it's the currently due hours
+
+```
+0 1 * * * /home/tdtrac/bin/cake tdtrac sendremind 0 14 2015-12-06 
+```
+
+This will send every 2 weeks on sunday (at 1am) - it's a reminder for users to input their hours.
+
+Basically, 
+ * Arg#1 = Day of the week to send
+ * Arg#2 - Period to send on.  14 days = 2 weeks
+ * Arg#3 - A known "good" date to send on.
+
 

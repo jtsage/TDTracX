@@ -7,6 +7,14 @@
             echo $this->Form->input('location', ['label' => __('Location'), 'data-minlength' => 5]);
             echo $this->Pretty->datePicker('end_date', __('End Date'),  $show->end_date);
             echo "<label>" . __("Switches") . "</label>";
+            echo $this->Pretty->check('is_reminded', $show->is_reminded, [
+                'label-width' => '100',
+                'label-text' => __('Is Reminded'),
+                'on-text' => __('YES'),
+                'off-text' => __('NO'),
+                'on-color' => 'danger',
+                'off-color' => 'success'
+            ]);
             echo $this->Pretty->check('is_active', $show->is_active, [
                 'label-width' => '100',
                 'label-text' => __('Is Active'),

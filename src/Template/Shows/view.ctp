@@ -22,6 +22,8 @@
             <p><?= h($show->location) ?></p>
             <h4><span class="label label-success"><?= __('Active Show?') ?></span></h4>
             <p><?= $this->Bool->prefYes($show->is_active) ?></p>
+            <h4><span class="label label-success"><?= __('Reminders Sent?') ?></span></h4>
+            <p><?= $this->Bool->prefNo($show->is_reminded) ?></p>
         </div>
         <div class="col-md-6">
             <h4><span class="label label-success"><?= __('End Date') ?></span></h4>

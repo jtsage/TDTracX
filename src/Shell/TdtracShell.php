@@ -37,6 +37,20 @@ class TdtracShell extends Shell
                     ]
                 ]
             ])
+            ->addSubcommand('sendremind', [
+                'help' => 'Send reminders to payroll users to input their hours.',
+                'parser' => [
+                    'description' => 'Send unpaid hours to the specified email, on the specified schedule.',
+                    'arguments' => [
+                        'dayOfWeek' => [ 'help' => 'Day of the week to allow sending on', 'required' => true ],
+                        'daysOfPeriod' => [ 'help' => 'Pay period length (i.e. 14 == 2 Weeks)', 'required' => true ],
+                        'startDate' => [ 'help' => 'Valid date to calculate period from', 'required' => true ]
+                    ],
+                    'options' => [
+                        'ignoreSchedule' => [ 'short' => 'i', 'boolean' => true, 'help' => 'Ignore schedule, send now', 'default' => false ]
+                    ]
+                ]
+            ])
             ->addSubcommand('adduser', [
                 'help' => 'Add a user',
                 'parser' => [
@@ -729,6 +743,64 @@ class TdtracShell extends Shell
         $email->send();
         
         $this->out('E-Mail Sent.');
+
+    }
+
+    public function sendremind($dayOfWeek, $daysOfPeriod, $startDate)
+    {
+        if ( !$this->params['ignoreSchedule'] ) {
+            $today = Time::now();
+            $today->hour(0)->minute(0)->second(0);
+
+            $start = Time::createFromFormat('Y-m-d', $startDate,'UTC');
+
+            if ( $today->dayOfWeek <> $dayOfWeek) {
+                $this->out('Wrong Day');
+                exit(1);
+            }
+
+            $daysSince = $today->diffInDays($start) + 1;
+
+            if ( $daysSince % $daysOfPeriod > 0) {
+                $this->out('Wrong Period');
+                exit(1);
+            }
+        }
+
+        $this->loadModel('Shows');
+        $this->loadModel('Users');
+        $this->loadModel('ShowUserPerms');
+
+
+        $showsToRemind = $this->Shows->find('list', ['valueField' => 'name', 'keyField' => 'id'])
+            ->where(['Shows.is_active' => 1 ])
+            ->where(['Shows.is_reminded' => 1]);
+
+         
+        $usersToRemindArr = $this->ShowUserPerms->find('list', ['valueField' => 'id', 'keyField' => 'user_id'])
+            ->where(['show_id IN' => array_keys($showsToRemind->toArray()) ])
+            ->where(['is_paid' => 1 ]);
+
+
+        $usersToRemind = $this->Users->find()
+            ->where(['is_active' => 1])
+            ->where(['is_notified' => 1])
+            ->where(['id IN' => array_keys($usersToRemindArr->toArray()) ]);
+
+        foreach ( $usersToRemind as $thisUser ) {
+            $this->out('Sending to: ' . $thisUser->first);
+            $email = new Email();
+            $email->transport('default');
+            $email->emailFormat('both');
+            $email->to($thisUser->username);
+            $email->subject('Hours are Due!');
+            $email->from('tdtracx@tdtrac.com');
+            $email->template('hourremind');
+            $email->viewVars(['name' => $thisUser->first . " " . $thisUser->last]);
+            $email->send();
+        }   
+
+        $this->out('E-Mail(s) Sent.');
 
     }
 }

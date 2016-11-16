@@ -14,6 +14,7 @@
                 $this->Paginator->sort('location', __("Location")),
                 $this->Paginator->sort('end_date', __("End Date")),
                 $this->Paginator->sort('is_active', __('Is Open'), ['direction' => 'DESC']),
+                "Reminders Sent?",
                 [__('Actions') => ['class' => 'text-center']]
             ]); ?>
         </tr>
@@ -25,7 +26,7 @@
         if ( $show->is_active <> $last_status ) {
             echo $this->Html->tableCells([
                 [  
-                    [ __('Closed Shows'), ['colspan' => '5', 'class' => 'text-center danger'] ]
+                    [ __('Closed Shows'), ['colspan' => '6', 'class' => 'text-center danger'] ]
                 ]
             ], ['class' => 'bold'], null, 1, false);
             $last_status = 0;
@@ -39,6 +40,7 @@
                         \IntlDateFormatter::NONE
                     ], 'UTC'),
                 $this->Bool->prefYes($show->is_active),
+                $this->Bool->prefNo($show->is_reminded),
                 [
                     '<div class="btn-group" role="group">' .
                     $this->Html->link(
