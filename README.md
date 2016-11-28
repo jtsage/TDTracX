@@ -10,6 +10,9 @@ as open source.
  * Configurable pay rate for budgeting purposes
  * Allow your employees to add thier own hours, while being notified on your next login
  * Optionally allow your employees to add budget expenses, or even view the current budget
+ * Send periodic e-mails to your users, reminding them to input their hours.
+ * Send period reports to yourself or your payroll department for processing.
+ * Manage tasks lists on a per-show basis.
 
 
 ### TDTracX
@@ -93,23 +96,18 @@ you forget your admin password.
 
 ## Periodic Emails
 
-This module is buggy, at best.  Still a work in progress.
+Newly added to the web interface, you can send periodic e-mails, either to remind users to input hours, or to send the unpaid hours to the payroll department.  You will need to alter 2 settings to make this work.  In config/tdtracx.php set "ServerTimeZoneFix" to your *server's* timezone.  It's how the offset it fixed.  This is important, or things won't run quite when you expect.
+
+Next, add a line to cron:
 
 ```
-0 21 * * * /home/tdtrac/bin/cake tdtrac sendunpaid user@host 0 14 2015-12-06 
+0 */2 * * * /home/tdtrac/bin/cake tdtrac cron
 ```
 
-This will send every 2 weeks on sunday (at 9pm) - it's the currently due hours
+This should really be in the web server user's crontab.  Please, don't run it as root.  Or any other user that does not own the cakephp install directory really.  Bad things will happen.  It'll overwrite the cache files and break your install until you fix them manually.
 
-```
-0 1 * * * /home/tdtrac/bin/cake tdtrac sendremind 0 14 2015-12-06 
-```
+This will allow tasks to run once every other hour.  Tasks will run as soon as possible after their set schedule.  As there is some imprecision with cron, tasks will not run *exactly* at thier scheduled time.  You can improve this resolution by running tdtrac cron *more* often, but if you do it enough, there will be performance concerns.
 
-This will send every 2 weeks on sunday (at 1am) - it's a reminder for users to input their hours.
-
-Basically, 
- * Arg#1 = Day of the week to send
- * Arg#2 - Period to send on.  14 days = 2 weeks
- * Arg#3 - A known "good" date to send on.
+See the web interface under "scheduled tasks" for what these cron tasks can be.
 
 

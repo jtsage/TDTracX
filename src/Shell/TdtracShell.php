@@ -7,6 +7,7 @@ use Cake\Network\Exception\InternalErrorException;
 use Cake\I18n\Time;
 use Cake\Network\Email\Email;
 use Cake\ORM\TableRegistry;
+use Cake\Core\Configure;
 
 /**
  * Tdtrac shell command.
@@ -22,34 +23,8 @@ class TdtracShell extends Shell
             ->addSubcommand('install', [
                 'help' => 'Run the install routine'
             ])
-            ->addSubcommand('sendunpaid', [
-                'help' => 'Send unpaid hours to email on a schedule',
-                'parser' => [
-                    'description' => 'Send unpaid hours to the specified email, on the specified schedule.',
-                    'arguments' => [
-                        'email' => [ 'help' => 'E-Mail Address(es) to send to', 'required' => true ],
-                        'dayOfWeek' => [ 'help' => 'Day of the week to allow sending on', 'required' => true ],
-                        'daysOfPeriod' => [ 'help' => 'Pay period length (i.e. 14 == 2 Weeks)', 'required' => true ],
-                        'startDate' => [ 'help' => 'Valid date to calculate period from', 'required' => true ]
-                    ],
-                    'options' => [
-                        'ignoreSchedule' => [ 'short' => 'i', 'boolean' => true, 'help' => 'Ignore schedule, send now', 'default' => false ]
-                    ]
-                ]
-            ])
-            ->addSubcommand('sendremind', [
-                'help' => 'Send reminders to payroll users to input their hours.',
-                'parser' => [
-                    'description' => 'Send unpaid hours to the specified email, on the specified schedule.',
-                    'arguments' => [
-                        'dayOfWeek' => [ 'help' => 'Day of the week to allow sending on', 'required' => true ],
-                        'daysOfPeriod' => [ 'help' => 'Pay period length (i.e. 14 == 2 Weeks)', 'required' => true ],
-                        'startDate' => [ 'help' => 'Valid date to calculate period from', 'required' => true ]
-                    ],
-                    'options' => [
-                        'ignoreSchedule' => [ 'short' => 'i', 'boolean' => true, 'help' => 'Ignore schedule, send now', 'default' => false ]
-                    ]
-                ]
+            ->addSubcommand('cron', [
+                'help' => 'Run scheduled tasks'
             ])
             ->addSubcommand('adduser', [
                 'help' => 'Add a user',
@@ -666,27 +641,55 @@ class TdtracShell extends Shell
         }
     }
 
-    public function sendunpaid($sendto, $dayOfWeek, $daysOfPeriod, $startDate)
-    {
-        if ( !$this->params['ignoreSchedule'] ) {
-            $today = Time::now();
-            $today->hour(0)->minute(0)->second(0);
+    public function cron() {
+        $this->loadModel('Schedules');
+        $all = $this->Schedules->find('all');
+        date_default_timezone_set(Configure::read('ServerTimeZoneFix'));
+        $real_offset = date('Z');
+        date_default_timezone_set('UTC');
+        $now = Time::parse($real_offset . " seconds");
 
-            $start = Time::createFromFormat('Y-m-d', $startDate,'UTC');
+        $this->verbose("Runtime: " . $now);
 
-            if ( $today->dayOfWeek <> $dayOfWeek) {
-                $this->out('Wrong Day');
-                exit(1);
+        foreach( $all as $task ) {
+            $this->out("Task #" . $task->id . " Period: " . $task->period . " Original: " . $task->start_time . " Last: " . $task->last_run);
+            $do_this_task = false;
+            if ( $task->last_run->lt($task->start_time) ) { 
+                $this->verbose(' Has never run');
+                if ( $task->start_time->lte($now) ) {
+                    $do_this_task = true;
+                    $this->verbose(' Should run now, overdue');
+                } else { $this->verbose(' SKIPPING'); }
+            } else {
+                $this->verbose(' Has run');
+                $counter = $task->start_time;
+                $breaker = true;
+                while ( $breaker ) {
+                    $counter->modify("+".$task->period."days");
+                    if ( $counter->gt($task->last_run)) { $breaker = false; $this->verbose(' Found next run: ' . $counter);}
+                }
+                if ( $counter->lte($now) ) {
+                    $this->verbose(' Should run now!'); $do_this_task = true;
+                } else { $this->verbose(' SKIPPING'); }
             }
 
-            $daysSince = $today->diffInDays($start) + 1;
-
-            if ( $daysSince % $daysOfPeriod > 0) {
-                $this->out('Wrong Period');
-                exit(1);
+            if ( $do_this_task ) {
+                $this->verbose(' Running task type: ' . $task->jobtype);
+                if ( $task->jobtype == "unpaid" ) { 
+                    $this->sendunpaid($task->sendto);
+                }
+                if ( $task->jobtype == "remind" ) {
+                    $this->sendremind();
+                }
+                $task->last_run = $now;
+                $this->Schedules->save($task);
+                $this->verbose(' Updated last run');
             }
         }
+    }
 
+    public function sendunpaid($sendto)
+    {
         $this->loadModel('Payrolls');
         $unpaid = $this->Payrolls->find()
             ->contain(['Shows', 'Users'])
@@ -742,65 +745,45 @@ class TdtracShell extends Shell
         $email->viewVars(['headers' => $headers, 'tabledata' => $datatable]);
         $email->send();
         
-        $this->out('E-Mail Sent.');
-
+        $this->verbose('  E-Mail Sent.');
     }
 
-    public function sendremind($dayOfWeek, $daysOfPeriod, $startDate)
+    public function sendremind()
     {
-        if ( !$this->params['ignoreSchedule'] ) {
-            $today = Time::now();
-            $today->hour(0)->minute(0)->second(0);
-
-            $start = Time::createFromFormat('Y-m-d', $startDate,'UTC');
-
-            if ( $today->dayOfWeek <> $dayOfWeek) {
-                $this->out('Wrong Day');
-                exit(1);
-            }
-
-            $daysSince = $today->diffInDays($start) + 1;
-
-            if ( $daysSince % $daysOfPeriod > 0) {
-                $this->out('Wrong Period');
-                exit(1);
-            }
-        }
-
         $this->loadModel('Shows');
         $this->loadModel('Users');
         $this->loadModel('ShowUserPerms');
-
 
         $showsToRemind = $this->Shows->find('list', ['valueField' => 'name', 'keyField' => 'id'])
             ->where(['Shows.is_active' => 1 ])
             ->where(['Shows.is_reminded' => 1]);
 
+        if ( sizeof($showsToRemind->toArray()) > 0 ) {
          
-        $usersToRemindArr = $this->ShowUserPerms->find('list', ['valueField' => 'id', 'keyField' => 'user_id'])
-            ->where(['show_id IN' => array_keys($showsToRemind->toArray()) ])
-            ->where(['is_paid' => 1 ]);
+            $usersToRemindArr = $this->ShowUserPerms->find('list', ['valueField' => 'id', 'keyField' => 'user_id'])
+                ->where(['show_id IN' => array_keys($showsToRemind->toArray()) ])
+                ->where(['is_paid' => 1 ]);
 
 
-        $usersToRemind = $this->Users->find()
-            ->where(['is_active' => 1])
-            ->where(['is_notified' => 1])
-            ->where(['id IN' => array_keys($usersToRemindArr->toArray()) ]);
+            $usersToRemind = $this->Users->find()
+                ->where(['is_active' => 1])
+                ->where(['is_notified' => 1])
+                ->where(['id IN' => array_keys($usersToRemindArr->toArray()) ]);
 
-        foreach ( $usersToRemind as $thisUser ) {
-            $this->out('Sending to: ' . $thisUser->first);
-            $email = new Email();
-            $email->transport('default');
-            $email->emailFormat('both');
-            $email->to($thisUser->username);
-            $email->subject('Hours are Due!');
-            $email->from('tdtracx@tdtrac.com');
-            $email->template('hourremind');
-            $email->viewVars(['name' => $thisUser->first . " " . $thisUser->last]);
-            $email->send();
-        }   
+            foreach ( $usersToRemind as $thisUser ) {
+                $this->out('Sending to: ' . $thisUser->first);
+                $email = new Email();
+                $email->transport('default');
+                $email->emailFormat('both');
+                $email->to($thisUser->username);
+                $email->subject('Hours are Due!');
+                $email->from('tdtracx@tdtrac.com');
+                $email->template('hourremind');
+                $email->viewVars(['name' => $thisUser->first . " " . $thisUser->last]);
+                $email->send();
+            }   
+        }
 
-        $this->out('E-Mail(s) Sent.');
-
+        $this->verbose('  E-Mail(s) Sent.');
     }
 }

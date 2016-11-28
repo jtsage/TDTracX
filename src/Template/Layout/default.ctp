@@ -66,7 +66,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="dropdown">
+            <li <?= ($this->request->params['controller'] == "Payrolls" ? "class='active dropdown'":"class='dropdown'") ?>>
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= __("Payroll") ?><span class="caret"></span></a>
               <ul class="dropdown-menu">
                 <li><a href="/payrolls/"><?= __("By Show") ?></a></li>
@@ -79,10 +79,11 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
               </ul>
             </li>
 
-            <li><a href="/budgets/"><?= __("Budget") ?></a></li>
-            <li><a href="/tasks/"><?= __("Tasks") ?></a></li>
-            <li><a href="/shows/"><?= __("Shows") ?></a></li>
-            <li><a href="/users/"><?= ($WhoAmI) ? __("Users") : __("My Account") ?></a></li>
+            <li <?= ($this->request->params['controller'] == "Budgets" ? "class='active'":"") ?>><a href="/budgets/"><?= __("Budget") ?></a></li>
+            <li <?= ($this->request->params['controller'] == "Tasks" ? "class='active'":"") ?>><a href="/tasks/"><?= __("Tasks") ?></a></li>
+            <li <?= ($this->request->params['controller'] == "Shows" ? "class='active'":"") ?>><a href="/shows/"><?= __("Shows") ?></a></li>
+            <li <?= ($this->request->params['controller'] == "Users" ? "class='active'":"") ?>><a href="/users/"><?= ($WhoAmI) ? __("Users") : __("My Account") ?></a></li>
+            <?= ($WhoAmI) ? "<li" . ($this->request->params['controller'] == "Schedules" ? " class='active'":"") . "><a href=\"/schedules/\">Scheduled Tasks</a></li>" : "" ?>
             <li><a href="/users/logout/"><?= __("Logout") ?></a></li>
             <li><a data-toggle="modal" data-target="#helpMe" href="#"><i class="fa fa-lg fa-fw fa-question-circle"></i>&thinsp;<?= __("Help") ?></a></li>
           </ul>
@@ -123,7 +124,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
   <footer style="padding-top: 20px; margin-top: 20px; border-top: 1px solid #e5e5e5;">
     <p class="text-center text-muted"><?= __("TDTracX: the quick time and budget tracking tool") ?></p>
     <?= $this->Html->nestedList([
-        __('Currently v0.0.13'), ' ',
+        __('Currently v0.0.14'), ' ',
         '<a href="https://github.com/jtsage/TDTracX">GitHub</a>', ' ',
         '<a href="http://tdtrac.com/">' . __('Home Page') . '</a>', ' ',
         '<a href="http://demox.tdtrac.com">' . __('Demo Application') . '</a>'

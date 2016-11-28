@@ -5,9 +5,27 @@ namespace App\View\Helper;
 
 use Cake\View\Helper;
 use Cake\I18n\Time;
+use Cake\Core\Configure;
 
 class PrettyHelper extends Helper
 {
+    public function next_run($original, $last, $period) {
+        date_default_timezone_set(Configure::read('ServerTimeZoneFix'));
+        $real_offset = date('Z');
+        date_default_timezone_set('UTC');
+        $now = Time::parse($real_offset . " seconds");
+        
+        if ( $last->lt($original) ) { 
+            return $original->i18nFormat(null, 'UTC');
+        }
+        $breaker = true;
+        while ( $breaker ) {
+            $counter = $original;
+            $counter->modify('+' . $period . "days");
+            if ( $counter->gte($now) ) { $breaker = false; }
+        }
+        return $counter->i18nFormat(null, 'UTC');
+    }
     public function phone($value)
     {
         if ( $value  < 100000000 ) { return "n/a"; }
@@ -98,6 +116,22 @@ class PrettyHelper extends Helper
         $retty  = '<div class="form-group required">';
         $retty .= '<label class="control-label">' . $label . '</label>';
         $retty .= '<input class="form-control" data-role="datebox" data-datebox-mode="calbox" type="text" id="'.$name.'-dbox" value="' . $pretval . '" data-options=\'{"linkedField": "#' . $name . '", "overrideDateFormat": "%B %-d, %Y", "linkedFieldFormat": "%Y-%m-%d" }\'>';
+        $retty .= '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $val . '" /></div>';
+        return $retty;
+    }
+
+    public function dateSPicker( $name, $label, $time=null ) {
+        if ( !is_null($time) ) { 
+            $val = $time->i18nFormat('YYYY-MM-dd HH:mm:ss');
+            $pretval = $time->i18nFormat('MMMM d, YYYY @ HH:mm');
+        } else {
+            $val = date('Y-m-d 00:00:00');
+            $pretval = date('F j, Y @ 00:00');
+        }
+
+        $retty  = '<div class="form-group required">';
+        $retty .= '<label class="control-label">' . $label . '</label>';
+        $retty .= '<input class="form-control" data-role="datebox" data-datebox-mode="slidebox" type="text" id="'.$name.'-dbox" value="' . $pretval . '" data-options=\'{"linkedField": "#' . $name . '", "minuteStep": 10, "overrideSlideFieldOrder": ["y","m","d","h","i"], "overrideDateFormat": "%B %-d, %Y @ %H:%M", "linkedFieldFormat": "%Y-%m-%d %H:%M:00" }\'>';
         $retty .= '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $val . '" /></div>';
         return $retty;
     }
