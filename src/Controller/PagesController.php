@@ -76,6 +76,11 @@ class PagesController extends AppController
         $this->loadModel('Tasks');
         $this->loadModel('UserPerms');
         $this->loadModel('Messages');
+        $this->loadModel('Schedules');
+
+        $schedules = $this->Schedules->find()->count();
+
+        $this->set('schedules', $schedules);
 
         $shows = $this->Shows->find()
             ->contain([

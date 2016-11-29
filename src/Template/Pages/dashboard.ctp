@@ -285,6 +285,40 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
+                        <i class="fa fa-clock-o fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><?= __("Scheduled Tasks") ?></div>
+                        <div><?= __("The system wide scheduled tasks list.") ?></div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="/schedules/">
+                <div class="panel-footer"><strong>
+                    <span class="pull-left">View Scheduled Tasks</span>
+                    <span class="pull-right">
+                        <span class="badge"><?= $schedules; ?></span> 
+                        <i class="fa fa-lg fa-arrow-right"></i>
+                    </span>
+                    <div class="clearfix"></div>
+                </strong></div>
+            </a>
+
+            <a href="/schedules/add/">
+                <div class="panel-footer">
+                    <span class="pull-left">Add Scheduled Task</span>
+                    <span class="pull-right"><i class="fa fa-lg fa-arrow-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+
+
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
                         <i class="fa fa-music fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">
