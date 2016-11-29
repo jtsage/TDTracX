@@ -124,7 +124,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
   <footer style="padding-top: 20px; margin-top: 20px; border-top: 1px solid #e5e5e5;">
     <p class="text-center text-muted"><?= __("TDTracX: the quick time and budget tracking tool") ?></p>
     <?= $this->Html->nestedList([
-        __('Currently v0.0.14'), ' ',
+        __('Currently v0.0.15'), ' ',
         '<a href="https://github.com/jtsage/TDTracX">GitHub</a>', ' ',
         '<a href="http://tdtrac.com/">' . __('Home Page') . '</a>', ' ',
         '<a href="http://demox.tdtrac.com">' . __('Demo Application') . '</a>'

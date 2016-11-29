@@ -25,6 +25,15 @@ class SchedulesController extends AppController
         }
         $schedules = $this->paginate($this->Schedules);
 
+        $this->loadModel('Shows');
+        $showsq = $this->Shows->find('all')
+            ->select(['id', 'name'])
+            ->where(['Shows.is_active' => 1]);
+
+        $shows = ["**Not Applicable**"];
+        foreach ($showsq as $show) { $shows[$show->id] = $show->name; }
+        $this->set('shows', $shows);
+
         $this->set(compact('schedules'));
         $this->set('_serialize', ['schedules']);
     }
@@ -46,6 +55,15 @@ class SchedulesController extends AppController
             'contain' => []
         ]);
 
+        $this->loadModel('Shows');
+        $showsq = $this->Shows->find('all')
+            ->select(['id', 'name'])
+            ->where(['Shows.is_active' => 1]);
+
+        $shows = ["**Not Applicable**"];
+        foreach ($showsq as $show) { $shows[$show->id] = $show->name; }
+        $this->set('shows', $shows);
+
         $this->set('schedule', $schedule);
         $this->set('_serialize', ['schedule']);
     }
@@ -61,6 +79,16 @@ class SchedulesController extends AppController
             $this->Flash->error(__('Only administrators may access the scheduled tasks module.'));
             return $this->redirect("/");
         }
+
+        $this->loadModel('Shows');
+        $showsq = $this->Shows->find('all')
+            ->select(['id', 'name'])
+            ->where(['Shows.is_active' => 1]);
+
+        $shows = ["** Not Applicable **"];
+        foreach ($showsq as $show) { $shows[$show->id] = $show->name; }
+        $this->set('shows', $shows);
+
         $schedule = $this->Schedules->newEntity();
         if ($this->request->is('post')) {
             $time = Time::createFromFormat(
@@ -95,6 +123,16 @@ class SchedulesController extends AppController
             $this->Flash->error(__('Only administrators may access the scheduled tasks module.'));
             return $this->redirect("/");
         }
+        
+        $this->loadModel('Shows');
+        $showsq = $this->Shows->find('all')
+            ->select(['id', 'name'])
+            ->where(['Shows.is_active' => 1]);
+
+        $shows = ["** Not Applicable **"];
+        foreach ($showsq as $show) { $shows[$show->id] = $show->name; }
+        $this->set('shows', $shows);
+
         $schedule = $this->Schedules->get($id, [
             'contain' => []
         ]);

@@ -16,7 +16,18 @@
     <div class="row">
         <div class="col-md-6">
             <h4><span class="label label-primary"><?= __('Job Type') ?></span></h4>
-            <p><?= h($schedule->jobtype) ?></p>
+            <p><?php
+                switch($schedule->jobtype) {
+                    case "remind":
+                        echo "Send Hour Reminders"; break;
+                    case "unpaid":
+                        echo "Send Un-Paid Report"; break;
+                    case 'budget':
+                        echo 'Send Budget Report'; break;
+                    case 'tasks':
+                        echo 'Send Task List'; break;
+                }
+            ?></p>
             <h4><span class="label label-primary"><?= __('E-Mail To') ?></span></h4>
             <p><?= h($schedule->sendto) ?></p>
             <h4><span class="label label-info"><?= __('First Valid Date/Time') ?></span></h4>

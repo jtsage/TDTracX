@@ -64,6 +64,10 @@ class SchedulesTable extends Table
             ->allowEmpty('sendto');
 
         $validator
+            ->integer('show_id')
+            ->notEmpty('show_id');
+
+        $validator
             ->dateTime('start_time')
             ->requirePresence('start_time', 'create')
             ->notEmpty('start_time');

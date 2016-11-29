@@ -652,7 +652,7 @@ class TdtracShell extends Shell
         $this->verbose("Runtime: " . $now);
 
         foreach( $all as $task ) {
-            $this->out("Task #" . $task->id . " Period: " . $task->period . " Original: " . $task->start_time . " Last: " . $task->last_run);
+            $this->verbose("Task #" . $task->id . " Period: " . $task->period . " Original: " . $task->start_time . " Last: " . $task->last_run);
             $do_this_task = false;
             if ( $task->last_run->lt($task->start_time) ) { 
                 $this->verbose(' Has never run');
@@ -675,17 +675,134 @@ class TdtracShell extends Shell
 
             if ( $do_this_task ) {
                 $this->verbose(' Running task type: ' . $task->jobtype);
-                if ( $task->jobtype == "unpaid" ) { 
-                    $this->sendunpaid($task->sendto);
-                }
-                if ( $task->jobtype == "remind" ) {
-                    $this->sendremind();
+                switch ( $task->jobtype ) {
+                    case "unpaid":
+                        $this->sendunpaid($task->sendto); break;
+                    case "remind":
+                        $this->sendremind(); break;
+                    case "tasks":
+                        $this->sendtask($task->sendto, $task->show_id); break;
+                    case "budget":
+                        $this->sendbudget($task->sendto, $task->show_id); break;
                 }
                 $task->last_run = $now;
                 $this->Schedules->save($task);
                 $this->verbose(' Updated last run');
             }
         }
+    }
+
+    public function sendbudget($sendto, $showid) {
+        $this->loadModel('Shows');
+        $this->loadModel('Budgets');
+
+        $shownamie = $this->Shows->find('all')
+            ->where(['Shows.id' => $showid])->first();
+
+        $budgets = $this->Budgets->find('all')
+            ->where(['show_id' => $showid])
+            ->order(['category' => 'ASC', 'date' => 'ASC']);
+
+        $datatable = [];
+        
+        $lastcat = false;
+        $subtotal = 0;
+        $total = 0;
+        foreach ( $budgets as $item ) {
+            if ( $lastcat <> $item->category ) {
+                if ( $lastcat <> false ) {
+                    $datatable[] = [ "", $lastcat . " Subtotal", "", "", "$" . number_format($subtotal, 2) ];
+                    $subtotal = 0;
+                }
+                $lastcat = $item->category;
+            }
+            $datatable[] = [
+                $item->date->i18nFormat('EEE, MMM dd, yyyy', 'UTC'),
+                $item->category,
+                $item->vendor,
+                $item->description,
+                "$" . number_format($item->price, 2)
+            ];
+            $subtotal += $item->price;
+            $total += $item->price;
+        }
+        $datatable[] = [ "", $lastcat . " Subtotal", "", "", "$" . number_format($subtotal, 2) ];
+        $datatable[] = [ "", "Grand Total", "", "", "$" . number_format($total, 2) ];
+
+        $headers = ['Date', 'Category', 'Vendor', 'Description', 'Price'];
+
+        $email = new Email();
+        $email->transport('default');
+        $email->helpers(['Html', 'Gourmet/Email.Email']);
+        $email->emailFormat('both');
+        $email->to($sendto);
+        $email->subject('Budget List - ' . date('Y-m-d'));
+        $email->from('tdtracx@tdtrac.com');
+        $email->template('budget');
+        $email->viewVars(['showname' => $shownamie->name, 'headers' => $headers, 'tabledata' => $datatable]);
+        $email->send();
+
+        $this->verbose('  E-Mail Sent.');
+    }
+    
+    public function sendtask($sendto, $showid) {
+        $this->Tasks = TableRegistry::get('Tasks');
+        $this->loadModel('Shows');
+
+        $shownamie = $this->Shows->find('all')
+            ->where(['Shows.id' => $showid])->first();
+
+        $taskies = $this->Tasks->find('all')
+            ->where(['show_id' => $showid])
+            ->join([
+                'assigned' => [
+                    'table' => 'users',
+                    'type' => 'INNER',
+                    'conditions' => 'assigned.id = Tasks.assigned_to',
+                ],
+                'created' => [
+                    'table' => 'users',
+                    'type' => 'INNER',
+                    'conditions' => 'created.id = Tasks.created_by',
+                ]
+            ])
+            ->select([
+                'title', 'due', 'priority', 'category', 'note', 'id', 'created_at', 'updated_at', 'task_accepted', 'task_done', 'created_by', 'assigned_to',
+                'assigned_name' => 'concat(assigned.first, " ", assigned.last)',
+                'created_name' => 'concat(created.first, " ", created.last)',
+                'is_overdue' => 'IF(Tasks.due < "' . date('Y-m-d') . '", 1, 0)'
+            ])
+            ->order(['task_done' => 'ASC', 'due' => 'ASC']);
+
+        $headers = ['Created By', 'Assigned To', 'Category', 'Title', 'Description', 'Accepted/Complete', 'Due', 'Priority'];
+
+        $datatable = [];
+
+        foreach ( $taskies as $task ) {
+            $datatable[] = [
+                $task->created_name,
+                $task->assigned_name,
+                $task->category,
+                $task->title,
+                $task->note,
+                ( $task->task_accepted ? "YES" : "NO" ) . " / " . ( $task->task_done ? "YES" : "NO" ),
+                $task->due->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
+                ["Missable","Normal","High","Critical"][$task->priority]
+            ];
+        }
+
+        $email = new Email();
+        $email->transport('default');
+        $email->helpers(['Html', 'Gourmet/Email.Email']);
+        $email->emailFormat('both');
+        $email->to($sendto);
+        $email->subject('Task List - ' . date('Y-m-d'));
+        $email->from('tdtracx@tdtrac.com');
+        $email->template('tasks');
+        $email->viewVars(['showname' => $shownamie->name, 'headers' => $headers, 'tabledata' => $datatable]);
+        $email->send();
+
+        $this->verbose('  E-Mail Sent.');
     }
 
     public function sendunpaid($sendto)

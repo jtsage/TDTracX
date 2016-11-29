@@ -14,6 +14,7 @@
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('jobtype', __('Job Type')) ?></th>
                 <th scope="col"><?= $this->Paginator->sort('sendto', __('Send-To E-Mail')) ?></th>
+                <th scope="col"><?= $this->Paginator->sort('show_id', __('Show')) ?></th>
                 <th scope="col"><?= $this->Paginator->sort('start_time') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('period') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('last_run') ?></th>
@@ -30,10 +31,15 @@
                             echo "Send Hour Reminders"; break;
                         case "unpaid":
                             echo "Send Un-Paid Report"; break;
+                        case 'budget':
+                            echo 'Send Budget Report'; break;
+                        case 'tasks':
+                            echo 'Send Task List'; break;
                     }
                 ?></td>
                 <td><?= h($schedule->sendto) ?></td>
-                <td><?= $schedule->start_time->i18nFormat([\IntlDateFormatter::FULL, \IntlDateFormatter::SHORT], 'UTC') ?></td>
+                <td><?= $shows[$schedule->show_id] ?></td>
+                <td><?= $schedule->start_time->i18nFormat("eee, MMM d, YYYY @ h:mm a", 'UTC') ?></td>
                 <td><?= $this->Number->format($schedule->period) ?></td>
                 <td><?= h($schedule->last_run) ?></td>
 
