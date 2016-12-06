@@ -18,78 +18,90 @@
 	<li><a <?= ($sort == "updated") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/updated">Updated Date</a></li>
 	<li><a <?= ($sort == "priority") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/priority">Assigned Priority</a></li>
 </ol>
+<table class="table table-striped table-bordered">
+        <thead>
+            <?= $this->Html->tableHeaders([
+                __("Title"),
+                __("Category"),
+                [__("Priority") => ['class' => 'text-center']],
+                __("Due"),
+                __("Accepted"),
+                __("Complete"),
+                [__('Actions') => ['class' => 'text-center']]
+            ]); ?>
+        </thead>
 
-<?php foreach ($tasks as $task) : ?>
 
-<?php 
-if ( $task->task_done ) { $panel_class = "panel-success"; }
-elseif ( $task->is_overdue ) { $panel_class = "panel-danger"; }
-elseif ( ! $task->task_accepted ) { $panel_class = "panel-info"; }
-elseif ( $task->task_accepted ) { $panel_class = "panel-warning"; }
-else { $panel_class = "panel-danger" ;}
-?>
+<?php foreach ($tasks as $task) {
 
-<div class="panel <?= $panel_class ?>">
-	<div class="panel-heading">
-		<div class="row">
-			<div class="col-xs-3">
-				<i class="fa fa-tasks fa-5x"></i>
-			</div>
-			<div class="col-xs-9 text-right">
-				<div class="huge"><?php
-    				for ( $i = 1; $i <= $task->priority; $i++ ) {
-    					echo '<i class="fa fa-bell" aria-hidden="true"></i>';
-    				} echo " " . $task->title ?></div>
-				<div><?= __("{3}due on {0}{2}{1} with {0}{4}{1} priority", [
-					"<strong>",
-					"</strong>",
-					$task->due->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
-					(($task->is_overdue) ? "was " : "is "),
-                    ["Missable","Normal","High","Critical"][$task->priority]
-				]); ?></div>
-			</div>
-		</div>
-	</div>
-	<table class="table table-bordered">
-    	<tr><th style="width: 30%">Created By</th><td><?= h($task->created_name) ?></td></tr>
-    	<tr><th>Asssigned To</th><td><?= h($task->assigned_name) ?></td></tr>
-    	<tr><th>Category</th><td><?= h($task->category) ?></td></tr>
-        <?php if ( ! $task->task_done ) : ?>
-    	<tr><th>Task Accepted</th><td class="<?= ($task->task_accepted) ? "success" : "warning" ?>"><?= ($task->task_accepted) ? "yes" : "no" ?></td></tr>
-        <?php endif; ?>
-    	<tr><th>Task Complete</th><td class="<?= ($task->task_done) ? "success" : ($task->is_overdue ? "danger" : "warning") ?>"><?= ($task->task_done) ? "YES" : "no" ?></td></tr>
-        
-        <?php if ( $opsok || $task->created_by == $opid ) : ?>
-    	<tr><th>Created / Edited</th><td><?= h($task->created_at) ?> &nbsp;/ &nbsp;<?= h($task->updated_at) ?></td></tr>
-        <?php endif; ?>
-    	<tr><th colspan="2">Description</th></tr>
-  	</table>
-	<div class="panel-body">
-		<?= $this->Text->autoParagraph(h($task->note)); ?>
-	</div>
+    if ( $task->task_done ) { 
+        $done_icon = "check-circle"; $done_clr = "success";
+        $cept_icon = "check-circle"; $cept_clr = "success";
+    } elseif ( $task->is_overdue ) { 
+        $done_icon = "exclamation-circle"; $done_clr = "danger";
+        if ( $task->task_accepted ) { 
+            $cept_icon = "check-circle"; $cept_clr = "success";        
+        } else {
+            $cept_icon = "exclamation-circle"; $cept_clr = "danger";
+        }
+    } elseif ( ! $task->task_accepted ) { 
+        $done_icon = "times-circle"; $done_clr = "default";
+        $cept_icon = "exclamation-circle"; $cept_clr = "warning";
+    } else { 
+        $done_icon = "exclamation-circle"; $done_clr = "warning";
+        $cept_icon = "check-circle"; $cept_clr = "success";
+    }
 
-    <?php if ( $opsok || $task->created_by == $opid ) : ?>
-	<a href="/tasks/edit/<?= $task->id; ?>">
-		<div class="panel-footer">
-			<span class="pull-left"><?= __('Edit Task Item'); ?></span>
-			<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-			<div class="clearfix"></div>
-		</div>
-	</a>
-    <?php endif; ?>
-    <?php if ( $opsok ) {
-    echo $this->Form->postLink(
-        '<div class="panel-footer"><span class="pull-left">' . __('Delete Task Item'). '</span><span class="pull-right"><i class="fa fa-trash"></i></span><div class="clearfix" ></div></div>',
-        ['action' => 'delete', $task->id],
-        ['escape' => false, 'confirm' => __('Are you sure you want to delete {0}?', $task->title) ] );
-    } ?>
-   
-</div>
+    $pri_icon = "";
+    for ( $i = 1; $i <= $task->priority; $i++ ) {
+        $pri_icon .= '<i class="fa fa-bell" aria-hidden="true"></i>';
+    }
 
-<?php endforeach; ?>
+    echo $this->Html->tableCells([
+        [
+            $task->title,
+            $task->category,
+            [
+                $pri_icon . " " . ["Missable","Normal","High","Critical"][$task->priority],
+                [ 'class' => 'text-center' ]
+            ],
+            $task->due->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
+            [
+                '<i class="fa fa-2x fa-' . $cept_icon . '" aria-hidden="true"></i>',
+                ['class' => 'text-center text-' . $cept_clr]
+            ],
+            [
+                '<i class="fa fa-2x fa-' . $done_icon . '" aria-hidden="true"></i>',
+                ['class' => 'text-center text-' . $done_clr]
+            ],
+            [
+                "<div class='btn-group'>" .
+                 $this->Html->link(
+                    $this->Pretty->iconView("Detail - " . $task->title),
+                    ['action' => 'detail', $task->id],
+                    ['escape' => false, 'class' => 'btn btn-primary btn-sm' ] 
+                ) .
+                ( $opsok ? $this->Html->link(
+                    $this->Pretty->iconEdit($task->title),
+                    ['action' => 'edit', $task->id],
+                    ['escape' => false, 'class' => 'btn btn-default btn-sm' ] 
+                ) : "") .
+                ( $opsok ? $this->Form->postLink(
+                    $this->Pretty->iconDelete($task->title),
+                    ['action' => 'delete', $task->id],
+                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $task->id), 'class' => 'btn btn-danger btn-sm' ] 
+                ) : "") . 
+                "</div>",
+                ['class' => 'text-center']
+            ]
+        ]
+    ]);
 
+} ?>
+
+</table>
 <?= $this->Pretty->helpMeStart(__('View Task List by Show')); ?>
-<p><?= __("This display allows you to add a view task items.") ?></p>
+<p><?= __("This display allows you to view task items.") ?></p>
 
 <table class="table table-condensed helptable">
 <?= $this->Html->tableCells([

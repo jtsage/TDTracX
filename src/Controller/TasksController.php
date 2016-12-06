@@ -163,6 +163,69 @@ class TasksController extends AppController
 
     }
 
+
+    public function detail($id = null)
+    {
+        $this->loadModel('Shows');
+
+        $task = $this->Tasks->find('all')
+            ->contain(['Shows'])
+            ->where(['Tasks.id' => $id])
+            ->join([
+                'assigned' => [
+                    'table' => 'users',
+                    'type' => 'INNER',
+                    'conditions' => 'assigned.id = Tasks.assigned_to',
+                ],
+                'created' => [
+                    'table' => 'users',
+                    'type' => 'INNER',
+                    'conditions' => 'created.id = Tasks.created_by',
+                ]
+            ])
+            ->select([
+                'show_id', 'title', 'due', 'priority', 'category', 'note', 'id', 'created_at', 'updated_at', 'task_accepted', 'task_done', 'created_by', 'assigned_to',
+                'show_name' => 'Shows.name', 'show_active' => 'Shows.is_active',
+                'assigned_name' => 'concat(assigned.first, " ", assigned.last)',
+                'created_name' => 'concat(created.first, " ", created.last)',
+                'is_overdue' => 'IF(Tasks.due < "' . date('Y-m-d') . '", 1, 0)'
+            ])->first();
+
+
+        if ( ! $task ) {
+            $this->Flash->error(__('Task not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
+
+        if ( ! $this->UserPerm->checkShow($this->Auth->user('id'), $task->show_id, 'is_task_user') && ! $this->UserPerm->checkShow($this->Auth->user('id'), $task->show_id, 'is_task_admin') ) {
+            $this->Flash->error(__('You do not have access to this task'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ( $task->show_active < 1 ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            if ( $this->Auth->user('is_admin') ) {
+                $this->set('opsok', false);
+            } else {
+                return $this->redirect(['action' => 'index']);
+            }
+        } else {
+            $this->set('opsok', $this->UserPerm->checkShow($this->Auth->user('id'), $task->show_id, 'is_task_admin'));
+        }
+
+        
+         $this->set('crumby', [
+            ["/", __("Dashboard")],
+            ["/tasks/", __("Task Lists")],
+            ["/tasks/" . $task->show_id, __("{0} Tasks", $task->show_name)],
+            [null, $task->title]
+        ]);
+
+        $this->set('task', $task);
+        $this->set('opid', $this->Auth->user('id'));
+        $this->set('_serialize', ['task']);
+
+    }
     /**
      * Add method
      *
