@@ -84,13 +84,13 @@
                     $this->Pretty->jqButton(
                         'toggle-on',
                         'default',
-                        'paidAllOn',
+                        'tadmAllOn',
                         'toggleState',
                         __('Toggle All YES') ) .
                     $this->Pretty->jqButton(
                         'toggle-off',
                         'default',
-                        'paidAllOff',
+                        'tadmAllOff',
                         'toggleState',
                         __('Toggle All NO') ) .
                     "</div>"
@@ -101,17 +101,34 @@
                     $this->Pretty->jqButton(
                         'toggle-on',
                         'default',
-                        'paidAllOn',
+                        'taskAllOn',
                         'toggleState',
                         __('Toggle All YES') ) .
                     $this->Pretty->jqButton(
                         'toggle-off',
                         'default',
-                        'paidAllOff',
+                        'taskAllOff',
                         'toggleState',
                         __('Toggle All NO') ) .
                     "</div>"
                     => ['class' => 'warning text-center' ]
+                ],
+
+                [ __("Calendar User") . ' ' . "<div class='btn-group'>" .
+                    $this->Pretty->jqButton(
+                        'toggle-on',
+                        'default',
+                        'calAllOn',
+                        'toggleState',
+                        __('Toggle All YES') ) .
+                    $this->Pretty->jqButton(
+                        'toggle-off',
+                        'default',
+                        'calAllOff',
+                        'toggleState',
+                        __('Toggle All NO') ) .
+                    "</div>"
+                    => ['class' => 'active text-center' ]
                 ],
             ]); ?>
         </thead>
@@ -173,6 +190,18 @@
                             $this->Pretty->check(
                                 'task_user[' . $user->id . ']',
                                 $user->perms['is_task_user'],
+                                [
+                                    'on-text' => __('YES'),
+                                    'off-text' => __('NO'),
+                                    'on-color' => 'success',
+                                    'off-color' => 'danger'
+                                ]
+                            ), ['class' => 'text-center']
+                        ],
+                        [
+                            $this->Pretty->check(
+                                'cal[' . $user->id . ']',
+                                $user->perms['is_cal'],
                                 [
                                     'on-text' => __('YES'),
                                     'off-text' => __('NO'),

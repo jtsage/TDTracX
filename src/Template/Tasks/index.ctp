@@ -149,5 +149,5 @@
 <p><?= _("This display shows the tasks of the shows you have access to.") ?></p>
 <p><?= _("For shows you administer, you may do anything to the task list.") ?></p>
 <p><?= _("For the shows you are a user in, you may edit only your own items and submit new ones") ?></p>
-<p><?= _("Additionally, if you are a system administrator, you can view the budgets from closed (inactive) shows.") ?></p>
+<p><?= _("Additionally, if you are a system administrator, you can view the tasks from closed (inactive) shows.") ?></p>
 <?= $this->Pretty->helpMeEnd(); ?>

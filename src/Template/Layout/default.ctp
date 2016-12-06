@@ -81,9 +81,10 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
 
             <li <?= ($this->request->params['controller'] == "Budgets" ? "class='active'":"") ?>><a href="/budgets/"><?= __("Budget") ?></a></li>
             <li <?= ($this->request->params['controller'] == "Tasks" ? "class='active'":"") ?>><a href="/tasks/"><?= __("Tasks") ?></a></li>
+            <li <?= ($this->request->params['controller'] == "Calendars" ? "class='active'":"") ?>><a href="/calendars/"><?= __("Calendars") ?></a></li>
             <li <?= ($this->request->params['controller'] == "Shows" ? "class='active'":"") ?>><a href="/shows/"><?= __("Shows") ?></a></li>
             <li <?= ($this->request->params['controller'] == "Users" ? "class='active'":"") ?>><a href="/users/"><?= ($WhoAmI) ? __("Users") : __("My Account") ?></a></li>
-            <?= ($WhoAmI) ? "<li" . ($this->request->params['controller'] == "Schedules" ? " class='active'":"") . "><a href=\"/schedules/\">Scheduled Tasks</a></li>" : "" ?>
+            <?= ($WhoAmI) ? "<li" . ($this->request->params['controller'] == "Schedules" ? " class='active'":"") . "><a href=\"/schedules/\">Cron</a></li>" : "" ?>
             <li><a href="/users/logout/"><?= __("Logout") ?></a></li>
             <li><a data-toggle="modal" data-target="#helpMe" href="#"><i class="fa fa-lg fa-fw fa-question-circle"></i>&thinsp;<?= __("Help") ?></a></li>
           </ul>
@@ -168,26 +169,29 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
       });
     });
     $('.toggleState').on('click', function() {
+      new_state = ( $(this).attr('id').match(/Off$/) ) ? false : true;
+
       switch($(this).attr('id')) {
         case 'buserAllOn' :
-          $('input[type="checkbox"][name^="budget"').bootstrapSwitch('state', true);
-          break;
         case 'buserAllOff':
-          $('input[type="checkbox"][name^="budget"').bootstrapSwitch('state', false);
-          break;
+          selector = "budget"; break;
         case 'paidAllOn' :
-          $('input[type="checkbox"][name^="paid"').bootstrapSwitch('state', true);
-          break;
         case 'paidAllOff':
-          $('input[type="checkbox"][name^="paid"').bootstrapSwitch('state', false);
-          break;
+          selector = "paid"; break;
         case 'padminAllOn' :
-          $('input[type="checkbox"][name^="padmin"').bootstrapSwitch('state', true);
-          break;
         case 'padminAllOff':
-          $('input[type="checkbox"][name^="padmin"').bootstrapSwitch('state', false);
-          break;
+          selector = "padmin"; break;
+        case 'tadmAllOn' :
+        case 'tadmAllOff':
+          selector = "task_admin"; break;
+        case 'taskAllOn' :
+        case 'taskAllOff':
+          selector = "task_user"; break;
+        case 'calAllOn' :
+        case 'calAllOff':
+          selector = "cal"; break;
       }
+      $('input[type="checkbox"][name^="'+ selector +'"').bootstrapSwitch('state', new_state);
       return false;
     });
     $('input[type="text"]').each(function() {

@@ -104,6 +104,18 @@
             } ?>
             </ul>
         </div>
+         <div class="col-md-4">
+            <ul class="list-group">
+            <li class="list-group-item label-success"><?= __("Calendar Users") ?></li>
+            <?php foreach ($show->show_user_perms as $showUserPerms) {
+                if ($showUserPerms->is_cal && $showUserPerms->user->is_active) { 
+                    echo "<li class='list-group-item'>";
+                    echo h($showUserPerms->user->last) . ", " . h($showUserPerms->user->first);
+                    echo "</li>";
+                }
+            } ?>
+            </ul>
+        </div>
     </div>
 
     <?php endif; ?>
