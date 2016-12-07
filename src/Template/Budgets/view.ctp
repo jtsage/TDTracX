@@ -1,4 +1,3 @@
-
 <div class="budgets view large-10 medium-9 columns">
     <h3>
         <?= h($show->name) ?>

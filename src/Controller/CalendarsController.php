@@ -105,8 +105,8 @@ class CalendarsController extends AppController
 
         $this->set('first_day_of_week', $first_day_of_week);
         $this->set('last_day_num', $last_day_num);
-        $this->set('last_day', $last_day);
-        $this->set('first_day', $first_day);
+        // $this->set('last_day', $last_day);
+        // $this->set('first_day', $first_day);
 
         $calendar = $this->Calendars->find('all')
             ->where([ 'Calendars.show_id' => $id ])
@@ -125,16 +125,23 @@ class CalendarsController extends AppController
         }
 
         foreach ( $calendar as $event ) {
-            $big_event[$event->date->i18nFormat("M", 'UTC')][] = $event->toArray();
+            $big_event[$event->date->i18nFormat("d", 'UTC')][] = $event->toArray();
         }
 
         $this->set('big_event', $big_event);
 
         $this->set('year', $year);
+        $this->set('month_num', $month);
         $this->set('month', $moy[$month]);
 
         if ( $month < 12 ) { $next = [ $year, $month+1 ]; } else { $next = [ $year+1, 1]; }
         if ( $month > 1 ) { $prev = [ $year, $month-1 ]; } else { $prev = [$year-1, 12]; }
+
+        $this->set('crumby', [
+            ["/", __("Dashboard")],
+            ["/calendars/", __("Calendars")],
+            [null, __("{0} Calendar", $show->name)]
+        ]);
 
         $this->set('next', $next);
         $this->set('prev', $prev);
@@ -201,12 +208,6 @@ class CalendarsController extends AppController
             }
         }
 
-        $catq = $this->Calendars->find()
-            ->select(['category'])
-            ->distinct(['category'])
-            ->order(['category' => 'ASC']);
-        $cat = json_encode($catq->extract('category'));
-
         $this->set('crumby', [
             ["/", __("Dashboard")],
             ["/calendars/", __("Calendars")],
@@ -215,7 +216,7 @@ class CalendarsController extends AppController
         ]);
 
         $shows = [$show->id => $show->name];
-        $this->set(compact('calendar', 'shows', 'cat'));
+        $this->set(compact('calendar', 'shows'));
         $this->set('_serialize', ['calendar']);
     }
 
@@ -281,12 +282,6 @@ class CalendarsController extends AppController
             }
         }
 
-        $catq = $this->Calendars->find()
-            ->select(['category'])
-            ->distinct(['category'])
-            ->order(['category' => 'ASC']);
-        $cat = json_encode($catq->extract('category'));
-
         $this->set('crumby', [
             ["/", __("Dashboard")],
             ["/calendars/", __("Calendars")],
@@ -295,7 +290,7 @@ class CalendarsController extends AppController
         ]);
 
         $shows = [$show->id => $show->name];
-        $this->set(compact('calendar', 'shows', 'cat'));
+        $this->set(compact('calendar', 'shows'));
         $this->set('_serialize', ['calendar']);
     }
 
@@ -310,12 +305,23 @@ class CalendarsController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         $calendar = $this->Calendars->get($id);
-        if ($this->Calendars->delete($calendar)) {
-            $this->Flash->success(__('The calendar has been deleted.'));
-        } else {
-            $this->Flash->error(__('The calendar could not be deleted. Please, try again.'));
+
+        if ( ! $calendar ) {
+            $this->Flash->error(__('Event not found!'));
+            return $this->redirect(['action' => 'index']); 
         }
 
-        return $this->redirect(['action' => 'index']);
+        if ( ! $this->UserPerm->checkShow($this->Auth->user('id'), $calendar->show_id, 'is_cal') ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }        
+
+        if ($this->Calendars->delete($calendar)) {
+            $this->Flash->success(__('The event has been deleted.'));
+        } else {
+            $this->Flash->error(__('The event could not be deleted. Please, try again.'));
+        }
+
+        return $this->redirect(['action' => 'view', $calendar->show_id, date('Y'), date('m')]);
     }
 }

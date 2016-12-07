@@ -6,22 +6,41 @@
         ['action' => 'add', $show->id],
         ['escape' => false, 'class' => 'btn btn-success btn-sm']
     ); } ?>
+    <?php echo $this->Html->link(
+            $this->Pretty->makeIcon(__("Today"), "refresh", __("Goto")),
+            ['action' => 'view', $show->id, date('Y'), date('m')],
+            ['escape' => false, 'class' => 'btn btn-default btn-sm']
+        ); ?>
     </div>
 </h3>
 
 <div class="text-center"><h3>
     <?php
+        echo "<div class='btn-group'>";
         echo $this->Html->link(
-            $this->Pretty->makeIcon(__("Previous"), "arrow-circle-left", __("Month")),
+            $this->Pretty->makeIcon(__("Previous"), "fast-backward", __("Year")),
+            ['action' => 'view', $show->id, $year-1, $month_num],
+            ['escape' => false, 'class' => 'btn btn-default btn-sm']
+        ); 
+        echo $this->Html->link(
+            $this->Pretty->makeIcon(__("Previous"), "step-backward", __("Month")),
             ['action' => 'view', $show->id, $prev[0], $prev[1]],
             ['escape' => false, 'class' => 'btn btn-default btn-sm']
         ); 
+        echo "</div>";
         echo " " . $month . " " . $year . " ";
+        echo "<div class='btn-group'>";
         echo $this->Html->link(
-            $this->Pretty->makeIcon(__("Next"), "arrow-circle-right", __("Month")),
+            $this->Pretty->makeIcon(__("Next"), "step-forward", __("Month")),
             ['action' => 'view', $show->id, $next[0], $next[1]],
             ['escape' => false, 'class' => 'btn btn-default btn-sm']
         ); 
+        echo $this->Html->link(
+            $this->Pretty->makeIcon(__("Next"), "fast-forward", __("Year")),
+            ['action' => 'view', $show->id, $year+1, $month_num],
+            ['escape' => false, 'class' => 'btn btn-default btn-sm']
+        ); 
+        echo "</div>";
     ?>
 </h3></div>
 
@@ -45,20 +64,48 @@
     $foundFirst = false;
     $foundLast = false;
 
-    echo "<tr style='height: 90px;'>\n";
+    echo "<tr style='height: 110px;'>\n";
     while ( $colCount < 7 || !$foundLast ) {
         echo "  <td style='padding-left:0; padding-right:0;'>";
         if ( !$foundLast && ( $foundFirst || $colCount == $first_day_of_week) ) {
             $foundFirst = true;
-            echo "<table style='width:100%'>";
-            echo "<tr><td width:20%'></td><td style='width:60%'></td><td class='text-center'>" . $currentDate . "</td></tr>";
-            echo "<tr><td colspan='3' style='font-size:40%'>&nbsp;</td></tr>";
+            echo "<table class='table' style='table-layout:fixed; width:100%'>";
+            echo $this->Html->tableCells([
+                [
+                    ['&nbsp', ['style' => 'border:0; width: 20%']],
+                    ['&nbsp', ['style' => 'border:0; width: 60%']],
+                    ['<strong>' . $currentDate . '</strong>', ['class' => 'text-center', 'style' => 'border:0']]
+                ],
+                [
+                    ['&nbsp', ['colspan' => 3, 'style' => 'padding:0; border:0; font-size:40%']]
+                ]
+            ]);
             foreach ( $big_event[$currentDate] as $this_event ) {
-                echo "<tr style='border-top: 1px #ccc solid; border-bottom: 1px #ccc solid;'>";
-                echo "<td class='text-center' style='vertical-align: middle; font-size: 11px'>" . ($this_event['all_day']?"ALL":$this_event['start_time']->i18nFormat("H:mm", 'UTC')) . "</td>";
-                echo "<td style='vertical-align:middle'><div style='padding: .2em; font-size: 12px; text-overflow: ellipsis'><a data-toggle=\"modal\" data-target=\"#event_". $this_event['id'] ."\">" . $this_event['title'] . "</a></div></td>";
-                echo "<td class='text-center' style='vertical-align: middle; font-size: 11px'>" . ($this_event['all_day']?"DAY":$this_event['end_time']->i18nFormat("H:mm", 'UTC')) . "</td>";
-                echo "</tr>";
+                if ( $this_event['all_day'] ) {
+                    echo $this->Html->tableCells([
+                        [
+                            [ 
+                                "<a data-toggle=\"modal\" data-target=\"#event_". $this_event['id'] ."\">" . $this_event['title'] . "</a>",
+                                [ 
+                                    'style' => 'vertical-align:middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; padding: .6em .2em;', 
+                                    'class' => 'text-center', 
+                                    'colspan' => 3
+                                ]
+                            ]
+                        ]
+                    ], ['style' => 'border-top: 1px #ccc solid; border-bottom: 1px #ccc solid;', 'class' => $this_event['category']], null, false, false);
+                } else {
+                    echo $this->Html->tableCells([
+                        [
+                            [ $this_event['start_time']->i18nFormat("H:mm", 'UTC'), ['style' => 'padding: .6em .2em; vertical-align: middle; font-size: 11px', 'class' => 'text-center']],
+
+                            ["<a data-toggle=\"modal\" data-target=\"#event_". $this_event['id'] ."\">" . $this_event['title'] . "</a>",
+                               [ 'style' => 'vertical-align: middle; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; padding: .6em .2em;']],
+
+                            [ $this_event['end_time']->i18nFormat("H:mm", 'UTC'), ['style' => 'padding: .6em .2em; vertical-align: middle; font-size: 11px', 'class' => 'text-center']],
+                        ]
+                    ], ['style' => 'border-top: 1px #ccc solid; border-bottom: 1px #ccc solid;', 'class' => $this_event['category']], null, false, false);
+                }
             }
             echo "</table>";
             $currentDate++;
@@ -66,7 +113,7 @@
         $colCount++;
         if ( $currentDate > $last_day_num ) { $foundLast = true; }
         echo "</td>\n";
-        if ( $colCount == 7 && !$foundLast ) { echo "</tr>\n<tr style='height: 90px;'>\n"; $colCount = 0; }
+        if ( $colCount == 7 && !$foundLast ) { echo "</tr>\n<tr style='height: 110px;'>\n"; $colCount = 0; }
     }
     echo "</tr>";
 ?>
@@ -79,29 +126,23 @@
     <div class="modal fade" id="event_<?= $this_event['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header bg-<?= $this_event['category'] ?>">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <h4 class="modal-title" id="myModalLabel"><?= $this_event['title'] ?></h4>
           </div>
           <div class="modal-body">
-            <p><?= $this_event['note'] ?></p>
             <table class="table">
-                <tr><th>Category</th><td><?= $this_event['category'] ?></td></tr>
-                <tr><th>Begin / End Times</th><td>
-                    <?php 
-                        if ( $this_event['all_day'] ) { echo "ALL DAY"; }
-                        else { 
-                            echo $this_event['start_time']->i18nFormat("H:mm", 'UTC') . " / " . $this_event['end_time']->i18nFormat("H:mm", 'UTC');
-                        }
-                    ?>
-                </td></tr>
-                <tr><th>Created / Edited Dates</th><td>
-                    <?php 
-                        echo $this_event['created_at']->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT], 'UTC');
-                        echo " / ";
-                        echo $this_event['updated_at']->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT], 'UTC');
-                    ?>
-                </td></tr>
+                <tr><th colspan="2">Description</th></tr>
+                <tr><td colspan="2" style="border-top:0;"><?= $this_event['note'] ?></td></tr>
+                <tr><th>Category</th><td><?= ['default' => 'No Color', 'active' => 'Active Color (grey)', 'success' => 'Success Color (green)', 'info' => 'Info Color (lt. blue)', 'warning' => 'Warning Color (yellow)', 'danger' => 'Danger Color (red)' ][$this_event['category']] ?></td></tr>
+                <?php if ( $this_event['all_day'] ) : ?>
+                    <tr><th>All Day Event</th><td>YES</td></tr>
+                <?php else: ?>
+                    <tr><th>Start Time</th><td><?= $this_event['start_time']->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC') ?></td></tr>
+                    <tr><th>End Time</th><td><?= $this_event['end_time']->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC') ?></td></tr>
+                <?php endif; ?>
+                <tr><th>Created at</th><td><?= $this_event['created_at']->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT], 'UTC') ?></td></tr>
+                <tr><th>Updated at</th><td><?= $this_event['updated_at']->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::SHORT], 'UTC') ?></td></tr>
             </table>
           </div>
           <div class="modal-footer"><div class="btn-group">
@@ -120,7 +161,6 @@
 <?php endforeach; ?>
 <?php endforeach; ?>
 
-<?= $this->Pretty->helpMeStart(__('View Calendars')); ?>
-<p><?= _("This display shows the calendars of the shows you have access to.") ?></p>
-<p><?= _("Additionally, if you are a system administrator, you can view the calendars from closed (inactive) shows.") ?></p>
+<?= $this->Pretty->helpMeStart(__('View Calendar')); ?>
+<p><?= _("This display shows the calendar of the show you have selected.") ?></p>
 <?= $this->Pretty->helpMeEnd(); ?>

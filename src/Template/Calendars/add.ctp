@@ -6,7 +6,7 @@
         <?php
             echo $this->Form->input('show_id', ['label' => __('Show Name'), 'options' => $shows]);
             echo $this->Form->input('title', ['label' => __("Event Title")]);
-            echo $this->Form->input('category', ['label' => __('Event Category'), 'autocomplete' => 'off', 'data-provide' => 'typeahead', 'data-source' => $cat]);
+            echo $this->Form->input('category', ['label' => __('Event Category'), 'options' => ['default' => 'No Color', 'active' => 'Active Color (grey)', 'success' => 'Success Color (green)', 'info' => 'Info Color (lt. blue)', 'warning' => 'Warning Color (yellow)', 'danger' => 'Danger Color (red)' ]]);
             echo $this->Form->input('note', ['label' => __("Event Description")]);
             echo $this->Pretty->datePicker('date', __('Event Date'));
             echo $this->Pretty->clockPicker('start_time', __('Start Time'), '9:00');
