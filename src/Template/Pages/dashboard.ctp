@@ -101,7 +101,7 @@
             </div>
 
             <?php foreach ( $calUser as $item ): ?>
-            <a href="/tasks/view/<?= $item->id ?>">
+            <a href="/calendars/view/<?= $item->id ?>">
                 <div class="panel-footer">
                     <span class="pull-left"><?= $item->name ?></span>
                     <span class="pull-right">
