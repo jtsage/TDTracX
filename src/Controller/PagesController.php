@@ -94,8 +94,8 @@ class PagesController extends AppController
                             'admnTotal' => 'sum(is_pay_admin)',
                             'budgTotal' => 'sum(is_budget)',
                             'taskTotal' => 'sum(is_task_user)',
-                            'tadmTotal' => 'sum(is_task_admin)'
-
+                            'tadmTotal' => 'sum(is_task_admin)',
+                            'calTotal'  => 'sum(is_cal)'
                         ])
                         ->group('show_id');
                 }

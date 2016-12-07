@@ -381,7 +381,7 @@
             </a>
 
             <div class="panel-footer text-center">
-                <strong><?= __("Open Shows (Budget/Admin/Paid/TaskUsr/TaskAdm)"); ?></strong>
+                <strong><?= __("Open Shows (Budget/Admin/Paid/TaskUsr/TaskAdm/Cal)"); ?></strong>
             </div>
 
             <?php foreach ( $shows as $item ): ?>
@@ -395,7 +395,8 @@
                                 $item->show_user_perms[0]->admnTotal . "/" .
                                 $item->show_user_perms[0]->paidTotal . "/" .
                                 $item->show_user_perms[0]->taskTotal . "/" .
-                                $item->show_user_perms[0]->tadmTotal
+                                $item->show_user_perms[0]->tadmTotal . "/" .
+                                $item->show_user_perms[0]->calTotal
                             ?>
                         </span> 
                         <i class="fa fa-lg fa-arrow-right"></i>
