@@ -35,6 +35,8 @@
                             echo 'Send Budget Report'; break;
                         case 'tasks':
                             echo 'Send Task List'; break;
+                        case 'today':
+                            echo 'Send Today\'s Calendar Events'; break;
                     }
                 ?></td>
                 <td><?= h($schedule->sendto) ?></td>

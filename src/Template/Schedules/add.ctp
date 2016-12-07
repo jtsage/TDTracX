@@ -3,7 +3,7 @@
     <fieldset>
         <legend><?= __('Add a Scheduled Task') ?></legend>
         <?php
-            echo $this->Form->input('jobtype', ['label' => __('Job Type'), 'options' => ['remind' => 'Send Reminders to Employees', 'unpaid' => 'Send Un-Paid Hours to Payroll Dept.', 'budget' => 'Send Budget Report', 'tasks' => 'Send Task List']]);
+            echo $this->Form->input('jobtype', ['label' => __('Job Type'), 'options' => ['remind' => 'Send Reminders to Employees', 'unpaid' => 'Send Un-Paid Hours to Payroll Dept.', 'budget' => 'Send Budget Report', 'tasks' => 'Send Task List', 'today' => 'Send Today\'s Calendar Events']]);
             echo $this->Form->input('sendto', ['label' => __('Send-To E-Mail (ignored for "remind" task)')]);
             echo $this->Form->input('show_id', ['label' => __('Show ID (if applicable)'), 'options' => $shows ]);
             echo $this->Pretty->dateSPicker('start_time', __('First Valid Date/Time'));

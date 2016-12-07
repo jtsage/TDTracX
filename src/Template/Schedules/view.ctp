@@ -26,6 +26,8 @@
                         echo 'Send Budget Report'; break;
                     case 'tasks':
                         echo 'Send Task List'; break;
+                    case 'today':
+                        echo 'Send Today\'s Calendar Events'; break;
                 }
             ?></p>
             <h4><span class="label label-primary"><?= __('E-Mail To') ?></span></h4>
@@ -48,3 +50,18 @@
     </div>
 </div>
 
+<?= $this->Pretty->helpMeStart(__('Scheduled Tasks')); ?>
+<p><?= __("This display allows you to view detail of a scheduled task.") ?></p>
+
+<table class="table table-condensed helptable">
+<?= $this->Html->tableCells([
+    [__("Job Type"),               __("The job type")],
+    [__("Send-To Email"),          __("The e-mail address to send the report to")],
+    [__("First Valid Date/Time"),  __("First valid date & time to send the report")],
+    [__("Period"),                 __("How many days to repeat this task in. (Default 7, one week)")],
+    [__("Last Run"),               __("Last Successful run of the task")],
+    [__("Next Run"),               __("Next run of the tast (approximate, due to possible cron drift.  See readme.")],
+]); ?>
+</table>
+
+<?= $this->Pretty->helpMeEnd(); ?>

@@ -726,12 +726,52 @@ class TdtracShell extends Shell
                         $this->sendtask($task->sendto, $task->show_id); break;
                     case "budget":
                         $this->sendbudget($task->sendto, $task->show_id); break;
+                    case "today":
+                        $this->sendcal($task->sendto, $task->show_id); break;
                 }
                 $task->last_run = $now;
                 $this->Schedules->save($task);
                 $this->verbose(' Updated last run');
             }
         }
+    }
+    public function sendcal($sendto, $showid) {
+        $this->loadModel('Calendars');
+        $this->loadModel('Budgets');
+
+        $shownamie = $this->Shows->find('all')
+            ->where(['Shows.id' => $showid])->first();
+
+        $cals = $this->Calendars->find('all')
+            ->where(['show_id' => $showid])
+            ->where(['date' => date('Y-m-d')])
+            ->order(['all_day' => 'DESC', 'start_time' => 'ASC']);
+
+        $datatable = [];
+        
+        foreach ( $cals as $item ) {
+            $datatable[] = [
+                ($item->all_day) ? "ALL" : $item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+                $item->title,
+                $item->note,
+                ($item->all_day) ? "DAY" : $item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+            ];
+        }
+
+        $headers = ['Start Time', 'Title', 'Description', 'End Time'];
+
+        $email = new Email();
+        $email->transport('default');
+        $email->helpers(['Html', 'Gourmet/Email.Email']);
+        $email->emailFormat('both');
+        $email->to($sendto);
+        $email->subject('Today\'s Events - ' . date('Y-m-d'));
+        $email->from('tdtracx@tdtrac.com');
+        $email->template('calendar');
+        $email->viewVars(['showname' => $shownamie->name, 'headers' => $headers, 'tabledata' => $datatable]);
+        $email->send();
+
+        $this->verbose('  E-Mail Sent.');
     }
 
     public function sendbudget($sendto, $showid) {

@@ -69,12 +69,13 @@
         echo "  <td style='padding-left:0; padding-right:0;'>";
         if ( !$foundLast && ( $foundFirst || $colCount == $first_day_of_week) ) {
             $foundFirst = true;
+            $extra = (( $today_is == $currentDate ) ? ["<span style='padding: .2em .4em; border-radius: .5em; border:1px solid #aaa;'>", "</span>"] : ["", ""]);
             echo "<table class='table' style='table-layout:fixed; width:100%'>";
             echo $this->Html->tableCells([
                 [
                     ['&nbsp', ['style' => 'border:0; width: 20%']],
                     ['&nbsp', ['style' => 'border:0; width: 60%']],
-                    ['<strong>' . $currentDate . '</strong>', ['class' => 'text-center', 'style' => 'border:0']]
+                    ['<strong>' . $extra[0] . $currentDate . $extra[1] . '</strong>', ['class' => 'text-center', 'style' => 'border:0']]
                 ],
                 [
                     ['&nbsp', ['colspan' => 3, 'style' => 'padding:0; border:0; font-size:40%']]

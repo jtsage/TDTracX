@@ -108,6 +108,14 @@ class CalendarsController extends AppController
         // $this->set('last_day', $last_day);
         // $this->set('first_day', $first_day);
 
+        if ( $month == date('m') && $year == date('Y') ) {
+            $today_is = date('j');
+        } else {
+            $today_is = 0;
+        }
+
+        $this->set('today_is', $today_is);
+
         $calendar = $this->Calendars->find('all')
             ->where([ 'Calendars.show_id' => $id ])
             ->where([ 'Calendars.date >=' => Time::createFromFormat('Y-m-d', $first_day, 'UTC') ])

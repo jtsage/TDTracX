@@ -10,9 +10,13 @@ as open source.
  * Configurable pay rate for budgeting purposes
  * Allow your employees to add thier own hours, while being notified on your next login
  * Optionally allow your employees to add budget expenses, or even view the current budget
- * Send periodic e-mails to your users, reminding them to input their hours.
- * Send period reports to yourself or your payroll department for processing.
  * Manage tasks lists on a per-show basis.
+ * Manage a per-show calendar of events.
+ * Send periodic e-mails to your users, reminding them to input their hours.
+ * Send periodic reports to yourself or your payroll department for processing.
+ * Send daily event lists to your users or yourself from a show calendar.
+ * Send a task list reminder to your users or yourself, per-show.
+ 
 
 
 ### TDTracX
