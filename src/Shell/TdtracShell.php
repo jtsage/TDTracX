@@ -237,6 +237,7 @@ class TdtracShell extends Shell
             $this->loadModel('Budgets');
             $this->loadModel('Payrolls');
             $this->loadModel('Messages');
+            $this->loadModel('Calendars');
             //$this->loadModel('Tasks');
             $this->Tasks = TableRegistry::get('Tasks');
             $this->loadModel('ShowUserPerms');
@@ -251,6 +252,9 @@ class TdtracShell extends Shell
             }
             if ( $this->Tasks->deleteAll([1 => 1]) ) {
                 $this->out(' Delete: Tasks');
+            }
+            if ( $this->Calendars->deleteAll([1 => 1]) ) {
+                $this->out(' Delete: Calendars');
             }
             if ( $this->ShowUserPerms->deleteAll([1 => 1]) ) {
                 $this->out(' Delete: ShowUserPerms');
@@ -272,6 +276,7 @@ class TdtracShell extends Shell
             $conn->execute('ALTER TABLE `payrolls` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `budgets` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `tasks` AUTO_INCREMENT = 1');
+            $conn->execute('ALTER TABLE `calendars` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `shows` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `messages` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `show_user_perms` AUTO_INCREMENT = 1');
@@ -341,7 +346,7 @@ class TdtracShell extends Shell
 
             $this->out(' Creating Permissions');
 
-            $insertCol = [ "user_id", "show_id", "is_pay_admin", "is_paid", "is_budget" ];
+            $insertCol = [ "user_id", "show_id", "is_pay_admin", "is_paid", "is_budget", "is_task_admin", "is_task_user", "is_cal" ];
             
             $insertRow = [
                 [ 
@@ -351,7 +356,8 @@ class TdtracShell extends Shell
                     'is_paid' => 1,
                     'is_budget' => 1,
                     'is_task_admin' => 1,
-                    'is_task_user' => 1
+                    'is_task_user' => 1,
+                    'is_cal' => 1
                 ],
                 [ 
                     'user_id' => $adminUser->id,
@@ -360,7 +366,8 @@ class TdtracShell extends Shell
                     'is_paid' => 1,
                     'is_budget' => 1,
                     'is_task_admin' => 1,
-                    'is_task_user' => 1
+                    'is_task_user' => 1,
+                    'is_cal' => 1
                 ],
                 [ 
                     'user_id' => $managerUser->id,
@@ -369,7 +376,8 @@ class TdtracShell extends Shell
                     'is_paid' => 1,
                     'is_budget' => 1,
                     'is_task_admin' => 0,
-                    'is_task_user' => 1
+                    'is_task_user' => 1,
+                    'is_cal' => 1
                 ],
                 [ 
                     'user_id' => $managerUser->id,
@@ -378,7 +386,8 @@ class TdtracShell extends Shell
                     'is_paid' => 1,
                     'is_budget' => 1,
                     'is_task_admin' => 0,
-                    'is_task_user' => 1
+                    'is_task_user' => 1,
+                    'is_cal' => 1
                 ],
                 [ 
                     'user_id' => $regularUser->id,
@@ -387,7 +396,8 @@ class TdtracShell extends Shell
                     'is_paid' => 1,
                     'is_budget' => 0,
                     'is_task_admin' => 0,
-                    'is_task_user' => 1
+                    'is_task_user' => 1,
+                    'is_cal' => 1
                 ],
                 [ 
                     'user_id' => $regularUser->id,
@@ -396,7 +406,8 @@ class TdtracShell extends Shell
                     'is_paid' => 1,
                     'is_budget' => 0,
                     'is_task_admin' => 0,
-                    'is_task_user' => 1
+                    'is_task_user' => 1,
+                    'is_cal' => 1
                 ],
             ];
 
@@ -625,6 +636,37 @@ class TdtracShell extends Shell
             ];
 
             $insertQuery = $this->Tasks->query();
+
+            $insertQuery->insert($insertCol);
+            $insertQuery->clause('values')->values($insertRow);
+            $insertQuery->execute();
+
+            $this->out(' Creating Calendar Items');
+
+            $insertCol = [ "date", "start_time", "end_time", "all_day", "show_id", "title", "category", "note" ];
+
+            $thisYear = date('Y');
+            $thisMonth = date('m');
+            $insertRow = [];
+
+            foreach ( range(1,8) as $counter ) {
+                foreach ( range(1,12) as $use_month ) { 
+                    $use_year = ( $thisMonth <= $use_month ) ? $thisYear : $thisYear+1;
+                    $insertRow[] = 
+                        [
+                            'date' => Time::createFromFormat('Y-m-d', $use_year . "-" . str_pad($use_month, 2, "0", STR_PAD_LEFT) . "-" . str_pad(rand(1,28), 2, "0", STR_PAD_LEFT), 'UTC'),
+                            'start_time' => Time::createFromFormat('H:i', rand(6,11) . ":" . str_pad(rand(0,5)*10, 2, "0", STR_PAD_LEFT), 'UTC'),
+                            'end_time' => Time::createFromFormat('H:i', rand(13,22) . ":" . str_pad(rand(0,5)*10, 2, "0", STR_PAD_LEFT), 'UTC'),
+                            'all_day' => ((rand(1,6) % 3) < 1) ? 1 : 0,
+                            'show_id' => $show1->id,
+                            'title' => 'Random Title #' . rand(12,365),
+                            'category' => ['default','active','success','info','warning','danger'][rand(0,5)],
+                            'note' => 'Random Description #' . rand(12,365)
+                        ];
+                }
+            }
+
+            $insertQuery = $this->Calendars->query();
 
             $insertQuery->insert($insertCol);
             $insertQuery->clause('values')->values($insertRow);
