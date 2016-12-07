@@ -26,7 +26,7 @@ class CalUtilComponent extends Component
                 'table' => 'calendars',
                 'alias' => 'Calendars',
                 'type' => 'LEFT',
-                'conditions' => ['Shows.id = Calendars.show_id', 'Calendars.date >= CURDATE()'],
+                'conditions' => ['Shows.id = Calendars.show_id', 'Calendars.date > CURDATE()'],
             ])
             ->group('Shows.id');
 

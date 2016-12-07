@@ -68,6 +68,7 @@ class PagesController extends AppController
     {
         $this->loadComponent('UserPerm');
         $this->loadComponent('TaskUtil');
+        $this->loadComponent('CalUtil');
 
         $this->loadModel('Payrolls');
         $this->loadModel('Budgets');
@@ -77,6 +78,7 @@ class PagesController extends AppController
         $this->loadModel('UserPerms');
         $this->loadModel('Messages');
         $this->loadModel('Schedules');
+        
 
         $schedules = $this->Schedules->find()->count();
 
@@ -116,6 +118,7 @@ class PagesController extends AppController
         $permListBdgt = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_budget');
         $permListTadm = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_task_admin');
         $permListTask = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_task_user');
+        $permListCal  = $this->UserPerm->getAllPerm($this->Auth->user('id'), 'is_cal');
 
 
         $tasksAdm = $this->Shows->find('all')
@@ -131,6 +134,14 @@ class PagesController extends AppController
         $this->set('tasksAdm', $tasksAdm);
         $this->set('tasksUser', $tasksUser);
         $this->set('showtask', $this->TaskUtil->getAllCounts($this->Auth->user('id')));
+
+        $calUser = $this->Shows->find('all')
+            ->where(['Shows.is_active' => 1])
+            ->where(['id' => $permListCal], ['id' => 'integer[]'])
+            ->order(['end_date' => 'ASC']);
+
+        $this->set('calUser', $calUser);
+        $this->set('showcal', $this->CalUtil->getAllCounts($this->Auth->user('id')));
 
         $payrollAdmShows = $this->Shows->find()
             ->select([
