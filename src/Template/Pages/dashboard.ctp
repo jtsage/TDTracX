@@ -31,7 +31,7 @@
 <?php endif; ?>
 
 <div class="row">
-    <?php if ( $tasksAdm->count() > 0 || $tasksUser->count() > 0 || $caluser->count() > 0 ) : ?>
+    <?php if ( $tasksAdm->count() > 0 || $tasksUser->count() > 0 || $calUser->count() > 0 ) : ?>
     <div class="col-md-6">
         <div class="panel panel-purple">
             <div class="panel-heading">
