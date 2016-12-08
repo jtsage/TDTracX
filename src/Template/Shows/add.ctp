@@ -22,9 +22,7 @@ function guid() {
       .toString(16)
       .substring(1);
   }
-  console.log('ran');
-  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
-    s4() + '-' + s4() + s4() + s4();
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 }
 </script>
 
