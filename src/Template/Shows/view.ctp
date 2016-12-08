@@ -32,6 +32,8 @@
             <p><?= $show->created_at->i18nFormat(null, $tz); ?></p>
             <h4><span class="label label-warning"><?= __('Last Update At') ?></span></h4>
             <p><?= $show->updated_at->i18nFormat(null, $tz); ?></p>
+            <h4><span class="label label-danger"><?= __('iCal Identifier') ?></span></h4>
+            <p><?= $show->sec_string; ?></p>
         </div>
     </div>
 </div>

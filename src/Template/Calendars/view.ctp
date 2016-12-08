@@ -161,6 +161,9 @@
 
 <?php endforeach; ?>
 <?php endforeach; ?>
+<?php if ( !is_null($show->sec_string) ) : ?>
+    <p class="text-center">iCal Link: <a href="http://<?= $_SERVER['HTTP_HOST']?>/calendars/ics/<?= $show->id ?>/<?= $show->sec_string ?>"><?= $_SERVER['HTTP_HOST']?>/calendars/ics/<?= $show->id ?>/<?= $show->sec_string ?></a></p>
+<?php endif; ?>
 
 <?= $this->Pretty->helpMeStart(__('View Calendar')); ?>
 <p><?= _("This display shows the calendar of the show you have selected.") ?></p>

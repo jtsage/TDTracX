@@ -6,6 +6,10 @@
             echo $this->Form->input('name', ['label' => __('Name'), 'data-minlength' => 5]);
             echo $this->Form->input('location', ['label' => __('Location'), 'data-minlength' => 5]);
             echo $this->Pretty->datePicker('end_date', __('End Date'),  $show->end_date);
+            echo $this->Form->input('sec_string', ['label' => ('iCal Identifier'), 'data-minlength' => 36]);
+        ?>
+            <a href="#" onClick="$('#sec-string').val(guid())" class="btn btn-danger">Generate ICS Indentifier</a><br /><br />
+        <?php
             echo "<label>" . __("Switches") . "</label>";
             echo $this->Pretty->check('is_reminded', $show->is_reminded, [
                 'label-width' => '100',
@@ -29,6 +33,18 @@
     <?= $this->Form->end() ?>
 </div>
 
+<script type="text/javascript">
+function guid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  console.log('ran');
+  return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+    s4() + '-' + s4() + s4() + s4();
+}
+</script>
 <?= $this->Pretty->helpMeStart(__('Edit Show')); ?>
 <p><?= __("This display allows you to edit an existing show."); ?></p>
 <table class="table table-condensed helptable">

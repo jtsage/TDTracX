@@ -44,19 +44,21 @@ project, I would also like to see what you come up with.
 $ composer install
 ```
 
-3.) Run initial migration (this creates the empty database):
+3.) Edit the configuration file in config/ - Copy tdtrac.php-dist to tdtrac.php and edit the new file.
+
+4.) Run initial migration (this creates the empty database):
 
 ```
 $ ./bin/cake migrations migrate
 ```
 
-4.) Run TDTracX installer (this creates the initial user, and sets up the datebase proceedures):
+5.) Run TDTracX installer (this creates the initial user, and sets up the datebase proceedures):
 
 ```
 $ ./bin/cake tdtrac install
 ```
 
-5.) Log in, change user e-mail, name, and password.
+6.) Log in, change user e-mail, name, and password.
 
 
 #### Lighttpd Redirects:
@@ -88,7 +90,9 @@ $ ./bin/cake tdtrac demoreset
 
 ## Other Console Commands
 
+```
 $ ./bin/cake tdtrac [command]
+```
 
  * adduser - Add's a user.
  * ban - Ban a user.
