@@ -400,6 +400,8 @@ class TasksController extends AppController
     {
         $this->request->allowMethod(['post', 'delete']);
         
+        $this->loadModel('Shows');
+
         $task = $this->Tasks->get($id);
         $show = $this->Shows->findById($task->show_id)->first();
 

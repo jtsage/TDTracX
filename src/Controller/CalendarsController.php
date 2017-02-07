@@ -95,6 +95,8 @@ class CalendarsController extends AppController
             $this->set('opsok', true);
         }
 
+        if ( substr($month, 0, 1) == "0" ) { $month = intval($month); }
+
         $this->set('show', $show); 
 
         $moy = ["", __("January"), __("February"), __("March"), __("April"), __("May"), __("June"), __("July"), __("August"), __("September"), __("October"), __("November"), __("December")];
