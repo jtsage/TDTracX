@@ -144,7 +144,7 @@ class CalendarsController extends AppController
 
         $this->set('year', $year);
         $this->set('month_num', $month);
-        $this->set('month', $moy[$month]);
+        $this->set('month', $moy[intval($month)]);
 
         if ( $month < 12 ) { $next = [ $year, $month+1 ]; } else { $next = [ $year+1, 1]; }
         if ( $month > 1 ) { $prev = [ $year, $month-1 ]; } else { $prev = [$year-1, 12]; }

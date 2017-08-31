@@ -88,7 +88,7 @@ class CalendarsTable extends Table
         $validator
             ->allowEmpty('category');
 
-        $Validator
+        $validator
             ->allowEmpty('sec_string');
 
         $validator
