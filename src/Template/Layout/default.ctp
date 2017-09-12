@@ -129,8 +129,9 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
         '<a href="https://github.com/jtsage/TDTracX">GitHub</a>', ' ',
         '<a href="http://tdtrac.com/">' . __('Home Page') . '</a>', ' ',
         '<a href="http://demox.tdtrac.com">' . __('Demo Application') . '</a>'
-      ], ["class" => "text-center list-inline text-muted"]
+      ], ["class" => "text-center list-inline text-muted hidden-print"]
     ); ?>
+    <p class="text-center text-muted visible-print-block">Printed on <?= date('Y-m-d H:i T') ?></p>
   </footer>
   
   <?php

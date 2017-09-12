@@ -32,24 +32,24 @@
                         echo $this->Html->link(
                             $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
                             ['action' => 'addtoshow', $show->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm']
+                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
                         );
                         echo $this->Form->postLink(
                             $this->Pretty->iconMark($show->name),
                             ['action' => 'markshowpaid', $show->id],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm']
+                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm hidden-print']
                         );
                     } else {
                         echo $this->Html->link(
                             $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
                             ['action' => 'addtoself', $show->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm']
+                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
                         );
                     }
                     echo $this->Html->link(
                         $this->Pretty->iconDL($show->name . " " . __("Payroll Item")),
                         ['action' => 'viewbyshow', $show->id, 'csv'],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
                     );
                     break;
                 case "user":
@@ -57,17 +57,17 @@
                         echo $this->Html->link(
                             $this->Pretty->iconAdd($user->first . " " . $user->last . " " . __("Payroll Item")),
                             ['action' => 'addtouser', $user->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm']
+                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
                         );
                         echo $this->Form->postLink(
                             $this->Pretty->iconMark($user->first . " " . $user->last),
                             ['action' => 'markuserpaid', $user->id],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $user->first . " " . $user->last),  'class' => 'btn btn-warning btn-sm']);
+                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $user->first . " " . $user->last),  'class' => 'btn btn-warning btn-sm hidden-print']);
                     }
                     echo $this->Html->link(
                         $this->Pretty->iconDL($user->first . " " . $user->last . __('&#39;s Payroll Report')),
                         ['action' => 'viewbyuser', $user->id, 'csv'],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
                     );
                     break;
                 case "unpaidshow":
@@ -75,13 +75,13 @@
                         echo $this->Form->postLink(
                             $this->Pretty->iconMark('ALL'),
                             ['action' => 'markallpaid'],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL Payroll items paid?'),  'class' => 'btn btn-warning btn-sm']
+                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL Payroll items paid?'),  'class' => 'btn btn-warning btn-sm hidden-print']
                         );
                     }
                     echo $this->Html->link(
                         $this->Pretty->iconDL(__('Unpaid by Show Payroll Report')),
                         ['action' => 'unpaid', 'show', 'csv'],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
                     );
                     break;
                 case "unpaiduser":
@@ -89,13 +89,13 @@
                         echo $this->Form->postLink(
                             $this->Pretty->iconMark('ALL'),
                             ['action' => 'markallpaid'],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL Payroll items paid?'),  'class' => 'btn btn-warning btn-sm']
+                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL Payroll items paid?'),  'class' => 'btn btn-warning btn-sm hidden-print']
                         );
                     }
                     echo $this->Html->link(
                         $this->Pretty->iconDL(__('Unpaid by User Payroll Report')),
                         ['action' => 'unpaid', 'user', 'csv'],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
                     );
                     break;
             }
@@ -202,7 +202,7 @@
                         $this->Form->postLink(
                             $this->Pretty->iconMark($item->notes),
                             ['action' => 'markpaid', $item->id, $returnTo],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark paid # {0}?', $item->id), 'class' => 'btn btn-warning btn-sm']) : "" ) . " " .
+                            ['escape' => false, 'confirm' => __('Are you sure you want to mark paid # {0}?', $item->id), 'class' => 'btn btn-warning btn-sm hidden-print']) : "" ) . " " .
                     $this->Bool->prefYes($item->is_paid), ['class' => 'text-center']
                 ],
                 [
@@ -210,11 +210,11 @@
                         $this->Html->link(
                             $this->Pretty->iconEdit($item->notes),
                             ['action' => 'edit', $item->id, $returnTo],
-                            ['escape' => false, 'class' => 'btn btn-default btn-sm']) .
+                            ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']) .
                         $this->Form->postLink(
                             $this->Pretty->iconDelete($item->notes),
                             ['action' => 'delete', $item->id, $returnTo],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id), 'class' => 'btn btn-danger btn-sm'])
+                            ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id), 'class' => 'btn btn-danger btn-sm hidden-print'])
                         : "" ),
                     ['class' => 'text-center']
                 ]
