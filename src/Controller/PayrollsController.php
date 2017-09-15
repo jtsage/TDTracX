@@ -74,6 +74,142 @@ class PayrollsController extends AppController
         ]);
 
     }
+
+    /**
+     * View method - by show
+     *
+     * @param string|null $id Show id.
+     * @param string|null $csv CSV Download
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function viewbyshowdate($id = null, $start = null, $end = null, $csv = false)
+    {
+        $this->set('viewMode', 'showdate');
+
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->findById($id)->first();
+
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
+
+        $auth = false;
+        if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_paid') ) {
+            $auth = true;
+            $this->set('adminView', false);
+            $userlist = [ $this->Auth->user('id') ];
+        }
+        if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_pay_admin') ) {
+            $auth = true;
+            $this->set('adminView', true);
+            $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
+        }
+        if ( $this->Auth->user('is_admin') ) {
+            $auth = true;
+            $this->set('adminView', true);
+            $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
+        }
+
+        if ( ! $auth ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ( $show->is_active < 1 && ! $this->Auth->user('is_admin') ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
+        $this->set('show', $show);
+
+        if ( $start == null || $end == null ) {
+        	$this->set('crumby', [
+            	["/", __("Dashboard")],
+           		["/payrolls/", __("Show Payroll Lists")],
+            	[null, $show->name]
+        	]);
+        	$this->set('start_time', new Time('2 weeks ago'));
+        	$this->render('pickdate');
+        } else {
+        	$start_date = Time::createFromFormat(
+				'Y-m-d',
+				$start,
+				'America/New_York'
+			);
+			$end_date = Time::createFromFormat(
+				'Y-m-d',
+				$end,
+				'America/New_York'
+			);
+			$this->set('end_date', $end);
+			$this->set('start_date', $start);
+	        $payrolls = $this->Payrolls->find('all')
+	            ->contain(['Users'])
+	            ->select([
+	                'id', 'date_worked', 'start_time', 'end_time', 'worked', 'is_paid', 'notes', 
+	                'fname' => 'Users.first',
+	                'lname' => 'Users.last',
+	                'fullname' => 'concat(Users.first, " ", Users.last)'
+	            ])
+	            ->where(['date_worked >=' => $start_date, 'date_worked <=' => $end_date])
+	            ->where(['user_id IN' => $userlist])
+	            ->where(['show_id' => $id])
+	            ->order(['Users.last' => 'ASC', 'Users.first' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
+
+	        if ( $this->Auth->user('is_admin') ) {
+	            $orphans = $this->Payrolls->find()
+	                ->contain(['Users'])
+	                ->select([
+	                    'user_id', 
+	                    'fullname' => 'concat(Users.first, " ", Users.last)'
+	                ])
+	                ->where(['user_id NOT IN' => $userlist])
+	                ->where(['show_id' => $id])
+	                ->group(['user_id'])
+	                ->order(['Users.last' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
+	            if ( $orphans->count() > 0 ) { $this->set('orphans', $orphans); }
+	        }
+
+	        $this->set('payrolls', $payrolls);
+
+	        $this->set('crumby', [
+	            ["/", __("Dashboard")],
+	            ["/payrolls/", __("Show Payroll Lists")],
+	            [null, $show->name]
+	        ]);
+
+	        if ( $csv == "csv" ) {
+	            $csvdata = [];
+	            foreach ( $payrolls as $item ) {
+	                $csvdata[] = [
+	                    $item->date_worked->i18nFormat('EEE, MMM dd, yyyy', 'UTC'),
+	                    $item->fname,
+	                    $item->lname,
+	                    $item->notes,
+	                    $item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+	                    $item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+	                    $item->worked,
+	                    (($item->is_paid)? "yes":"NO")
+	                ];
+	            }
+	            $headers = [];
+
+	            $_serialize = 'csvdata';
+	            $_header = ['Date', 'First Name', 'Last Name', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
+
+	            $filename = "payroll-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
+	            $this->response->download($filename);
+	            $this->viewClass = 'CsvView.Csv';
+	            $this->set(compact('csvdata', '_serialize', '_header'));
+	        } else {
+	            $this->render('view');
+	        }
+    	}
+    }
+
     /**
      * Index method
      *
@@ -264,6 +400,118 @@ class PayrollsController extends AppController
         }
     }
 
+	/**
+     * View method - by show UNPAID
+     *
+     * @param string|null $id Show id.
+     * @param string|null $csv CSV Download
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function viewbyshowunpaid($id = null, $csv = false)
+    {
+        $this->set('viewMode', 'unpaidshow');
+
+        $this->loadModel('Shows');
+
+        $show = $this->Shows->findById($id)->first();
+
+        if ( ! $show ) {
+            $this->Flash->error(__('Show not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
+
+        $auth = false;
+        if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_paid') ) {
+            $auth = true;
+            $this->set('adminView', false);
+            $userlist = [ $this->Auth->user('id') ];
+        }
+        if ( $this->UserPerm->checkShow($this->Auth->user('id'), $id, 'is_pay_admin') ) {
+            $auth = true;
+            $this->set('adminView', true);
+            $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
+        }
+        if ( $this->Auth->user('is_admin') ) {
+            $auth = true;
+            $this->set('adminView', true);
+            $userlist = array_keys($this->UserPerm->getShowPaidUsers($id));
+        }
+
+        if ( ! $auth ) {
+            $this->Flash->error(__('You do not have access to this show'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ( $show->is_active < 1 && ! $this->Auth->user('is_admin') ) {
+            $this->Flash->error(__('Sorry, this show is now closed.'));
+            return $this->redirect(['action' => 'index']);   
+        }
+
+        $this->set('show', $show);
+
+        $payrolls = $this->Payrolls->find('all')
+            ->contain(['Users'])
+            ->select([
+                'id', 'date_worked', 'start_time', 'end_time', 'worked', 'is_paid', 'notes', 
+                'fname' => 'Users.first',
+                'lname' => 'Users.last',
+                'fullname' => 'concat(Users.first, " ", Users.last)'
+            ])
+            ->where(['user_id IN' => $userlist])
+            ->where(['show_id' => $id])
+            ->where(['is_paid' => 0])
+            ->order(['Users.last' => 'ASC', 'Users.first' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
+
+        if ( $this->Auth->user('is_admin') ) {
+            $orphans = $this->Payrolls->find()
+                ->contain(['Users'])
+                ->select([
+                    'user_id', 
+                    'fullname' => 'concat(Users.first, " ", Users.last)'
+                ])
+                ->where(['user_id NOT IN' => $userlist])
+                ->where(['show_id' => $id])
+                ->group(['user_id'])
+                ->order(['Users.last' => 'ASC', 'Payrolls.date_worked' => 'DESC', 'Payrolls.start_time' => 'DESC']);
+            if ( $orphans->count() > 0 ) { $this->set('orphans', $orphans); }
+        }
+
+        $this->set('payrolls', $payrolls);
+
+        $this->set('crumby', [
+            ["/", __("Dashboard")],
+            ["/payrolls/", __("Show Payroll Lists")],
+            [null, $show->name]
+        ]);
+
+        if ( $csv == "csv" ) {
+            $csvdata = [];
+            foreach ( $payrolls as $item ) {
+                $csvdata[] = [
+                    $item->date_worked->i18nFormat('EEE, MMM dd, yyyy', 'UTC'),
+                    $item->fname,
+                    $item->lname,
+                    $item->notes,
+                    $item->start_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+                    $item->end_time->i18nFormat([\IntlDateFormatter::NONE, \IntlDateFormatter::SHORT], 'UTC'),
+                    $item->worked,
+                    (($item->is_paid)? "yes":"NO")
+                ];
+            }
+            $headers = [];
+
+            $_serialize = 'csvdata';
+            $_header = ['Date', 'First Name', 'Last Name', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
+
+            $filename = "payroll-unpaid-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
+            $this->response->download($filename);
+            $this->viewClass = 'CsvView.Csv';
+            $this->set(compact('csvdata', '_serialize', '_header'));
+        } else {
+            $this->render('view');
+        }
+    }
     /**
      * View method - by user
      *

@@ -3,6 +3,7 @@
         <?php 
             switch ( $viewMode ) {
                 case "show":
+                case "showdate":
                     echo h($show->name) . __(" Payroll Expenditure");
                     $helpTitle = __("View Show Payroll Expenditure");
                     $returnTo = 0;
@@ -52,6 +53,26 @@
                         ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
                     );
                     break;
+                case "showdate":
+                    if ( $adminView ) { 
+                        echo $this->Html->link(
+                            $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
+                            ['action' => 'addtoshow', $show->id],
+                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                        );
+                    } else {
+                        echo $this->Html->link(
+                            $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
+                            ['action' => 'addtoself', $show->id],
+                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                        );
+                    }
+                    echo $this->Html->link(
+                        $this->Pretty->iconDL($show->name . " " . __("Payroll Item")),
+                        ['action' => 'viewbyshowdate', $show->id, $start_date, $end_date, 'csv'],
+                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
+                    );
+                    break;
                 case "user":
                     if ( $adminView ) {
                         echo $this->Html->link(
@@ -71,16 +92,27 @@
                     );
                     break;
                 case "unpaidshow":
-                    if ( $adminView == 2 ) {
+                    if ( $adminView ) { 
+                        echo $this->Html->link(
+                            $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
+                            ['action' => 'addtoshow', $show->id],
+                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                        );
                         echo $this->Form->postLink(
-                            $this->Pretty->iconMark('ALL'),
-                            ['action' => 'markallpaid'],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL Payroll items paid?'),  'class' => 'btn btn-warning btn-sm hidden-print']
+                            $this->Pretty->iconMark($show->name),
+                            ['action' => 'markshowpaid', $show->id],
+                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm hidden-print']
+                        );
+                    } else {
+                        echo $this->Html->link(
+                            $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
+                            ['action' => 'addtoself', $show->id],
+                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
                         );
                     }
                     echo $this->Html->link(
-                        $this->Pretty->iconDL(__('Unpaid by Show Payroll Report')),
-                        ['action' => 'unpaid', 'show', 'csv'],
+                        $this->Pretty->iconDL($show->name . " " . __("Payroll Item")),
+                        ['action' => 'viewbyshowunpaid', $show->id, 'csv'],
                         ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
                     );
                     break;
@@ -140,12 +172,12 @@
                 [__("Is Paid?") => ['class' => 'text-center']],
                 [__("Actions") => ['class' => 'text-center']]
             ];
-            if ( $viewMode == "unpaidshow" ) { array_unshift($headers, __("User")); }
+            //if ( $viewMode == "unpaidshow" ) { array_unshift($headers, __("User")); }
             if ( $viewMode == "unpaiduser" ) { array_unshift($headers, __("Show")); }
             
-            if ( $viewMode == "unpaidshow" || $viewMode == "unpaiduser" ) {
-                $colspan = [ 5, 8 ];
-            }
+            //if ( $viewMode == "unpaidshow" || $viewMode == "unpaiduser" ) {
+                //$colspan = [ 5, 8 ];
+            //}
             echo $this->Html->tableHeaders($headers);
         ?>
     </thead>
@@ -154,18 +186,21 @@
 
         $total = 0;
         $subtotal = 0;
+        $upsubtotal = 0;
+        $uptotal = 0;
         $lastuser = "";
 
         foreach ( $payrolls as $item ) {
             switch ( $viewMode ) {
                 case "show":
-                case "unpaiduser":
+                case "unpaidshow":
+                case "showdate":
                     $thisItem = $item->fullname;
                     $thisItemName = __("User");
                     $thisItemExtra = "";
                     break;
                 case "user":
-                case "unpaidshow":
+                case "unpaiduser":
                     $thisItem = $item->showname;
                     $thisItemName = __("Show");
                     $thisItemExtra = ( ( ! $item->activeshow ) ? " [" . __('Closed') . "]" : " [" . __("Ending") . ": " . $item->show->end_date->i18nFormat('yyyy-MM-dd', 'UTC') . "]" );
@@ -179,7 +214,14 @@
                             [number_format($subtotal,2), ['class' => 'text-right']],
                             [ "", ['colspan' => 2]]
                         ]
-                    ], ['class' => 'success bold'], null, 1, false);  
+                    ], ['class' => 'success bold'], null, 1, false);
+                    echo $this->Html->tableCells([
+                        [
+                            [ $thisItemName . " " . __('Un-Paid Sub-Total') . ": " . $lastuser , ['colspan' => $colspan[0]]],
+                            [number_format($upsubtotal,2), ['class' => 'text-right']],
+                            [ "", ['colspan' => 2]]
+                        ]
+                    ], ['class' => 'warning bold'], null, 1, false);
                 }
                 echo $this->Html->tableCells([
                     [
@@ -188,6 +230,7 @@
                 ], ['class' => 'info bold'], null, 1, false); 
 
                 $subtotal = 0;
+                $upsubtotal = 0;
                 $lastuser = $thisItem;
             }
 
@@ -220,13 +263,17 @@
                 ]
             ];
 
-            if ( $viewMode == "unpaidshow" ) { array_unshift($thisTableCell, $item->fullname); }
+            //if ( $viewMode == "unpaidshow" ) { array_unshift($thisTableCell, $item->fullname); }
             if ( $viewMode == "unpaiduser" ) { array_unshift($thisTableCell, $item->showname); }
 
             echo $this->Html->tableCells([$thisTableCell]);
 
             $subtotal += $item->worked;
             $total += $item->worked;
+            if ( ! $item->is_paid ) {
+                $upsubtotal += $item->worked;
+                $uptotal += $item->worked;
+            }
         }
         if ( $total > 0 ) {
             echo $this->Html->tableCells([
@@ -235,7 +282,14 @@
                     [number_format($subtotal,2), ['class' => 'text-right']],
                     [ "", ['colspan' => 2]]
                 ]
-            ], ['class' => 'success bold'], null, 1, false);  
+            ], ['class' => 'success bold'], null, 1, false);
+            echo $this->Html->tableCells([
+                [
+                    [ $thisItemName . " " . __('Un-Paid Sub-Total') . ": " . $lastuser , ['colspan' => $colspan[0]]],
+                    [number_format($upsubtotal,2), ['class' => 'text-right']],
+                    [ "", ['colspan' => 2]]
+                ]
+            ], ['class' => 'warning bold'], null, 1, false);
 
             echo $this->Html->tableCells([
                 [
@@ -244,6 +298,13 @@
                     [ "", ['colspan' => 2]]
                 ]
             ], ['class' => 'danger bold'], null, 1, false);
+            echo $this->Html->tableCells([
+                [
+                    [ __('Un-Paid Total Hours'), ['colspan' => $colspan[0]]],
+                    [number_format($uptotal,2), ['class' => 'text-right']],
+                    [ "", ['colspan' => 2]]
+                ]
+            ], ['class' => 'warning bold'], null, 1, false);
         }
 
         ?>

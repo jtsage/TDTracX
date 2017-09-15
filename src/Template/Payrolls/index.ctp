@@ -55,7 +55,7 @@
         </a>
         <a href="/payrolls/viewbyshow/<?= $item->id; ?>">
             <div class="panel-footer">
-                <span class="pull-left"><?= __('View Details'); ?></span>
+                <span class="pull-left"><?= __('View Full Payroll'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
             </div>
@@ -122,10 +122,24 @@
         </a>
         <a href="/payrolls/viewbyshow/<?= $item->id; ?>">
             <div class="panel-footer">
-                <span class="pull-left"><?= __('View Details'); ?></span>
+                <span class="pull-left"><?= __('View Full Payroll'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
             </div>
+        </a>
+        <a href="/payrolls/viewbyshowunpaid/<?= $item->id; ?>">
+                <div class="panel-footer">
+                    <span class="pull-left"><?= __('View Unpaid Payroll'); ?></span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+        </a>
+        <a href="/payrolls/viewbyshowdate/<?= $item->id; ?>">
+                <div class="panel-footer">
+                    <span class="pull-left"><?= __('View Payroll by Date Range'); ?></span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
         </a>
     </div>
 </div>
@@ -190,7 +204,14 @@
             </a>
             <a href="/payrolls/viewbyshow/<?= $item->id; ?>">
                 <div class="panel-footer">
-                    <span class="pull-left"><?= __('View Details'); ?></span>
+                    <span class="pull-left"><?= __('View Full Payroll'); ?></span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+            <a href="/payrolls/viewbyshowunpaid/<?= $item->id; ?>">
+                <div class="panel-footer">
+                    <span class="pull-left"><?= __('View Unpaid Payroll'); ?></span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>

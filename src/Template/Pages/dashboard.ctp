@@ -191,7 +191,7 @@
             <a href="/payrolls/viewbyshow/<?= $item->show_id ?>">
                 <div class="panel-footer">
                     <span class="pull-left"><?= $item->showName ?></span>
-                    <span class="pull-right">
+                    <span class="pull-right" title="Outstanding Hours">
                         <span class="badge"><?= number_format($item->workTotal,2 ); ?></span> 
                         <i class="fa fa-lg fa-arrow-right"></i>
                     </span>
@@ -208,7 +208,7 @@
             <a href="/payrolls/viewbyshow/<?= $item->show_id ?>">
                 <div class="panel-footer">
                     <span class="pull-left"><?= $item->showName ?></span>
-                    <span class="pull-right">
+                    <span class="pull-right" title="Outstanding Hours">
                         <span class="badge"><?= number_format($item->workTotal,2 ); ?></span> 
                         <i class="fa fa-lg fa-arrow-right"></i>
                     </span>
@@ -259,7 +259,7 @@
             <a href="/payrolls/viewbyuser/<?= $item->user_id ?>">
                 <div class="panel-footer">
                     <span class="pull-left"><?= $item->fullName ?></span>
-                    <span class="pull-right">
+                    <span class="pull-right" title="Outstanding Hours">
                         <span class="badge"><?= number_format($item->workTotal,2 ); ?></span> 
                         <i class="fa fa-lg fa-arrow-right"></i>
                     </span>

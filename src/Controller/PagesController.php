@@ -146,7 +146,7 @@ class PagesController extends AppController
         $payrollAdmShows = $this->Shows->find()
             ->select([
                  'showName' => 'Shows.name',
-                 'workTotal' => 'sum(Payrolls.worked)',
+                 'workTotal' => 'sum(Case When Payrolls.is_paid = 0 Then Payrolls.worked Else 0 End)',
                  'show_id' => 'Shows.id'
             ])
             ->join([
@@ -163,7 +163,7 @@ class PagesController extends AppController
         $payrollSelfShows = $this->Shows->find()
             ->select([
                  'showName' => 'Shows.name',
-                 'workTotal' => 'sum(Payrolls.worked)',
+                 'workTotal' => 'sum(Case When Payrolls.is_paid = 0 Then Payrolls.worked Else 0 End)',
                  'show_id' => 'Shows.id'
             ])
             ->join([
@@ -194,7 +194,7 @@ class PagesController extends AppController
             ->select([
                 'fullName' => 'concat(Users.first, " ", Users.last)',
                 'user_id' => 'Users.id',
-                'workTotal' => 'sum(Payrolls.worked)'
+                'workTotal' => 'sum(Case When Payrolls.is_paid = 0 Then Payrolls.worked Else 0 End)'
             ])
             ->join([
                 'table' => 'users',
@@ -208,7 +208,9 @@ class PagesController extends AppController
                 'type' => 'LEFT',
                 'conditions' => ['ShowUserPerms.user_id = Payrolls.user_id', 'Payrolls.show_id IN' => $activeShows]
             ])
+            //->where(['Payrolls.is_paid' => 0])
             ->where(['ShowUserPerms.show_id IN' => $activeShows])
+            ->order(['Users.last' => 'ASC', 'Users.first' => 'ASC'])
             ->group('Users.id');
 
 

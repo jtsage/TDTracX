@@ -202,7 +202,12 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
       $('[data-toggle="tooltip"]').tooltip({
         container: 'body'
       });
-    })
+    });
+    $('#daterangepick #set_dates').on('click', function(e){
+      e.preventDefault();
+      newhref = window.location.protocol + "//" + window.location.host + window.location.pathname + "/" + $('#start_date').val() + "/" + $('#end_date').val();
+      window.location.href = newhref;
+    });
   </script>
   </body>
 </html>
