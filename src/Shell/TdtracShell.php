@@ -719,9 +719,9 @@ class TdtracShell extends Shell
                 $this->verbose(' Running task type: ' . $task->jobtype);
                 switch ( $task->jobtype ) {
                     case "unpaid":
-                        $this->sendunpaid($task->sendto); break;
+                        $this->sendunpaid($task->sendto, $task->show_id); break;
                     case "remind":
-                        $this->sendremind(); break;
+                        $this->sendremind($task->show_id); break;
                     case "tasks":
                         $this->sendtask($task->sendto, $task->show_id); break;
                     case "budget":
@@ -887,7 +887,7 @@ class TdtracShell extends Shell
         $this->verbose('  E-Mail Sent.');
     }
 
-    public function sendunpaid($sendto)
+    public function sendunpaid($sendto, $showid)
     {
         $this->loadModel('Payrolls');
         $unpaid = $this->Payrolls->find()
@@ -901,6 +901,7 @@ class TdtracShell extends Shell
             ])
             ->where(['is_paid' => 0])
             ->where(['Shows.is_active' => 1])
+            ->where(['Shows.id' => $showid])
             ->order(['Users.last' => 'ASC', 'Users.first' => 'ASC', 'Shows.end_date' => 'DESC', 'date_worked' => 'DESC', 'start_time' => 'DESC']);
 
         $datatable = [];
@@ -947,42 +948,30 @@ class TdtracShell extends Shell
         $this->verbose('  E-Mail Sent.');
     }
 
-    public function sendremind()
+    public function sendremind($showtoremind)
     {
         $this->loadModel('Shows');
         $this->loadModel('Users');
         $this->loadModel('ShowUserPerms');
 
-        $showsToRemind = $this->Shows->find('list', ['valueField' => 'name', 'keyField' => 'id'])
-            ->where(['Shows.is_active' => 1 ])
-            ->where(['Shows.is_reminded' => 1]);
+        $usersToRemind = $this->ShowUserPerms->find('all')
+            ->contain(['Users'])
+            ->where(['show_id' => $showtoremind ])
+            ->where(['is_paid' => 1 ]);
 
-        if ( sizeof($showsToRemind->toArray()) > 0 ) {
-         
-            $usersToRemindArr = $this->ShowUserPerms->find('list', ['valueField' => 'id', 'keyField' => 'user_id'])
-                ->where(['show_id IN' => array_keys($showsToRemind->toArray()) ])
-                ->where(['is_paid' => 1 ]);
-
-
-            $usersToRemind = $this->Users->find()
-                ->where(['is_active' => 1])
-                ->where(['is_notified' => 1])
-                ->where(['id IN' => array_keys($usersToRemindArr->toArray()) ]);
-
-            foreach ( $usersToRemind as $thisUser ) {
-                $this->out('Sending to: ' . $thisUser->first);
-                $email = new Email();
-                $email->transport('default');
-                $email->emailFormat('both');
-                $email->to($thisUser->username);
-                $email->subject('Hours are Due!');
-                $email->from('tdtracx@tdtrac.com');
-                $email->template('hourremind');
-                $email->viewVars(['name' => $thisUser->first . " " . $thisUser->last]);
-                $email->send();
-            }   
-        }
-
+        foreach ( $usersToRemind as $thisUser ) {
+            $this->out('Sending to: ' . $thisUser->user->first);
+            $email = new Email();
+            $email->transport('default');
+            $email->emailFormat('both');
+            $email->to($thisUser->user->username);
+            $email->subject('Hours are Due!');
+            $email->from('tdtracx@tdtrac.com');
+            $email->template('hourremind');
+            $email->viewVars(['name' => $thisUser->user->first . " " . $thisUser->user->last]);
+            $email->send();
+        }   
+        
         $this->verbose('  E-Mail(s) Sent.');
     }
 }
