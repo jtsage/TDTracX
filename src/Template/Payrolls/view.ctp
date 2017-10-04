@@ -242,11 +242,8 @@
                 [ number_format($item->worked, 2), ['class' => 'text-right']],
                 [
                     ( ( $adminView && !$item->is_paid ) ?
-                        $this->Form->postLink(
-                            $this->Pretty->iconMark($item->notes),
-                            ['action' => 'markpaid', $item->id, $returnTo],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark paid # {0}?', $item->id), 'class' => 'btn btn-warning btn-sm hidden-print']) : "" ) . " " .
-                    $this->Bool->prefYes($item->is_paid), ['class' => 'text-center']
+                        "<a href=\"#\" id=\"mark-paid-{$item->id}\" data-item=\"{$item->id}\" class=\"mark-paid-btn btn btn-warning btn-sm hidden-print\">" . $this->Pretty->iconMark($item->notes) . "</a>" : "" ) . " " .
+                    "<span>" . $this->Bool->prefYes($item->is_paid) . "</span>", ['class' => 'text-center']
                 ],
                 [
                     ( ( $adminView || !$item->is_paid ) ?

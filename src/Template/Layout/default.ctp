@@ -38,7 +38,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css');
        echo $this->Html->css('bootstrap-switch.min');
-       echo $this->Html->css('https://tdtrac.com/cdn/jtsage-datebox/4.0.0/jtsage-datebox-4.0.0.bootstrap.min.css');
+       echo $this->Html->css('https://tdtrac.com/cdn/jtsage-datebox/4.2.3/jtsage-datebox-4.2.3.bootstrap.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
        echo $this->Html->css('tdtracx');
 
@@ -140,34 +140,14 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     echo $this->Html->script('bootstrap3-typeahead.min');
     echo $this->Html->script('bootstrap-switch.min');
     echo $this->Html->script('jquery-ui.min');
-    echo $this->Html->script('https://tdtrac.com/cdn/jtsage-datebox/4.0.0/jtsage-datebox-4.0.0.bootstrap.min.js');
+    echo $this->Html->script('https://tdtrac.com/cdn/jtsage-datebox/4.2.3/jtsage-datebox-4.2.3.bootstrap.min.js');
     echo $this->Html->script('https://tdtrac.com/cdn/external/jquery.mousewheel.min.js');
     echo $this->Html->script('validator.min');
   ?>
 
   <script type="text/javascript">
-    $('.clockpicker').each(function() { 
-      $(this).clockpicker({
-        donetext: 'Done',
-        twelvehour: false,
-        autoclose: true,
-        minutestep: 5,
-        placement: 'bottom'
-      });
-    });
     $(".bootcheck").each(function() {
       $(this).bootstrapSwitch();
-    });
-    $(".datepicker").each(function() {
-      $(this).datetimepicker({
-        autoclose: true,
-        todayHighlight: 1,
-        startView: 2,
-        minView: 2,
-        todayBtn: "linked",
-        pickerPosition: "bottom-right",
-        fontAwesome: true
-      });
     });
     $('.toggleState').on('click', function() {
       new_state = ( $(this).attr('id').match(/Off$/) ) ? false : true;
@@ -202,6 +182,40 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
       $('[data-toggle="tooltip"]').tooltip({
         container: 'body'
       });
+    });
+    $('.mark-paid-btn').on('click', function(e){
+      e.preventDefault();
+
+      var self = this,
+        tdbox = $(this).parent();
+        itemnum = $(this).data('item');
+
+      $(self).hide();
+      tdbox.addClass('danger');
+
+      cont = confirm('Are you sure you wish to mark item #' + $(this).data('item') + " paid?" );
+
+      if ( cont ) {
+        $.ajax({
+          url: "/payrolls/markpaidajax/" + itemnum,
+          success: function(data) {
+            jdata = JSON.parse(data);
+            if ( jdata.success == true ) {
+              tdbox.removeClass('danger').addClass('success');
+              tdbox.find('span').html("yes");
+            } else {
+              tdbox.removeClass('danger');
+              $(self).show();
+              alert(jdata.responseString);
+            }
+          }
+        });
+      } else {
+        $(self).show();
+        tdbox.removeClass('danger');
+      }
+
+      return false;
     });
     $('#daterangepick #set_dates').on('click', function(e){
       e.preventDefault();

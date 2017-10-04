@@ -15,6 +15,7 @@ class PayrollsController extends AppController
     public function initialize()
     {
         parent::initialize();
+        $this->loadComponent('RequestHandler');
         $this->loadComponent('UserPerm');
     }
 
@@ -1099,6 +1100,44 @@ class PayrollsController extends AppController
         } else {
             return $this->redirect(['action' => 'viewbyshow', $payroll->show_id]);
         }
+    }
+
+     /**
+     * Mark (single) method (AJAX)
+     *
+     * @param string|null $id Payroll id.
+     * @return void Redirects to index.
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function markpaidajax($id = null)
+    {
+        $payroll = $this->Payrolls->findById($id)->first();
+
+        if ( ! $payroll ) {
+            $this->Flash->error(__('Record not found!'));
+            return $this->redirect(['action' => 'index']); 
+        }
+
+        if ( !(
+            $this->Auth->user('is_admin') || 
+            $this->UserPerm->checkShow($this->Auth->user('id'), $payroll->show_id, 'is_pay_admin')
+         ) ) {
+            $this->set('success', false);
+            $this->set('responseString', 'You cannot mark this payroll item paid');
+        } else {
+
+            $this->request->allowMethod(['get']);
+            $payroll->is_paid = 1;
+            if ($this->Payrolls->save($payroll)) {
+                $this->set('success', true);
+                $this->set('responseString', 'The payroll has been marked paid.');
+            } else {
+                $this->set('success', false);
+                $this->set('responseString', 'The payroll could not be marked paid. Please, try again.');
+            }
+    		}
+        $this->viewBuilder()->setLayout('ajax');
+        $this->set('_serialize', ['responseString', 'success']);
     }
 
     /**
