@@ -2,7 +2,7 @@
 <div class="calendars form large-9 medium-8 columns content">
     <?= $this->Form->create($calendar) ?>
     <fieldset>
-        <legend><?= __('Add Event') ?></legend>
+	<legend><?= __('Add Event') ?> - THIS IS NOT HOW YOU ADD HOURS TO PAYROLL!</legend>
         <?php
             echo $this->Form->input('show_id', ['label' => __('Show Name'), 'options' => $shows]);
             echo $this->Form->input('title', ['label' => __("Event Title")]);
