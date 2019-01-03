@@ -32,9 +32,9 @@ class CalendarsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('calendars');
-        $this->displayField('title');
-        $this->primaryKey('id');
+        $this->getTable('calendars');
+        $this->setDisplayField('title');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Shows', [
             'foreignKey' => 'show_id',

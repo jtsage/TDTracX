@@ -16,7 +16,7 @@ class UsersController extends AppController
 
     public function beforeFilter(\Cake\Event\Event $event)
     {
-        $this->Auth->allow(['logout', 'forgot_password', 'reset_password']);
+        $this->Auth->allow(['logout', 'forgotPassword', 'resetPassword']);
     }
     /**
      * Index method
@@ -142,7 +142,7 @@ class UsersController extends AppController
         }
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
-            $user = $this->Users->patchEntity($user, $this->request->data);
+            $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -178,7 +178,7 @@ class UsersController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->data);
+            $user = $this->Users->patchEntity($user, $this->request->getData());
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -206,8 +206,8 @@ class UsersController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->data, [
-                'fieldlist' => ['first', 'last', 'phone', 'time_zone']
+            $user = $this->Users->patchEntity($user, $this->request->getData(), [
+                'field' => ['first', 'last', 'phone', 'time_zone']
             ]);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
@@ -235,7 +235,7 @@ class UsersController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $user = $this->Users->patchEntity($user, $this->request->data, ['fieldList' => ['password', 'is_password_expired']]);
+            $user = $this->Users->patchEntity($user, $this->request->getData(), ['field' => ['password', 'is_password_expired']]);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -300,14 +300,14 @@ class UsersController extends AppController
         return $user;
     }
 
-    function forgot_password() {
+    function forgotPassword() {
         if ( ! is_null($this->Auth->user('id'))) {
             $this->Flash->error(__('You have not forgotten your password, you are logged in.'));
             return $this->redirect('/');
         }
-        if ($this->request->is(['post']) && !empty( $this->request->data(['username']) ) ) {
+        if ($this->request->is(['post']) && !empty( $this->request->getData('username') ) ) {
 
-            $userReset = $this->Users->findByUsername($this->request->data['username'])->first();
+            $userReset = $this->Users->findByUsername($this->request->getData('username'))->first();
 
             if ( empty($userReset) ) {
                 $this->Flash->error(__('Password reset instructions sent.  You have 24 hours to complete this request.'));
@@ -316,12 +316,13 @@ class UsersController extends AppController
                 $userReset = $this->__genPassToken($userReset);
                 if ( $this->Users->save($userReset) ) {
                     $email = new Email('default');
+                    $email->viewBuilder()->setTemplate('reset');
                     $email
-                        ->emailFormat('both')
-                        ->template('reset')
-                        ->to($userReset->username)
-                        ->subject('Password Reset Requested')
-                        ->viewVars([
+                        ->setEmailFormat('both')
+                        
+                        ->setTo($userReset->username)
+                        ->setSubject('Password Reset Requested')
+                        ->setViewVars([
                             'username' => $userReset->username,
                             'ip' => $_SERVER['REMOTE_ADDR'],
                             'hash' => $userReset->reset_hash,
@@ -336,7 +337,7 @@ class UsersController extends AppController
         }
     }
 
-    function reset_password($hash) {
+    function resetPassword($hash) {
         if ( ! is_null($this->Auth->user('id'))) {
             $this->Flash->error(__('You have not forgotten your password, you are logged in.'));
             return $this->redirect('/');
@@ -355,7 +356,7 @@ class UsersController extends AppController
             } else {
                 $this->set('user', $user);    
                 if ($this->request->is(['patch', 'post', 'put'])) {
-                    $user = $this->Users->patchEntity($user, $this->request->data, ['fieldList' => ['password', 'is_password_expired']]);
+                    $user = $this->Users->patchEntity($user, $this->request->getData(), ['fields' => ['password', 'is_password_expired']]);
                     $user->reset_hash = null;
                     $user->reset_hash_time = date('Y-m-d H:i:s', 1);
                     if ($this->Users->save($user)) {

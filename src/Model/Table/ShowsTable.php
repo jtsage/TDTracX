@@ -27,9 +27,9 @@ class ShowsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('shows');
-        $this->displayField('name');
-        $this->primaryKey('id');
+        $this->getTable('shows');
+        $this->setDisplayField('name');
+        $this->setPrimaryKey('id');
 
         $this->hasMany('Budgets', [
             'foreignKey' => 'show_id'

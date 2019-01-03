@@ -1,121 +1,51 @@
-TDTrac is a web based show budget and payroll hours tracker, built by a TD, for other TD's, 
-freelance designers, and anyone else who finds it useful. TDTrac is completely free, released 
-as open source.
+# CakePHP Application Skeleton
 
-## TDTrac Features:
+[![Build Status](https://img.shields.io/travis/cakephp/app/master.svg?style=flat-square)](https://travis-ci.org/cakephp/app)
+[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
 
- * Track as many show budgets as you wish
- * Budgets can be organized by vendor, category, or even amount spent
- * Track as many active or inactive employees as you wish
- * Configurable pay rate for budgeting purposes
- * Allow your employees to add thier own hours, while being notified on your next login
- * Optionally allow your employees to add budget expenses, or even view the current budget
- * Manage tasks lists on a per-show basis.
- * Manage a per-show calendar of events.
- * Send periodic e-mails to your users, reminding them to input their hours.
- * Send periodic reports to yourself or your payroll department for processing.
- * Send daily event lists to your users or yourself from a show calendar.
- * Send a task list reminder to your users or yourself, per-show.
- 
+A skeleton for creating applications with [CakePHP](https://cakephp.org) 3.x.
 
+The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
 
-### TDTracX
+## Installation
 
-This is the new version of TDTrac, completely refactored in CakePHP3.
+1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
+2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
 
-## LICENSE:
+If Composer is installed globally, run
 
-You may use this code, in part or in full, for any reason, in any circumstance without notifying
-the author.  You may redistribute this code, in full or part, with any project you work on.  If 
-you wish to charge for this code as part of your project, you may.  You may not sell this code 
-without modification, but you may charge for installation or use of this code on your own server.
-If you find this especially useful, or make a ton of money off this though, please drop me a line
-as I would love to see what you have put together.  Also, if you use this code as a basis of a new
-project, I would also like to see what you come up with.
-
-
-### Installation
-
-1.) Clone GIT repository into your hosting folder, and change into that directory.
-
-2.) Run composer:
-
-```
-$ composer install
+```bash
+composer create-project --prefer-dist cakephp/app
 ```
 
-3.) Edit the configuration file in config/ - Copy tdtrac.php-dist to tdtrac.php and edit the new file.
+In case you want to use a custom app dir name (e.g. `/myapp/`):
 
-4.) Run initial migration (this creates the empty database):
-
-```
-$ ./bin/cake migrations migrate
+```bash
+composer create-project --prefer-dist cakephp/app myapp
 ```
 
-5.) Run TDTracX installer (this creates the initial user, and sets up the datebase proceedures):
+You can now either use your machine's webserver to view the default home page, or start
+up the built-in webserver with:
 
-```
-$ ./bin/cake tdtrac install
-```
-
-6.) Log in, change user e-mail, name, and password.
-
-
-#### Lighttpd Redirects:
-
-```
-$HTTP["host"] =~ "demox\.tdtrac\.com" {
-    server.document-root = "/full/path/to/TDTracX/webroot/"
-    url.rewrite-if-not-file =(
-        "^([^\?]*)(\?(.+))?$" => "/index.php?url=$1&$3"
-    )
-}
+```bash
+bin/cake server -p 8765
 ```
 
-#### Improve performance?
+Then visit `http://localhost:8765` to see the welcome page.
 
-```
-$ php composer.phar dumpautoload -o
-```
+## Update
 
-## The Demo
+Since this skeleton is a starting point for your application and various files
+would have been modified as per your needs, there isn't a way to provide
+automated upgrades, so you have to do any updates manually.
 
-If you want to run your own version of the demo, you can run the shell script. (This is totally destructive to the PRODUCTION database - you have been warned.)
+## Configuration
 
-To run it, you will need to be able to read and understand the php file, located at:
+Read and edit `config/app.php` and setup the `'Datasources'` and any other
+configuration relevant for your application.
 
-```
-$ ./bin/cake tdtrac demoreset
-```
+## Layout
 
-## Other Console Commands
-
-```
-$ ./bin/cake tdtrac [command]
-```
-
- * adduser - Add's a user.
- * ban - Ban a user.
- * unban - Un-Ban a user.
- * resetpass - Reset a user password.
-
-All of these things can be done in the app itself, however, if for some reason you don't wish to maintain an admin account of your own, you could use this. Also great if 
-you forget your admin password.
-
-## Periodic Emails
-
-Newly added to the web interface, you can send periodic e-mails, either to remind users to input hours, or to send the unpaid hours to the payroll department.  You will need to alter 2 settings to make this work.  In config/tdtracx.php set "ServerTimeZoneFix" to your *server's* timezone.  It's how the offset it fixed.  This is important, or things won't run quite when you expect.
-
-Next, add a line to cron:
-
-```
-0 */2 * * * /home/tdtrac/bin/cake tdtrac cron
-```
-
-This should really be in the web server user's crontab.  Please, don't run it as root.  Or any other user that does not own the cakephp install directory really.  Bad things will happen.  It'll overwrite the cache files and break your install until you fix them manually.
-
-This will allow tasks to run once every other hour.  Tasks will run as soon as possible after their set schedule.  As there is some imprecision with cron, tasks will not run *exactly* at thier scheduled time.  You can improve this resolution by running tdtrac cron *more* often, but if you do it enough, there will be performance concerns.
-
-See the web interface under "scheduled tasks" for what these cron tasks can be.
-
-
+The app skeleton uses a subset of [Foundation](http://foundation.zurb.com/) (v5) CSS
+framework by default. You can, however, replace it with any other library or
+custom styles.

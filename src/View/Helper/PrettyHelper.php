@@ -6,25 +6,31 @@ namespace App\View\Helper;
 use Cake\View\Helper;
 use Cake\I18n\Time;
 use Cake\Core\Configure;
+use Cake\Chronos\Chronos;
 
 class PrettyHelper extends Helper
 {
     public function next_run($original, $last, $period) {
+        
         date_default_timezone_set(Configure::read('ServerTimeZoneFix'));
         $real_offset = date('Z');
+        
         date_default_timezone_set('UTC');
-        $now = Time::parse($real_offset . " seconds");
+        $now = Chronos::now();
         
         if ( $last->lt($original) ) { 
             return $original->i18nFormat(null, 'UTC');
         }
         $breaker = true;
+        $ohshit = 0;
+        $counter = $original->toMutable();
         while ( $breaker ) {
-            $counter = $original;
-            $counter->modify('+' . $period . "days");
+            $counter = $counter->modify("+" . $period . " days");
             if ( $counter->gte($now) ) { $breaker = false; }
+            $ohshit++;
+            if ( $ohshit > 1000 ) { "LoopError"; }
         }
-        return $counter->i18nFormat(null, 'UTC');
+        return $counter;
     }
     public function phone($value)
     {
@@ -82,7 +88,7 @@ class PrettyHelper extends Helper
         $retty  = '<div class="form-group required">';
         $retty .= '<label class="control-label" for="' . $name . '">' . $label . '</label>';
         $retty .= '<div class="input-group"><span class="input-group-addon">$</span>';
-        $retty .= '<input type="number" ' . ((!is_null($value)) ? "value='" . number_format($value,2) . "'" : "" ) . ' name="' . $name . '" required="required" step=".01" min="0" id="price" class="form-control">';
+        $retty .= '<input type="number" ' . ((!is_null($value)) ? "value='" . number_format($value,2,'.','') . "'" : "" ) . ' name="' . $name . '" required="required" step=".01" min="0" id="price" class="form-control">';
         $retty .= "</div></div>";
         return $retty;
     }

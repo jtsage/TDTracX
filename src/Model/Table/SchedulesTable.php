@@ -30,9 +30,9 @@ class SchedulesTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('schedules');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->getTable('schedules');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
          $this->addBehavior('Timestamp', [
             'events' => [

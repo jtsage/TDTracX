@@ -191,8 +191,8 @@ class CalendarsController extends AppController
         //date_default_timezone_set('UTC');
         $this->set('real_offset', $real_offset);
 
-        $this->response->type('ics');
-        $this->viewBuilder()->layout(false);
+        $this->response->withType('ics');
+        $this->viewBuilder()->setLayout(false);
     }
 
     /**
@@ -224,27 +224,12 @@ class CalendarsController extends AppController
         $calendar = $this->Calendars->newEntity();
         if ($this->request->is('post')) {
 
-            $time = Time::createFromFormat(
-                 'Y-m-d',
-                 $this->request->data['date'],
-                 'UTC'
-            );
-            $this->request->data['date'] = $time;
-            $d_worked = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['start_time'],
-                 'UTC'
-            );
-            $this->request->data['start_time'] = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['end_time'],
-                 'UTC'
-            );
-            $this->request->data['end_time'] = $time;
+            $calendar = $this->Calendars->patchEntity($calendar, $this->request->getData());
+            
+            $calendar->date = Time::createFromFormat( 'Y-m-d', $this->request->getData('date'), 'UTC' );
+            $calendar->start_time =Time::createFromFormat( 'H:i', $this->request->getData('start_time'), 'UTC' );
+            $calendar->end_time = Time::createFromFormat( 'H:i', $this->request->getData('end_time'), 'UTC' );
 
-            $calendar = $this->Calendars->patchEntity($calendar, $this->request->data);
             if ($this->Calendars->save($calendar)) {
                 $this->Flash->success(__('The event has been saved.'));
 
@@ -298,27 +283,13 @@ class CalendarsController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
 
-            $time = Time::createFromFormat(
-                 'Y-m-d',
-                 $this->request->data['date'],
-                 'UTC'
-            );
-            $this->request->data['date'] = $time;
-            $d_worked = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['start_time'],
-                 'UTC'
-            );
-            $this->request->data['start_time'] = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['end_time'],
-                 'UTC'
-            );
-            $this->request->data['end_time'] = $time;
+            $calendar = $this->Calendars->patchEntity($calendar, $this->request->getData());
 
-            $calendar = $this->Calendars->patchEntity($calendar, $this->request->data);
+            $calendar->date = Time::createFromFormat( 'Y-m-d', $this->request->getData('date'), 'UTC' );
+            $calendar->start_time =Time::createFromFormat( 'H:i', $this->request->getData('start_time'), 'UTC' );
+            $calendar->end_time = Time::createFromFormat( 'H:i', $this->request->getData('end_time'), 'UTC' );
+
+
             if ($this->Calendars->save($calendar)) {
                 $this->Flash->success(__('The event has been saved.'));
 

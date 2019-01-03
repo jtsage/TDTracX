@@ -258,14 +258,13 @@ class TasksController extends AppController
 
         $task = $this->Tasks->newEntity();
         if ($this->request->is('post')) {
-            $time = Time::createFromFormat(
-                 'Y-m-d',
-                 $this->request->data['due'],
-                 'UTC'
-            );
-            $this->request->data['due'] = $time;
-            $this->request->data['created_by'] = $this->Auth->user('id');
-            $task = $this->Tasks->patchEntity($task, $this->request->data);
+
+            $time = Time::createFromFormat('Y-m-d', $this->request->getData('due'), 'UTC');
+
+            $task = $this->Tasks->patchEntity($task, $this->request->getData());
+            $task->due = $time;
+            $task->created_by = $this->Auth->user('id');
+
             if ($this->Tasks->save($task)) {
                 $this->MailMsg->sendIntNotify($this->Auth->user('id'), $task->assigned_to, "New Task Created: " . $task->title);
                 $userTo = $this->Users->findById($task->assigned_to)->first();
@@ -354,13 +353,11 @@ class TasksController extends AppController
 
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $time = Time::createFromFormat(
-                 'Y-m-d',
-                 $this->request->data['due'],
-                 'UTC'
-            );
-            $this->request->data['due'] = $time;
-            $task = $this->Tasks->patchEntity($task, $this->request->data);
+            $time = Time::createFromFormat( 'Y-m-d', $this->request->getData('due'), 'UTC' );
+
+            $task = $this->Tasks->patchEntity($task, $this->request->getData());
+            $task->due = $time;
+
             if ($this->Tasks->save($task)) {
                 $this->Flash->success(__('The task has been saved.'));
                 return $this->redirect(['action' => 'view', $show->id]);

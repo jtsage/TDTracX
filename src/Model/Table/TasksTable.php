@@ -32,9 +32,9 @@ class TasksTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('tasks');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->getTable('tasks');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Shows', [
             'foreignKey' => 'show_id',

@@ -158,7 +158,7 @@ class BudgetsController extends AppController
         $_header = ['Date', 'Show', 'Category', 'Vendor', 'Description', 'Price'];
 
         $filename = "budget-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
-        $this->response->download($filename);
+        $this->setResponse($this->getResponse()->withDownload($filename));
         $this->viewClass = 'CsvView.Csv';
         $this->set(compact('csvdata', '_serialize', '_header'));
     }
@@ -192,13 +192,12 @@ class BudgetsController extends AppController
 
         $budget = $this->Budgets->newEntity();
         if ($this->request->is('post')) {
-            $time = Time::createFromFormat(
+            $budget = $this->Budgets->patchEntity($budget, $this->request->getData());
+            $budget->date = Time::createFromFormat(
                  'Y-m-d',
-                 $this->request->data['date'],
+                 $this->request->getData('date'),
                  'UTC'
             );
-            $this->request->data['date'] = $time;
-            $budget = $this->Budgets->patchEntity($budget, $this->request->data);
             if ($this->Budgets->save($budget)) {
                 $this->Flash->success(__('The budget has been saved.'));
                 return $this->redirect(['action' => 'view', $id]);
@@ -264,15 +263,14 @@ class BudgetsController extends AppController
         }
 
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $time = Time::createFromFormat(
+            $budget = $this->Budgets->patchEntity($budget, $this->request->getData(), [
+                'fields' => ['vendor', 'category', 'description', 'price']
+            ]);
+            $budget->date = Time::createFromFormat(
                  'Y-m-d',
-                 $this->request->data['date'],
+                 $this->request->getData('date'),
                  'UTC'
             );
-            $this->request->data['date'] = $time;
-            $budget = $this->Budgets->patchEntity($budget, $this->request->data, [
-                'fieldList' => ['vendor', 'category', 'description', 'price', 'date']
-            ]);
             if ($this->Budgets->save($budget)) {
                 $this->Flash->success(__('The budget has been saved.'));
                 return $this->redirect(['action' => 'view', $show->id]);

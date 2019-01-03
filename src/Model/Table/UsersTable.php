@@ -27,9 +27,9 @@ class UsersTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('users');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->getTable('users');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->hasMany('Messages', [
             'foreignKey' => 'user_id'

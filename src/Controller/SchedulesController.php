@@ -91,13 +91,12 @@ class SchedulesController extends AppController
 
         $schedule = $this->Schedules->newEntity();
         if ($this->request->is('post')) {
-            $time = Time::createFromFormat(
+            $schedule = $this->Schedules->patchEntity($schedule, $this->request->getData());
+            $schedule->start_time = Time::createFromFormat(
                  'Y-m-d H:i:s',
-                 $this->request->data['start_time'],
+                 $this->request->getData('start_time'),
                  'UTC'
             );
-            $this->request->data['start_time'] = $time;
-            $schedule = $this->Schedules->patchEntity($schedule, $this->request->data);
             if ($this->Schedules->save($schedule)) {
                 $this->Flash->success(__('The schedule has been saved.'));
 
@@ -137,13 +136,12 @@ class SchedulesController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $time = Time::createFromFormat(
+            $schedule = $this->Schedules->patchEntity($schedule, $this->request->getData());
+            $schedule->start_time = Time::createFromFormat(
                  'Y-m-d H:i:s',
-                 $this->request->data['start_time'],
+                 $this->request->getData('start_time'),
                  'UTC'
             );
-            $this->request->data['start_time'] = $time;
-            $schedule = $this->Schedules->patchEntity($schedule, $this->request->data);
             if ($this->Schedules->save($schedule)) {
                 $this->Flash->success(__('The schedule has been saved.'));
 

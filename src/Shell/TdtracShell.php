@@ -3,9 +3,9 @@ namespace App\Shell;
 
 use Cake\Console\Shell;
 use Cake\Datasource\ConnectionManager;
-use Cake\Network\Exception\InternalErrorException;
+use Cake\Http\Exception\InternalErrorException;
 use Cake\I18n\Time;
-use Cake\Network\Email\Email;
+use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
 
@@ -19,7 +19,7 @@ class TdtracShell extends Shell
     {
         $parser = parent::getOptionParser();
         $parser
-            ->description('A small set of utilities to streamline administering TDTracX')
+            ->setDescription('A small set of utilities to streamline administering TDTracX')
             ->addSubcommand('install', [
                 'help' => 'Run the install routine'
             ])
@@ -414,7 +414,7 @@ class TdtracShell extends Shell
             $insertQuery = $this->ShowUserPerms->query();
 
             $insertQuery->insert($insertCol);
-            $insertQuery->clause('values')->values($insertRow);
+            $insertQuery->clause('values')->setValues($insertRow);
             $insertQuery->execute();
 
 
@@ -484,7 +484,7 @@ class TdtracShell extends Shell
             $insertQuery = $this->Budgets->query();
 
             $insertQuery->insert($insertCol);
-            $insertQuery->clause('values')->values($insertRow);
+            $insertQuery->clause('values')->setValues($insertRow);
             $insertQuery->execute();
 
             $this->out(' Creating Payroll Items');
@@ -580,7 +580,7 @@ class TdtracShell extends Shell
             $insertQuery = $this->Payrolls->query();
 
             $insertQuery->insert($insertCol);
-            $insertQuery->clause('values')->values($insertRow);
+            $insertQuery->clause('values')->setValues($insertRow);
             $insertQuery->execute();
 
 
@@ -638,7 +638,7 @@ class TdtracShell extends Shell
             $insertQuery = $this->Tasks->query();
 
             $insertQuery->insert($insertCol);
-            $insertQuery->clause('values')->values($insertRow);
+            $insertQuery->clause('values')->setValues($insertRow);
             $insertQuery->execute();
 
             $this->out(' Creating Calendar Items');
@@ -669,7 +669,7 @@ class TdtracShell extends Shell
             $insertQuery = $this->Calendars->query();
 
             $insertQuery->insert($insertCol);
-            $insertQuery->clause('values')->values($insertRow);
+            $insertQuery->clause('values')->setValues($insertRow);
             $insertQuery->execute();
 
 
@@ -761,14 +761,14 @@ class TdtracShell extends Shell
         $headers = ['Start Time', 'Title', 'Description', 'End Time'];
 
         $email = new Email();
-        $email->transport('default');
-        $email->helpers(['Html', 'Gourmet/Email.Email']);
-        $email->emailFormat('both');
-        $email->to($sendto);
-        $email->subject('Today\'s Events - ' . date('Y-m-d'));
-        $email->from('tdtracx@tdtrac.com');
-        $email->template('calendar');
-        $email->viewVars(['showname' => $shownamie->name, 'headers' => $headers, 'tabledata' => $datatable]);
+        $email->setTransport('default');
+        $email->viewBuilder()->setHelpers(['Html', 'Gourmet/Email.Email']);
+        $email->setEmailFormat('both');
+        $email->setTo($sendto);
+        $email->setSubject('Today\'s Events - ' . date('Y-m-d'));
+        $email->setFrom('tdtracx@tdtrac.com');
+        $email->viewBuilder()->setTemplate('calendar');
+        $email->setViewVars(['showname' => $shownamie->name, 'headers' => $headers, 'tabledata' => $datatable]);
         $email->send();
 
         $this->verbose('  E-Mail Sent.');
@@ -814,14 +814,14 @@ class TdtracShell extends Shell
         $headers = ['Date', 'Category', 'Vendor', 'Description', 'Price'];
 
         $email = new Email();
-        $email->transport('default');
-        $email->helpers(['Html', 'Gourmet/Email.Email']);
-        $email->emailFormat('both');
-        $email->to($sendto);
-        $email->subject('Budget List - ' . date('Y-m-d'));
-        $email->from('tdtracx@tdtrac.com');
-        $email->template('budget');
-        $email->viewVars(['showname' => $shownamie->name, 'headers' => $headers, 'tabledata' => $datatable]);
+        $email->setTransport('default');
+        $email->viewBuilder()->setHelpers(['Html', 'Gourmet/Email.Email']);
+        $email->setEmailFormat('both');
+        $email->setTo($sendto);
+        $email->setSubject('Budget List - ' . date('Y-m-d'));
+        $email->setFrom('tdtracx@tdtrac.com');
+        $email->viewBuilder()->setTemplate('budget');
+        $email->setViewVars(['showname' => $shownamie->name, 'headers' => $headers, 'tabledata' => $datatable]);
         $email->send();
 
         $this->verbose('  E-Mail Sent.');
@@ -874,14 +874,14 @@ class TdtracShell extends Shell
         }
 
         $email = new Email();
-        $email->transport('default');
-        $email->helpers(['Html', 'Gourmet/Email.Email']);
-        $email->emailFormat('both');
-        $email->to($sendto);
-        $email->subject('Task List - ' . date('Y-m-d'));
-        $email->from('tdtracx@tdtrac.com');
-        $email->template('tasks');
-        $email->viewVars(['showname' => $shownamie->name, 'headers' => $headers, 'tabledata' => $datatable]);
+        $email->setTransport('default');
+        $email->viewBuilder()->setHelpers(['Html', 'Gourmet/Email.Email']);
+        $email->setEmailFormat('both');
+        $email->setTo($sendto);
+        $email->setSubject('Task List - ' . date('Y-m-d'));
+        $email->setFrom('tdtracx@tdtrac.com');
+        $email->viewBuilder()->setTemplate('tasks');
+        $email->setViewVars(['showname' => $shownamie->name, 'headers' => $headers, 'tabledata' => $datatable]);
         $email->send();
 
         $this->verbose('  E-Mail Sent.');
@@ -935,14 +935,14 @@ class TdtracShell extends Shell
         $headers = ['User Name', 'Show Name', 'Notes', 'Date Worked', 'Start Time', 'End Time', 'Hours Worked'];
 
         $email = new Email();
-        $email->transport('default');
-        $email->helpers(['Html', 'Gourmet/Email.Email']);
-        $email->emailFormat('both');
-        $email->to($sendto);
-        $email->subject('Unpaid Hours - ' . date('Y-m-d'));
-        $email->from('tdtracx@tdtrac.com');
-        $email->template('unpaid');
-        $email->viewVars(['headers' => $headers, 'tabledata' => $datatable]);
+        $email->setTransport('default');
+        $email->viewBuilder()->setHelpers(['Html', 'Gourmet/Email.Email']);
+        $email->setEmailFormat('both');
+        $email->setTo($sendto);
+        $email->setSubject('Unpaid Hours - ' . date('Y-m-d'));
+        $email->setFrom('tdtracx@tdtrac.com');
+        $email->viewBuilder()->setTemplate('unpaid');
+        $email->setViewVars(['headers' => $headers, 'tabledata' => $datatable]);
         $email->send();
         
         $this->verbose('  E-Mail Sent.');
@@ -962,13 +962,13 @@ class TdtracShell extends Shell
         foreach ( $usersToRemind as $thisUser ) {
             $this->out('Sending to: ' . $thisUser->user->first);
             $email = new Email();
-            $email->transport('default');
-            $email->emailFormat('both');
-            $email->to($thisUser->user->username);
-            $email->subject('Hours are Due!');
-            $email->from('tdtracx@tdtrac.com');
-            $email->template('hourremind');
-            $email->viewVars(['name' => $thisUser->user->first . " " . $thisUser->user->last]);
+            $email->setTransport('default');
+            $email->setEmailFormat('both');
+            $email->setTo($thisUser->user->username);
+            $email->setSubject('Hours are Due!');
+            $email->setFrom('tdtracx@tdtrac.com');
+            $email->viewBuilder()->setTemplate('hourremind');
+            $email->setViewVars(['name' => $thisUser->user->first . " " . $thisUser->user->last]);
             $email->send();
         }   
         

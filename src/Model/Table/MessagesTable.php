@@ -25,9 +25,9 @@ class MessagesTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('messages');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->getTable('messages');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',

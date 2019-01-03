@@ -202,7 +202,7 @@ class PayrollsController extends AppController
 	            $_header = ['Date', 'First Name', 'Last Name', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
 
 	            $filename = "payroll-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
-	            $this->response->download($filename);
+                $this->setResponse($this->getResponse()->withDownload($filename));
 	            $this->viewClass = 'CsvView.Csv';
 	            $this->set(compact('csvdata', '_serialize', '_header'));
 	        } else {
@@ -393,7 +393,7 @@ class PayrollsController extends AppController
             $_header = ['Date', 'First Name', 'Last Name', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
 
             $filename = "payroll-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
-            $this->response->download($filename);
+            $this->setResponse($this->getResponse()->withDownload($filename));
             $this->viewClass = 'CsvView.Csv';
             $this->set(compact('csvdata', '_serialize', '_header'));
         } else {
@@ -506,7 +506,7 @@ class PayrollsController extends AppController
             $_header = ['Date', 'First Name', 'Last Name', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
 
             $filename = "payroll-unpaid-" . preg_replace("/ /", "_", $show->name) . "-" . date('Ymd') . ".csv";
-            $this->response->download($filename);
+            $this->setResponse($this->getResponse()->withDownload($filename));
             $this->viewClass = 'CsvView.Csv';
             $this->set(compact('csvdata', '_serialize', '_header'));
         } else {
@@ -606,7 +606,7 @@ class PayrollsController extends AppController
             $_header = ['Date', 'Show', 'Show End Date', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
 
             $filename = "payroll-" . preg_replace("/ /", "_", $user->first) . "_" . preg_replace("/ /", "_", $user->last) . "-" . date('Ymd') . ".csv";
-            $this->response->download($filename);
+            $this->setResponse($this->getResponse()->withDownload($filename));
             $this->viewClass = 'CsvView.Csv';
             $this->set(compact('csvdata', '_serialize', '_header'));
         } else {
@@ -689,7 +689,7 @@ class PayrollsController extends AppController
             $_header = ['User Name', 'Show', 'Date', 'Note', 'Start Time', 'End Time', 'Hours Worked', 'Is Paid?'];
 
             $filename = "payroll-unpaid_by_" . ($mode == 'show' ? "show" : "user") . "-" . date('Ymd') . ".csv";
-            $this->response->download($filename);
+            $this->setResponse($this->getResponse()->withDownload($filename));
             $this->viewClass = 'CsvView.Csv';
             $this->set(compact('csvdata', '_serialize', '_header'));
         } else {
@@ -727,34 +727,19 @@ class PayrollsController extends AppController
 
         $payroll = $this->Payrolls->newEntity();
         if ($this->request->is('post')) {
-            $toUser = $this->Users->findById($this->request->data['user_id'])->first();
+            $toUser = $this->Users->findById($this->request->getData('user_id'))->first();
 
-            
+            $d_worked = Time::createFromFormat('Y-m-d',$this->request->getData('date_worked'),'UTC');
 
-            $time = Time::createFromFormat(
-                 'Y-m-d',
-                 $this->request->data['date_worked'],
-                 'UTC'
-            );
-            $this->request->data['date_worked'] = $time;
-            $d_worked = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['start_time'],
-                 'UTC'
-            );
-            $this->request->data['start_time'] = $time;
-            $time = Time::createFromFormat(
-                 'H:i',
-                 $this->request->data['end_time'],
-                 'UTC'
-            );
-            $this->request->data['end_time'] = $time;
-            if ( ! $this->UserPerm->checkShow($this->request->data['user_id'], $id, 'is_paid') ) {
+            if ( ! $this->UserPerm->checkShow($this->request->getData('user_id'), $id, 'is_paid') ) {
                 $this->Flash->error(__('That user cannot be paid on this show'));
                 return $this->redirect(['action' => 'indexuser']);
             }
-            $fixed_data = array_merge($this->request->data, ['show_id' => $show->id, 'is_paid' => 0]);
+            $fixed_data = array_merge($this->request->getData(), ['show_id' => $show->id, 'is_paid' => 0]);
+            $fixed_data['date_worked'] = $d_worked;
+            $fixed_data['start_time'] = Time::createFromFormat('H:i',$this->request->getData('start_time'),'UTC');
+            $fixed_data['end_time'] = Time::createFromFormat('H:i',$this->request->getData('end_time'),'UTC');
+
             $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
             
             if ( $toUser->is_salary ) { $payroll->is_paid = 1; }
@@ -812,19 +797,15 @@ class PayrollsController extends AppController
 
         $payroll = $this->Payrolls->newEntity();
         if ($this->request->is('post')) {
-            $toUser = $this->Users->findById($this->request->data['user_id'])->first();
+            $toUser = $this->Users->findById($this->request->getData('user_id'))->first();
 
-            $time = Time::createFromFormat('Y-m-d',$this->request->data['date_worked'],'UTC');
-            $this->request->data['date_worked'] = $time;
-            $d_worked = $time;
+            $d_worked = Time::createFromFormat('Y-m-d',$this->request->getData('date_worked'),'UTC');
 
-            $time = Time::createFromFormat('H:i',$this->request->data['start_time'],'UTC');
-            $this->request->data['start_time'] = $time;
+            $fixed_data = array_merge($this->request->getData(), ['show_id' => $show->id, 'user_id' => $this->Auth->user('id'), 'is_paid' => 0]);
+            $fixed_data['date_worked'] = $d_worked;
+            $fixed_data['start_time'] = Time::createFromFormat('H:i',$this->request->getData('start_time'),'UTC');
+            $fixed_data['end_time'] = Time::createFromFormat('H:i',$this->request->getData('end_time'),'UTC');
 
-            $time = Time::createFromFormat('H:i',$this->request->data['end_time'],'UTC');
-            $this->request->data['end_time'] = $time;
-
-            $fixed_data = array_merge($this->request->data, ['show_id' => $show->id, 'user_id' => $this->Auth->user('id'), 'is_paid' => 0]);
             $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data);
 
             if ( $toUser->is_salary ) { $payroll->is_paid = 1; }
@@ -966,17 +947,16 @@ class PayrollsController extends AppController
 
         if ($this->request->is(['patch', 'post', 'put'])) {
 
-            $time = Time::createFromFormat('Y-m-d',$this->request->data['date_worked'],'UTC');
-            $this->request->data['date_worked'] = $time;
+            $fixed_data = [
+                'date_worked' => Time::createFromFormat('Y-m-d',$this->request->getData('date_worked'),'UTC'),
+                'start_time' => Time::createFromFormat('H:i',$this->request->getData('start_time'),'UTC'),
+                'end_time' => Time::createFromFormat('H:i',$this->request->getData('end_time'),'UTC'),
+                'notes' => $this->request->getData('notes'),
+                'is_paid' => $this->request->getData('is_paid')
+            ];
 
-            $time = Time::createFromFormat('H:i',$this->request->data['start_time'],'UTC');
-            $this->request->data['start_time'] = $time;
-
-            $time = Time::createFromFormat('H:i',$this->request->data['end_time'],'UTC');
-            $this->request->data['end_time'] = $time;
-
-            $payroll = $this->Payrolls->patchEntity($payroll, $this->request->data, [
-                'fieldList' => $flist
+            $payroll = $this->Payrolls->patchEntity($payroll, $fixed_data, [
+                'fields' => $flist
             ]);
             if ($this->Payrolls->save($payroll)) {
                 $this->Flash->success(__('The payroll has been saved.'));

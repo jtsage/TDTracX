@@ -26,9 +26,9 @@ class PayrollsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('payrolls');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->getTable('payrolls');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',

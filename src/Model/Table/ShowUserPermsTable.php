@@ -26,9 +26,9 @@ class ShowUserPermsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('show_user_perms');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->getTable('show_user_perms');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',

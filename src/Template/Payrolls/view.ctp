@@ -92,27 +92,27 @@
                     );
                     break;
                 case "unpaidshow":
-                    if ( $adminView ) { 
-                        echo $this->Html->link(
-                            $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
-                            ['action' => 'addtoshow', $show->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
-                        );
-                        echo $this->Form->postLink(
-                            $this->Pretty->iconMark($show->name),
-                            ['action' => 'markshowpaid', $show->id],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm hidden-print']
-                        );
-                    } else {
-                        echo $this->Html->link(
-                            $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
-                            ['action' => 'addtoself', $show->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
-                        );
-                    }
+                    // if ( $adminView ) { 
+                    //     echo $this->Html->link(
+                    //         $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
+                    //         ['action' => 'addtoshow', $show->id],
+                    //         ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                    //     );
+                    //     echo $this->Form->postLink(
+                    //         $this->Pretty->iconMark($show->name),
+                    //         ['action' => 'markshowpaid', $show->id],
+                    //         ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm hidden-print']
+                    //     );
+                    // } else {
+                    //     echo $this->Html->link(
+                    //         $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
+                    //         ['action' => 'addtoself', $show->id],
+                    //         ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                    //     );
+                    // }
                     echo $this->Html->link(
-                        $this->Pretty->iconDL($show->name . " " . __("Payroll Item")),
-                        ['action' => 'viewbyshowunpaid', $show->id, 'csv'],
+                        $this->Pretty->iconDL(__("Payroll Items By Show")),
+                        ['action' => 'unpaid', 'show', 'csv'],
                         ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
                     );
                     break;

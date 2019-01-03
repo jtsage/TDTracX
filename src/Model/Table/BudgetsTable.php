@@ -25,9 +25,9 @@ class BudgetsTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('budgets');
-        $this->displayField('id');
-        $this->primaryKey('id');
+        $this->getTable('budgets');
+        $this->setDisplayField('id');
+        $this->setPrimaryKey('id');
 
         $this->belongsTo('Shows', [
             'foreignKey' => 'show_id',

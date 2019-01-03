@@ -129,23 +129,23 @@ class ShowsController extends AppController
                 ->execute();
 
             $insertRow = array();
-            foreach ( $this->request->data['users'] as $user ) {
+            foreach ( $this->request->getData('users') as $user ) {
                 $insertRow[] = [
                     'user_id' => $user,
                     'show_id' => $id,
-                    'is_pay_admin' => ((isset($this->request->data['padmin'][$user]) && $this->request->data['padmin'][$user]) ? 1 : 0 ),
-                    'is_paid' => ((isset($this->request->data['paid'][$user]) && $this->request->data['paid'][$user]) ? 1 : 0 ),
-                    'is_budget' => ((isset($this->request->data['budget'][$user]) && $this->request->data['budget'][$user]) ? 1 : 0 ),
-                    'is_task_admin' => ((isset($this->request->data['task_admin'][$user]) && $this->request->data['task_admin'][$user]) ? 1 : 0 ),
-                    'is_task_user' => ((isset($this->request->data['task_user'][$user]) && $this->request->data['task_user'][$user]) ? 1 : 0 ),
-                    'is_cal' => ((isset($this->request->data['cal'][$user]) && $this->request->data['cal'][$user]) ? 1 : 0 ),
+                    'is_pay_admin'  => ( $this->request->getData('padmin.'.$user)     ? 1 : 0 ),
+                    'is_paid'       => ( $this->request->getData('paid.'.$user)       ? 1 : 0 ),
+                    'is_budget'     => ( $this->request->getData('budget.'.$user)     ? 1 : 0 ),
+                    'is_task_admin' => ( $this->request->getData('task_admin.'.$user) ? 1 : 0 ),
+                    'is_task_user'  => ( $this->request->getData('task_user.'.$user)  ? 1 : 0 ),
+                    'is_cal'        => ( $this->request->getData('cal.'.$user)        ? 1 : 0 ),
                 ];
             }
 
             $insertQuery = $this->ShowUserPerms->query();
 
             $insertQuery->insert($insertCol);
-            $insertQuery->clause('values')->values($insertRow);
+            $insertQuery->clause('values')->setValues($insertRow);
             $insertQuery->execute();
             
             $this->Flash->success(__('The show permissions have been saved.'));
@@ -208,11 +208,11 @@ class ShowsController extends AppController
         if ($this->request->is('post')) {
             $time = Time::createFromFormat(
                  'Y-m-d',
-                 $this->request->data['end_date'],
+                 $this->request->getData('end_date'),
                  'UTC'
             );
-            $this->request->data['end_date'] = $time;
-            $show = $this->Shows->patchEntity($show, $this->request->data);
+	    $show = $this->Shows->patchEntity($show, $this->request->getData());
+	    $show->end_date = $time;
             if ($result = $this->Shows->save($show)) {
                 $this->Flash->success(__('The show has been saved, please adjust permissions'));
                 return $this->redirect(['action' => 'editperm', $result->id]);
@@ -249,11 +249,11 @@ class ShowsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $time = Time::createFromFormat(
                  'Y-m-d',
-                 $this->request->data['end_date'],
+                 $this->request->getData('end_date'),
                  'UTC'
             );
-            $this->request->data['end_date'] = $time;
-            $show = $this->Shows->patchEntity($show, $this->request->data);
+            $show = $this->Shows->patchEntity($show, $this->request->getData());
+            $show->end_date = $time;
             if ($this->Shows->save($show)) {
                 $this->Flash->success(__('The show has been saved.'));
                 return $this->redirect(['action' => 'index']);
