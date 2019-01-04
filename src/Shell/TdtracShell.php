@@ -8,6 +8,7 @@ use Cake\I18n\Time;
 use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
 use Cake\Core\Configure;
+use Cake\Chronos\Chronos;
 
 /**
  * Tdtrac shell command.
@@ -689,7 +690,7 @@ class TdtracShell extends Shell
         date_default_timezone_set(Configure::read('ServerTimeZoneFix'));
         $real_offset = date('Z');
         date_default_timezone_set('UTC');
-        $now = Time::parse($real_offset . " seconds");
+        $now = Chronos::now();
 
         $this->verbose("Runtime: " . $now);
 
@@ -704,11 +705,14 @@ class TdtracShell extends Shell
                 } else { $this->verbose(' SKIPPING'); }
             } else {
                 $this->verbose(' Has run');
-                $counter = $task->start_time;
+                $counter = $task->start_time->toMutable();
                 $breaker = true;
+                $ohshit = 0;
                 while ( $breaker ) {
-                    $counter->modify("+".$task->period."days");
+                    $counter = $counter->modify("+".$task->period."days");
                     if ( $counter->gt($task->last_run)) { $breaker = false; $this->verbose(' Found next run: ' . $counter);}
+                    $ohshit++;
+                    if ( $ohshit > 10000 ) { $this->verbose(' LoopError!  Something went way wrong'); $breaker = false; }
                 }
                 if ( $counter->lte($now) ) {
                     $this->verbose(' Should run now!'); $do_this_task = true;
