@@ -140,9 +140,40 @@ class UsersController extends AppController
             $this->Flash->error(__('You may not add users'));
             return $this->redirect(['action' => 'view', $this->Auth->user('id')]);
         }
+
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->getData());
+            $fileList = array();
+            foreach ( $this->request->getData() as $postDataKey=>$postDataVal ) {
+                if ( substr($postDataKey,0,5) == "file_" && $postDataVal == 1 ) {
+                    $fileList[] = substr($postDataKey,5);
+                }
+            }
+
+            $this->loadModel('Files');
+            
+            $SQLfiles = $this->Files->find('all')->where(['id IN' => $fileList]);
+            $attachments = array();
+
+
+            foreach ( $SQLfiles as $SQLfile ) {
+                $content = base64_decode(fread($SQLfile->fle, $SQLfile->fle_size*2));
+                $attachments[$SQLfile->name] = [
+                    'data' => $content,
+                    'mimetype' => $SQLfile->fle_type
+                ];
+            }
+
+            if ( $this->request->getData('welcomeEmailSend') ) {
+                $email = new Email('default');
+                $email->setTo($user->username)
+                    ->setSubject('Welcome to TDTracX');
+                if ( $SQLfiles->count() > 0 ) {}
+                $email->attachments($attachments);
+                $email->send(preg_replace("/\n/", "<br />\n", $this->request->getData('welcomeEmail')));
+            }
+
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
                 return $this->redirect(['action' => 'index']);
@@ -150,6 +181,13 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
+        
+        $this->loadModel('Files');
+
+        $file = $this->Files->find('all')->select(['id', 'name', 'dsc']);
+
+        $this->set('files', $file);
+
         $this->set('crumby', [
             ["/", __("Dashboard")],
             ["/users/", __("Users")],

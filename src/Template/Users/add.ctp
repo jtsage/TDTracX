@@ -26,6 +26,41 @@
             );
         ?>
         </div>
+        <?php
+            function doEet($matches) {
+                if ( isset(CINFO[$matches[1]]) ) {
+                    return CINFO[$matches[1]];
+                }
+                return "!!Variable-Not-Defined!!";
+            }
+            $welcomeMailText = CINFO['welcomemail'];
+            $welcomeMailText = preg_replace_callback("/{{(\w+)}}/m", "doEet", $welcomeMailText);
+        ?>
+        <div class="form-group">
+            <label for="welcomeEmail">Welcome E-Mail</label>
+            <textarea class="form-control" id="welcomeEmail" name="welcomeEmail" rows="12"><?= $welcomeMailText ?></textarea>
+        </div>
+        <?= $this->Pretty->check('welcomeEmailSend', 1, [
+                'label-width' => '100',
+                'label-text' => __('Send E-Mail'),
+                'on-text' => __('YES'),
+                'off-text' => __('NO'),
+                'on-color' => 'success',
+                'off-color' => 'danger'
+        ]); ?>
+        <p><strong>Files to attach to E-Mail:</strong></p>
+        <?php 
+            foreach ($files as $file) {
+                echo $this->Pretty->check('file_' . $file->id , 0, [
+                    'label-width' => '600',
+                    'label-text' => $file->name . ": " . $file->dsc,
+                    'on-text' => __('YES'),
+                    'off-text' => __('NO'),
+                    'on-color' => 'success',
+                    'off-color' => 'danger'
+                ]);
+            }
+        ?>
     </fieldset>
     <?= $this->Form->button(__('Add'), ['class' => 'btn-default']) ?>
     <?= $this->Form->end() ?>

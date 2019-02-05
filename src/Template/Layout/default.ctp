@@ -150,6 +150,18 @@ if ( $this->request->getParam('controller') == "Pages" ) {
   ?>
 
   <script type="text/javascript">
+    function do_rep() {
+      var cur_pass = $('#password').val(),
+          cur_user = $('#username').val(),
+          cur_text = $('#welcomeEmail').val();
+
+      cur_text = cur_text.replace(/username:.+\n/m, "username: " + cur_user + "\n");
+      cur_text = cur_text.replace(/password:.+\n/m, "password: " + cur_pass + "\n");
+      $('#welcomeEmail').val(cur_text);
+    }
+    $('#password').on('change', do_rep);
+    $('#username').on('change', do_rep);
+
     $(".bootcheck").each(function() {
       $(this).bootstrapSwitch();
     });
