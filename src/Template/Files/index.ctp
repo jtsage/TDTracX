@@ -7,16 +7,16 @@
 <h3>
     <?= __("Files"); ?>
     <div class="btn-group">
-        <?php echo $this->Html->link(
+        <?= (($opsok) ? $this->Html->link(
             $this->Pretty->iconAdd(__("File")),
             ['action' => 'add'],
             ['escape' => false, 'class' => 'btn btn-success btn-sm']
-        ); ?>
+        ) : ""); ?>
         </div>
 </h3>
 
 <div class="files index large-9 medium-8 columns content">
-    <table class="table table-bordered">
+    <table class="table table-hover">
         <thead>
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
@@ -41,10 +41,10 @@
                                 ['action' => 'view', $file->id],
                                 ['escape' => false, 'class' => 'btn btn-default btn-sm' ] ) ?>
                             
-                            <?= $this->Form->postLink(
+                            <?= (($opsok) ? $this->Form->postLink(
                                 $this->Pretty->iconDelete($file->dsc),
                                 ['action' => 'delete', $file->id],
-                                ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $file->id), 'class' => 'btn btn-danger btn-sm' ] ) ?>
+                                ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $file->id), 'class' => 'btn btn-danger btn-sm' ] ) : "") ?>
                             
                     </div>
                 </td>
@@ -63,3 +63,9 @@
         <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
     </div>
 </div>
+
+<?= $this->Pretty->helpMeStart(__('Stored Files')); ?>
+<p><?= __("This display allows you to view all the currently stored files.") ?></p>
+<p><?= __("These files are available to all site participants.  Store things like how-to instructions for your specific installation here.  They can also be attached to the new user welcome e-mail.") ?></p>
+
+<?= $this->Pretty->helpMeEnd(); ?>

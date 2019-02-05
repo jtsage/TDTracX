@@ -13,7 +13,13 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = 'TDTracX: the quick time and budget tracking tool';
+
+if ( $this->request->getParam('controller') == "Pages" ) {
+  $cakeDescription = 'TDTracX: the quick time and budget tracking tool for '. CINFO['longname'];
+} else {
+  $cakeDescription = 'TDTracX:' . CINFO['shortname'] . ":" . $this->fetch('title');
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,10 +28,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>
-        <?= $cakeDescription ?>:
-        <?= $this->fetch('title') ?>
-    </title>
+    <title><?= $cakeDescription ?></title>
 
     <?= $this->Html->meta('icon') ?>
 
@@ -62,7 +65,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="/" class="navbar-brand">TDTrac<span style="color:#C3593C">X</span></a>
+          <a href="/" class="navbar-brand">TDTrac<span style="color:#C3593C">X</span><span style="color:#c39b1f"><?= CINFO['shortname']?></span></a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -85,6 +88,7 @@ $cakeDescription = 'TDTracX: the quick time and budget tracking tool';
             <li <?= ($this->request->getParam('controller') == "Shows" ? "class='active'":"") ?>><a href="/shows/"><?= __("Shows") ?></a></li>
             <li <?= ($this->request->getParam('controller') == "Users" ? "class='active'":"") ?>><a href="/users/"><?= ($WhoAmI) ? __("Users") : __("My Account") ?></a></li>
             <?= ($WhoAmI) ? "<li" . ($this->request->getParam('controller') == "Schedules" ? " class='active'":"") . "><a href=\"/schedules/\">Cron</a></li>" : "" ?>
+            <?= ($WhoAmI) ? "<li" . ($this->request->getParam('controller') == "Files" ? " class='active'":"") . "><a href=\"/files/\">Files</a></li>" : "" ?>
             <li><a href="/users/logout/"><?= __("Logout") ?></a></li>
             <li><a data-toggle="modal" data-target="#helpMe" href="#"><i class="fa fa-lg fa-fw fa-question-circle"></i>&thinsp;<?= __("Help") ?></a></li>
           </ul>

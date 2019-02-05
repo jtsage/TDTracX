@@ -20,11 +20,17 @@ class FilesController extends AppController
      */
     public function index()
     {
-        if ( ! $this->Auth->user('is_admin')) {
-            $this->Flash->error(__('Only Administrative users may upload, alter, or delete files.')); 
-            return $this->redirect('/');
-        }
         $files = $this->paginate($this->Files);
+        $this->set('crumby', [
+            ["/", __("Dashboard")],
+            [null, __("Stored Files")]
+        ]);
+
+        if ( $this->Auth->user('is_admin') ) {
+            $this->set('opsok', true);
+        } else {
+            $this->set('opsok', false);
+        }
 
         $this->set(compact('files'));
     }
@@ -38,18 +44,12 @@ class FilesController extends AppController
      */
     public function view($id = null)
     {
-        if ( ! $this->Auth->user('is_admin')) {
-            $this->Flash->error(__('Only Administrative users may upload, alter, or delete files.')); 
-            return $this->redirect('/');
-        }
-
         $file = $this->Files->get($id, [
             'contain' => []
         ]);
 
         $content = base64_decode(fread($file->fle, $file->fle_size*2));
 
-        
         $this->set('file', $file);
         $response = $this->response;
         $response = $response
@@ -96,6 +96,11 @@ class FilesController extends AppController
             }
             $this->Flash->error(__('The file could not be saved. Please, try again.'));
         }
+        $this->set('crumby', [
+            ["/", __("Dashboard")],
+            ["/files/", __("Stored Files")],
+            [null, __("Add Stored File")]
+        ]);
         $this->set(compact('file'));
     }
 

@@ -34,6 +34,11 @@ class SchedulesController extends AppController
         foreach ($showsq as $show) { $shows[$show->id] = $show->name; }
         $this->set('shows', $shows);
 
+        $this->set('crumby', [
+            ["/", __("Dashboard")],
+            [null, __("Scheduled Tasks")]
+        ]);
+
         $this->set(compact('schedules'));
         $this->set('_serialize', ['schedules']);
     }
@@ -63,6 +68,12 @@ class SchedulesController extends AppController
         $shows = ["**Not Applicable**"];
         foreach ($showsq as $show) { $shows[$show->id] = $show->name; }
         $this->set('shows', $shows);
+
+        $this->set('crumby', [
+            ["/", __("Dashboard")],
+            ["/schedules/", __("Scheduled Tasks")],
+            [null, __("Scheduled Task #{0}", $id)]
+        ]);
 
         $this->set('schedule', $schedule);
         $this->set('_serialize', ['schedule']);
@@ -105,6 +116,11 @@ class SchedulesController extends AppController
                 $this->Flash->error(__('The schedule could not be saved. Please, try again.'));
             }
         }
+        $this->set('crumby', [
+            ["/", __("Dashboard")],
+            ["/schedules/", __("Scheduled Tasks")],
+            [null, __("Add Scheduled Task")]
+        ]);
         $this->set(compact('schedule'));
         $this->set('_serialize', ['schedule']);
     }
@@ -150,6 +166,11 @@ class SchedulesController extends AppController
                 $this->Flash->error(__('The schedule could not be saved. Please, try again.'));
             }
         }
+        $this->set('crumby', [
+            ["/", __("Dashboard")],
+            ["/schedules/", __("Scheduled Tasks")],
+            [null, __("Scheduled Task #{0}", $id)]
+        ]);
         $this->set(compact('schedule'));
         $this->set('_serialize', ['schedule']);
     }
