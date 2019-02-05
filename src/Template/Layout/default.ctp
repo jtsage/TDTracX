@@ -127,9 +127,9 @@ if ( $this->request->getParam('controller') == "Pages" ) {
   
   </div>
   <footer style="padding-top: 20px; margin-top: 20px; border-top: 1px solid #e5e5e5;">
-    <p class="text-center text-muted"><?= __("TDTracX: the quick time and budget tracking tool") ?></p>
+    <p class="text-center text-muted"><?= __("TDTracX: the quick time and budget tracking tool") ?><br /><small>Site Administrator Contact: <a href="mailto:<?= CINFO['adminmail'] ?>"><?= CINFO['adminname'] ?></a></small></p>
     <?= $this->Html->nestedList([
-        __('Currently v1.1.0'), ' ',
+        __('Currently v1.2.0'), ' ',
         '<a href="https://github.com/jtsage/TDTracX">GitHub</a>', ' ',
         '<a href="http://tdtrac.com/">' . __('Home Page') . '</a>', ' ',
         '<a href="http://demox.tdtrac.com">' . __('Demo Application') . '</a>'
