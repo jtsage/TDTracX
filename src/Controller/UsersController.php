@@ -172,6 +172,12 @@ class UsersController extends AppController
                 $email->attachments($attachments);
                 $email->send(preg_replace("/\n/", "<br />\n", $this->request->getData('welcomeEmail')));
             }
+            if ( $this->request->getData('welcomeEmailSendCopy') ) {
+                $email = new Email('default');
+                $email->setTo(CINFO['adminmail'])
+                    ->setSubject('Welcome to TDTracX: ' . $this->request->getData('first') . " " .  $this->request->getData('last'));
+                $email->send(preg_replace("/\n/", "<br />\n", $this->request->getData('welcomeEmail')));
+            }
 
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
