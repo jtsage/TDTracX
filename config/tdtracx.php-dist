@@ -6,7 +6,7 @@ return [
 		'adminmail' => 'please-do-not-send@example.com',
 		'adminname' => 'Example Admin',
 		'servername' => 'https://demox.tdtrac.com',
-		'welcomemail' => "Good day!\n\nWelcome to Example Company's digital time sheet system.  The e-mail below contains your temporary password, and also instructions on how the system works.  Please take a look at the PDF, it includes additional information on how to change your e-mail address if necessary, and also how the reminder system works (you will get e-mails to add your hours!)\n\nYou have been assigned a temporary password, please change it the first time you log in!\n\nAddress:  {{servername}}\nusername: {{username}}\npassword: {{password}}\n\nFor your convenience, the instructions on how to use the system are also attached to this e-mail.\n\nThanks,\n{{adminname}}\n{{adminmail}}\n"
+		'welcomemail' => "Good day!\n\nWelcome to {{longname}}'s digital time sheet system.  The e-mail below contains your temporary password, and also instructions on how the system works.  Please take a look at the PDF, it includes additional information on how to change your e-mail address if necessary, and also how the reminder system works (you will get e-mails to add your hours!)\n\nYou have been assigned a temporary password, please change it the first time you log in!\n\nAddress:  {{servername}}\nusername: {{username}}\npassword: {{password}}\n\nFor your convenience, the instructions on how to use the system are also attached to this e-mail.\n\nThanks,\n{{adminname}}\n{{adminmail}}\n"
 	],
 	'debug' => true, // THIS OVERRIDES THE DEBUG VALUE IN app.php
 	'ServerTimeZoneFix' => 'America/New_York',
