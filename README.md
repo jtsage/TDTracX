@@ -1,51 +1,14 @@
-# CakePHP Application Skeleton
+# TDTracX
+### A Theater Oriented Budget and Payroll Tracker
+TDTrac is a web based show budget and payroll hours tracker, built by a Technical Director, for other TD's, freelance designers, and anyone else who finds it useful. TDTrac is completely free, released as open source. We also offer hosting plans for a nominal fee (no domain required!) so you don't need to pay for webspace elsewhere.
 
-[![Build Status](https://img.shields.io/travis/cakephp/app/master.svg?style=flat-square)](https://travis-ci.org/cakephp/app)
-[![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app)
-
-A skeleton for creating applications with [CakePHP](https://cakephp.org) 3.x.
-
-The framework source code can be found here: [cakephp/cakephp](https://github.com/cakephp/cakephp).
-
-## Installation
-
-1. Download [Composer](https://getcomposer.org/doc/00-intro.md) or update `composer self-update`.
-2. Run `php composer.phar create-project --prefer-dist cakephp/app [app_name]`.
-
-If Composer is installed globally, run
-
-```bash
-composer create-project --prefer-dist cakephp/app
-```
-
-In case you want to use a custom app dir name (e.g. `/myapp/`):
-
-```bash
-composer create-project --prefer-dist cakephp/app myapp
-```
-
-You can now either use your machine's webserver to view the default home page, or start
-up the built-in webserver with:
-
-```bash
-bin/cake server -p 8765
-```
-
-Then visit `http://localhost:8765` to see the welcome page.
-
-## Update
-
-Since this skeleton is a starting point for your application and various files
-would have been modified as per your needs, there isn't a way to provide
-automated upgrades, so you have to do any updates manually.
-
-## Configuration
-
-Read and edit `config/app.php` and setup the `'Datasources'` and any other
-configuration relevant for your application.
-
-## Layout
-
-The app skeleton uses a subset of [Foundation](http://foundation.zurb.com/) (v5) CSS
-framework by default. You can, however, replace it with any other library or
-custom styles.
+## Features
+ * Track individual show or project budgets
+ * Track individual show or project task lists
+ * Track individual show or project payroll, included:
+ * An unlimited number of active or inactive employees.
+ * A secure interface to allow employees to track their own hours.
+ * Keep track of which payroll items have been paid, and which are outstanding
+ * Remind your employees quickly via e-mail that payroll is due
+ * Fine grained access control on a per show/job basis.
+ * Fully mobile-ready interface for phone, ipod, tablet or netbook use.

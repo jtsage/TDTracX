@@ -242,6 +242,7 @@ class TdtracShell extends Shell
             //$this->loadModel('Tasks');
             $this->Tasks = TableRegistry::get('Tasks');
             $this->loadModel('ShowUserPerms');
+            $this->loadModel('Files');
 
             $this->out('Removing all records.');
 
@@ -269,6 +270,9 @@ class TdtracShell extends Shell
             if ( $this->Users->deleteAll([1 => 1]) ) {
                 $this->out(' Delete: Users');
             }
+            if ( $this->Files->deleteAll([1 => 1]) ) {
+                $this->out(' Delete: Files');
+            }
 
 
             $this->out($this->nl(1) . 'Resetting AUTO_INCREMENT');
@@ -280,6 +284,7 @@ class TdtracShell extends Shell
             $conn->execute('ALTER TABLE `calendars` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `shows` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `messages` AUTO_INCREMENT = 1');
+            $conn->execute('ALTER TABLE `files` AUTO_INCREMENT = 1');
             $conn->execute('ALTER TABLE `show_user_perms` AUTO_INCREMENT = 1');
 
             $this->out($this->nl(1) . 'Creating Data:');
