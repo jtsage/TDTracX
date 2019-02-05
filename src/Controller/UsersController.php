@@ -156,7 +156,6 @@ class UsersController extends AppController
             $SQLfiles = $this->Files->find('all')->where(['id IN' => $fileList]);
             $attachments = array();
 
-
             foreach ( $SQLfiles as $SQLfile ) {
                 $content = base64_decode(fread($SQLfile->fle, $SQLfile->fle_size*2));
                 $attachments[$SQLfile->name] = [
