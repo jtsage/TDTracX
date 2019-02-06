@@ -4,7 +4,7 @@ For convience, a fair few operations can be achieved from the shell. This is a l
 
     $ ./bin cake tdtrac 
 
-** Usage: cake tdtrac [subcommand] [-h] [-q] [-v] **
+**Usage: cake tdtrac [subcommand] [-h] [-q] [-v]**
 
 	Subcommands:
 
