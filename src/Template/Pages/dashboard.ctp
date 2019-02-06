@@ -318,6 +318,39 @@
             <div class="panel-heading">
                 <div class="row">
                     <div class="col-xs-3">
+                        <i class="fa fa-file fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge"><?= __("Stored Files") ?></div>
+                        <div><?= __("The system wide stored files.") ?></div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="/files/">
+                <div class="panel-footer"><strong>
+                    <span class="pull-left">View Files</span>
+                    <span class="pull-right">
+                        <span class="badge"><?= $files; ?></span> 
+                        <i class="fa fa-lg fa-arrow-right"></i>
+                    </span>
+                    <div class="clearfix"></div>
+                </strong></div>
+            </a>
+
+            <a href="/files/add/">
+                <div class="panel-footer">
+                    <span class="pull-left">Add File</span>
+                    <span class="pull-right"><i class="fa fa-lg fa-arrow-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+
+        <div class="panel panel-yellow">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
                         <i class="fa fa-clock-o fa-5x"></i>
                     </div>
                     <div class="col-xs-9 text-right">

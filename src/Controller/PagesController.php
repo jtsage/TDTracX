@@ -78,8 +78,12 @@ class PagesController extends AppController
         $this->loadModel('UserPerms');
         $this->loadModel('Messages');
         $this->loadModel('Schedules');
+        $this->loadModel('Files');
         
+        $files = $this->Files->find()->count();
 
+        $this->set('files', $files);
+        
         $schedules = $this->Schedules->find()->count();
 
         $this->set('schedules', $schedules);
