@@ -46,8 +46,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
        echo $this->fetch('css');
        echo $this->fetch('script');
       
-       echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css');
-       echo $this->Html->css('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css');
+       echo $this->Html->css('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css');
        echo $this->Html->css('bootstrap-switch.min');
        echo $this->Html->css('https://tdtrac.com/cdn/jtsage-datebox/4.2.3/jtsage-datebox-4.2.3.bootstrap.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
@@ -62,58 +61,52 @@ if ( $this->request->getParam('controller') == "Pages" ) {
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body style="padding-top:70px">
+  <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a href="/" class="navbar-brand">TDTrac<span style="color:#C3593C">X</span><span style="color:#c39b1f"><?= CINFO['shortname']?></span></a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li <?= ($this->request->getParam('controller') == "Payrolls" ? "class='active dropdown'":"class='dropdown'") ?>>
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= __("Payroll") ?><span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="/payrolls/"><?= __("By Show") ?></a></li>
-                <li><a href="/payrolls/indexuser"><?= __("By User") ?></a></li>
-                <?php if ( $WhoAmI ): ?>
-                  <li role="separator" class="divider"></li>
-                  <li><a href="/payrolls/unpaid/user"><?= __("Unpaid By User") ?></a></li>
-                  <li><a href="/payrolls/unpaid/show"><?= __("Unpaid By Show") ?></a></li>
-                <?php endif; ?>
-              </ul>
-            </li>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a href="/" class="navbar-brand">TDTrac<span style="color:#C3593C">X</span><span style="color:#c39b1f"><?= CINFO['shortname']?></span></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
 
-            <li <?= ($this->request->getParam('controller') == "Budgets" ? "class='active'":"") ?>><a href="/budgets/"><?= __("Budget") ?></a></li>
-            <li <?= ($this->request->getParam('controller') == "Tasks" ? "class='active'":"") ?>><a href="/tasks/"><?= __("Tasks") ?></a></li>
-            <li <?= ($this->request->getParam('controller') == "Calendars" ? "class='active'":"") ?>><a href="/calendars/"><?= __("Calendars") ?></a></li>
-            <li <?= ($this->request->getParam('controller') == "Shows" ? "class='active'":"") ?>><a href="/shows/"><?= __("Shows") ?></a></li>
-            <li <?= ($this->request->getParam('controller') == "Users" ? "class='active'":"") ?>><a href="/users/"><?= ($WhoAmI) ? __("Users") : __("My Account") ?></a></li>
-            <?= ($WhoAmI) ? "<li" . ($this->request->getParam('controller') == "Schedules" ? " class='active'":"") . "><a href=\"/schedules/\">Cron</a></li>" : "" ?>
-            <?= ($WhoAmI) ? "<li" . ($this->request->getParam('controller') == "Files" ? " class='active'":"") . "><a href=\"/files/\">Files</a></li>" : "" ?>
-            <li><a href="/users/logout/"><?= __("Logout") ?></a></li>
-            <li><a data-toggle="modal" data-target="#helpMe" href="#"><i class="fa fa-lg fa-fw fa-question-circle"></i>&thinsp;<?= __("Help") ?></a></li>
-          </ul>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
 
-        <?php 
-        $user = $this->request->getSession()->read('Auth.User');
+				<li <?= ($this->request->getParam('controller') == "Payrolls" ? "class='active nav-item dropdown'":"class='nav-item dropdown'") ?>>
+					<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><?= __("Payroll") ?><span class="caret"></span></a>
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="/payrolls/"><?= __("By Show") ?></a>
+						<a class="dropdown-item" href="/payrolls/indexuser"><?= __("By User") ?></a>
+						<?php if ( $WhoAmI ): ?>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="/payrolls/unpaid/user"><?= __("Unpaid By User") ?></a>
+							<a class="dropdown-item" href="/payrolls/unpaid/show"><?= __("Unpaid By Show") ?></a>
+						<?php endif; ?>
+					</div>
+				</li>
 
-        if( ! empty( $user ) ) 
-        {
-            echo '<p class="navbar-text navbar-right">' . __("Signed in") . ': ' . $user['first'] . " " . $user['last'] . ' </p>';
-        } ?>
+				<li class="nav-item <?= ($this->request->getParam('controller') == "Budgets" ? "active'":"") ?>"><a class="nav-link" href="/budgets/"><?= __("Budget") ?></a></li>
+				<li class="nav-item <?= ($this->request->getParam('controller') == "Tasks" ? "class='active'":"") ?>"><a class="nav-link" href="/tasks/"><?= __("Tasks") ?></a></li>
+				<li class="nav-item <?= ($this->request->getParam('controller') == "Calendars" ? "class='active'":"") ?>"><a class="nav-link" href="/calendars/"><?= __("Calendars") ?></a></li>
+				<li class="nav-item <?= ($this->request->getParam('controller') == "Shows" ? "class='active'":"") ?>"><a class="nav-link" href="/shows/"><?= __("Shows") ?></a></li>
+				<li class="nav-item <?= ($this->request->getParam('controller') == "Users" ? "class='active'":"") ?>"><a class="nav-link" href="/users/"><?= ($WhoAmI) ? __("Users") : __("My Account") ?></a></li>
+				<?= ($WhoAmI) ? "<li class='nav-item" . ($this->request->getParam('controller') == "Schedules" ? " class='active'":"") . "'><a class=\"nav-link\" href=\"/schedules/\">Cron</a></li>" : "" ?>
+				<?= ($WhoAmI) ? "<li class='nav-item" . ($this->request->getParam('controller') == "Files" ? " class='active'":"") . "'><a class=\"nav-link\" href=\"/files/\">Files</a></li>" : "" ?>
+				<li class="nav-item"><a class="nav-link" href="/users/logout/"><?= __("Logout") ?></a></li>
+				<li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#helpMe" href="#"><i class="fa fa-lg fa-fw fa-question-circle"></i>&thinsp;<?= __("Help") ?></a></li>
+			</ul>
+			<?php 
+				$user = $this->request->getSession()->read('Auth.User');
 
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
+				if( ! empty( $user ) ) {
+					echo '<p class="navbar-text navbar-right">' . __("Signed in") . ': ' . $user['first'] . " " . $user['last'] . ' </p>';
+				}
+			?>
+		</div>
+	</nav>
 
-  <div class="container" role="main">
+
+  <div class="container" style="padding-top:20px" role="main">
 
     <?php 
       if ( !empty($crumby) && is_array($crumby) ) {
@@ -136,14 +129,13 @@ if ( $this->request->getParam('controller') == "Pages" ) {
   </div>
   <footer style="padding-top: 20px; margin-top: 20px; border-top: 1px solid #e5e5e5;">
     <p class="text-center text-muted"><?= __("TDTracX: the quick time and budget tracking tool") ?><br /><small>Site Administrator Contact: <a href="mailto:<?= CINFO['adminmail'] ?>"><?= CINFO['adminname'] ?></a></small></p>
-    <?= $this->Html->nestedList([
-        __('Currently v1.2.2'), ' ',
-        '<a href="https://github.com/jtsage/TDTracX">GitHub</a>', ' ',
-        '<a href="http://tdtrac.com/">' . __('Home Page') . '</a>', ' ',
-        '<a href="http://demox.tdtrac.com">' . __('Demo Application') . '</a>'
-      ], ["class" => "text-center list-inline text-muted hidden-print"]
-    ); ?>
-    <p class="text-center text-muted visible-print-block">Printed on <?= date('Y-m-d H:i T') ?></p>
+    <ul class="text-center list-inline text-muted d-print-none">
+    	<li class="list-inline-item"><?= __('Currently v1.2.2') ?></li>
+    	<li class="list-inline-item"><a href="https://github.com/jtsage/TDTracX">GitHub</a></li>
+    	<li class="list-inline-item"><a href="http://tdtrac.com/"><?= __('Home Page') ?></a></li>
+    	<li class="list-inline-item"><a href="http://demox.tdtrac.com"><?= __('Demo Application') ?></a></li>
+    </ul>
+    <p class="text-center text-muted d-print-block d-none">Printed on <?= date('Y-m-d H:i T') ?></p>
   </footer>
   
   <?php
@@ -152,7 +144,9 @@ if ( $this->request->getParam('controller') == "Pages" ) {
     echo $this->Html->script('bootstrap3-typeahead.min');
     echo $this->Html->script('bootstrap-switch.min');
     echo $this->Html->script('jquery-ui.min');
-    echo $this->Html->script('https://tdtrac.com/cdn/jtsage-datebox/4.2.3/jtsage-datebox-4.2.3.bootstrap.min.js');
+    echo $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js');
+    echo $this->Html->script('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js');
+    //echo $this->Html->script('https://tdtrac.com/cdn/jtsage-datebox/4.2.3/jtsage-datebox-4.2.3.bootstrap.min.js');
     echo $this->Html->script('https://tdtrac.com/cdn/external/jquery.mousewheel.min.js');
     echo $this->Html->script('validator.min');
   ?>

@@ -9,7 +9,7 @@
         "cakephp/cakephp": "3.7.*",
         "cakephp/migrations": "^2.0.0",
         "cakephp/plugin-installer": "^1.0",
-        "friendsofcake/bootstrap-ui": "^1.4",
+        "friendsofcake/bootstrap-ui": "dev-develop",
         "friendsofcake/cakephp-csvview": "^3.3",
         "gourmet/email": "^3.1",
         "gourmet/whoops": "^1.1",

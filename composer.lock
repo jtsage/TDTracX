@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1a97fdd456a86e6b2f131575ae464ac",
+    "content-hash": "856dde331aaf5b99b51592004a167d00",
     "packages": [
         {
             "name": "aura/intl",
@@ -355,23 +355,23 @@
         },
         {
             "name": "friendsofcake/bootstrap-ui",
-            "version": "1.4.1",
+            "version": "dev-develop",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfCake/bootstrap-ui.git",
-                "reference": "d61733535cad6f4ec1c966bacc6cafaef3f461c0"
+                "reference": "1dfc322c1fa4049b86f8c62ba4213ee3a159c50f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfCake/bootstrap-ui/zipball/d61733535cad6f4ec1c966bacc6cafaef3f461c0",
-                "reference": "d61733535cad6f4ec1c966bacc6cafaef3f461c0",
+                "url": "https://api.github.com/repos/FriendsOfCake/bootstrap-ui/zipball/1dfc322c1fa4049b86f8c62ba4213ee3a159c50f",
+                "reference": "1dfc322c1fa4049b86f8c62ba4213ee3a159c50f",
                 "shasum": ""
             },
             "require": {
-                "cakephp/cakephp": "^3.5"
+                "cakephp/cakephp": "^3.7.0"
             },
             "require-dev": {
-                "cakephp/chronos": "^1.1",
+                "cakephp/bake": "^1.8",
                 "phpunit/phpunit": "^5.7.14|^6.0"
             },
             "type": "cakephp-plugin",
@@ -402,7 +402,7 @@
                 "cakephp",
                 "twitter"
             ],
-            "time": "2018-12-20T17:11:21+00:00"
+            "time": "2018-12-20T18:40:28+00:00"
         },
         {
             "name": "friendsofcake/cakephp-csvview",
@@ -4555,6 +4555,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "friendsofcake/bootstrap-ui": 20,
         "psy/psysh": 0
     },
     "prefer-stable": true,
