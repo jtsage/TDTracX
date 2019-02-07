@@ -1,18 +1,18 @@
 <h3><?= __("Task Lists - Administrator"); ?></h3>
 
-<div class="row">
+<div class="mb-5 row">
 <?php $rowcount = 0; ?>
 
 <?php foreach ($showsA as $show): ?>
 <?php if ( $rowcount == 2 ) { echo "</div><div class='row'>"; $rowcount=0; } $rowcount++; ?>
 <div class="col-md-6">
-    <div class="panel panel-green">
-        <div class="panel-heading">
+    <div class="card border-success">
+        <div class="card-body bg-success">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <i class="fa fa-tasks fa-5x"></i>
                 </div>
-                <div class="col-xs-9 text-right">
+                <div class="col-sm-9 text-right">
                     <div class="huge"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}.", [
                         "<strong>",
@@ -23,21 +23,21 @@
                 </div>
             </div>
         </div>
-        <table class="table table-bordered">
+        <table class="table table-bordered mb-0">
             <tr><th>Total Tasks</th><td style="text-align: center"><?= $showtask['total'][$show->id] ?></td></tr>
             <tr><th>Overdue Tasks</th><td style="text-align: center"><?= $showtask['overdue'][$show->id] ?></td></tr>
             <tr><th>New Tasks</th><td style="text-align: center"><?= $showtask['new'][$show->id] ?></td></tr>
             <tr><th>Pending Tasks</th><td style="text-align: center"><?= $showtask['accept_notdone'][$show->id] ?></td></tr>
         </table>
         <a href="/tasks/add/<?= $show->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('Add Task Item'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
             </div>
         </a>
         <a href="/tasks/view/<?= $show->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('View and Review Tasks'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
@@ -50,19 +50,19 @@
 
 <h3><?= __("Task Lists - User"); ?></h3>
 
-<div class="row">
+<div class="mb-5 row">
 <?php $rowcount = 0; ?>
 
 <?php foreach ($showsU as $show): ?>
 <?php if ( $rowcount == 2 ) { echo "</div><div class='row'>"; $rowcount=0; } $rowcount++; ?>
 <div class="col-md-6">
-    <div class="panel panel-primary">
-        <div class="panel-heading">
+    <div class="card border-primary">
+        <div class="card-body bg-primary">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <i class="fa fa-tasks fa-5x"></i>
                 </div>
-                <div class="col-xs-9 text-right">
+                <div class="col-sm-9 text-right">
                     <div class="huge"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}.", [
                         "<strong>",
@@ -73,18 +73,18 @@
                 </div>
             </div>
         </div>
-        <table class="table table-bordered">
+        <table class="table table-bordered mb-0">
             <tr><th>Your Tasks</th><td style="text-align: center"><?= $showtask['yours'][$show->id] ?></td></tr>
         </table>
         <a href="/tasks/add/<?= $show->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('Add Task Item'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
             </div>
         </a>
         <a href="/tasks/view/<?= $show->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('View and Review Your Tasks'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
@@ -102,19 +102,19 @@
     }
 ?>
 
-<div class="row">
+<div class="mb-5 row">
 <?php $rowcount = 0; ?>
 
 <?php foreach ($inactshows as $show): ?>
 <?php if ( $rowcount == 2 ) { echo "</div><div class='row'>"; $rowcount=0; } $rowcount++; ?>
 <div class="col-md-6">
-    <div class="panel panel-red">
-        <div class="panel-heading">
+    <div class="card border-danger">
+        <div class="card-body bg-danger">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <i class="fa fa-tasks fa-5x"></i>
                 </div>
-                <div class="col-xs-9 text-right">
+                <div class="col-sm-9 text-right">
                     <div class="huge"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total of {0}{4}{1} tasks, ", [
                         "<strong>",
@@ -132,7 +132,7 @@
             </div>
         </div>
         <a href="/tasks/view/<?= $show->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('View and Review Tasks'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>

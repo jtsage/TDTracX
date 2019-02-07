@@ -11,12 +11,12 @@
 </h3>
 
 <ol class="breadcrumb">
-	<li><strong>Sort By: </strong></li>
-	<li><a <?= ($sort == "due") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/due">Due Date</a></li>
-	<li><a <?= ($sort == "new") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/new">New Items</a></li>
-	<li><a <?= ($sort == "created") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/created">Created Date</a></li>
-	<li><a <?= ($sort == "updated") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/updated">Updated Date</a></li>
-	<li><a <?= ($sort == "priority") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/priority">Assigned Priority</a></li>
+	<li class="breadcrumb-item"><strong>Sort By: </strong></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "due") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/due">Due Date</a></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "new") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/new">New Items</a></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "created") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/created">Created Date</a></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "updated") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/updated">Updated Date</a></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "priority") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/priority">Assigned Priority</a></li>
 </ol>
 <table class="table table-striped table-bordered">
         <thead>
@@ -84,7 +84,7 @@
                 ( $opsok ? $this->Html->link(
                     $this->Pretty->iconEdit($task->title),
                     ['action' => 'edit', $task->id],
-                    ['escape' => false, 'class' => 'btn btn-default btn-sm' ] 
+                    ['escape' => false, 'class' => 'btn btn-secondary btn-sm' ] 
                 ) : "") .
                 ( $opsok ? $this->Form->postLink(
                     $this->Pretty->iconDelete($task->title),

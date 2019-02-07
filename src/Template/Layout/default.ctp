@@ -48,7 +48,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
       
        echo $this->Html->css('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css');
        echo $this->Html->css('bootstrap-switch.min');
-       echo $this->Html->css('https://tdtrac.com/cdn/jtsage-datebox/4.2.3/jtsage-datebox-4.2.3.bootstrap.min.css');
+       echo $this->Html->css('https://cdn.jsdelivr.net/npm/jtsage-datebox-bootstrap4@4.4.1/jtsage-datebox.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
        echo $this->Html->css('tdtracx');
 
@@ -93,7 +93,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
 				<?= ($WhoAmI) ? "<li class='nav-item" . ($this->request->getParam('controller') == "Schedules" ? " class='active'":"") . "'><a class=\"nav-link\" href=\"/schedules/\">Cron</a></li>" : "" ?>
 				<?= ($WhoAmI) ? "<li class='nav-item" . ($this->request->getParam('controller') == "Files" ? " class='active'":"") . "'><a class=\"nav-link\" href=\"/files/\">Files</a></li>" : "" ?>
 				<li class="nav-item"><a class="nav-link" href="/users/logout/"><?= __("Logout") ?></a></li>
-				<li class="nav-item"><a class="nav-link" data-toggle="modal" data-target="#helpMe" href="#"><i class="fa fa-lg fa-fw fa-question-circle"></i>&thinsp;<?= __("Help") ?></a></li>
+				<li class="nav-item"><a class="nav-link" onClick="javascript:$('#helpMeModal').modal(); return false;" href="#"><i class="fa fa-lg fa-fw fa-question-circle"></i>&thinsp;<?= __("Help") ?></a></li>
 			</ul>
 			<?php 
 				$user = $this->request->getSession()->read('Auth.User');
@@ -110,15 +110,15 @@ if ( $this->request->getParam('controller') == "Pages" ) {
 
     <?php 
       if ( !empty($crumby) && is_array($crumby) ) {
-        echo '<ol class="breadcrumb">';
+        echo '<nav aria-label="breadcrumb"><ol class="breadcrumb">';
         foreach ( $crumby as $crumb ) {
           if ( is_null($crumb[0]) ) {
-            echo "<li class='active'>" . $crumb[1] . "</li>";
+            echo "<li class='breadcrumb-item active'>" . $crumb[1] . "</li>";
           } else {
-            echo "<li><a href='" . $crumb[0] . "'>" . $crumb[1] . "</a></li>";
+            echo "<li class='breadcrumb-item'><a href='" . $crumb[0] . "'>" . $crumb[1] . "</a></li>";
           }
         }
-        echo '</ol>';
+        echo '</ol></nav>';
       }
     ?>
 
@@ -130,7 +130,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
   <footer style="padding-top: 20px; margin-top: 20px; border-top: 1px solid #e5e5e5;">
     <p class="text-center text-muted"><?= __("TDTracX: the quick time and budget tracking tool") ?><br /><small>Site Administrator Contact: <a href="mailto:<?= CINFO['adminmail'] ?>"><?= CINFO['adminname'] ?></a></small></p>
     <ul class="text-center list-inline text-muted d-print-none">
-    	<li class="list-inline-item"><?= __('Currently v1.2.2') ?></li>
+    	<li class="list-inline-item"><?= __('Currently v1.4.0a1') ?></li>
     	<li class="list-inline-item"><a href="https://github.com/jtsage/TDTracX">GitHub</a></li>
     	<li class="list-inline-item"><a href="http://tdtrac.com/"><?= __('Home Page') ?></a></li>
     	<li class="list-inline-item"><a href="http://demox.tdtrac.com"><?= __('Demo Application') ?></a></li>
@@ -140,13 +140,12 @@ if ( $this->request->getParam('controller') == "Pages" ) {
   
   <?php
     echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js');
-    echo $this->Html->script('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js');
     echo $this->Html->script('bootstrap3-typeahead.min');
     echo $this->Html->script('bootstrap-switch.min');
     echo $this->Html->script('jquery-ui.min');
     echo $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js');
     echo $this->Html->script('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js');
-    //echo $this->Html->script('https://tdtrac.com/cdn/jtsage-datebox/4.2.3/jtsage-datebox-4.2.3.bootstrap.min.js');
+    echo $this->Html->script('https://cdn.jsdelivr.net/npm/jtsage-datebox-bootstrap4@4.4.1/jtsage-datebox.min.js');
     echo $this->Html->script('https://tdtrac.com/cdn/external/jquery.mousewheel.min.js');
     echo $this->Html->script('validator.min');
   ?>
