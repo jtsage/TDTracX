@@ -166,7 +166,7 @@ class UsersController extends AppController
 
             if ( $this->request->getData('welcomeEmailSend') ) {
                 $email = new Email('default');
-                $email->setTo($user->username)
+                $email->setTo(rtrim($user->username))
                     ->setSubject('Welcome to TDTracX');
                 if ( $SQLfiles->count() > 0 ) {}
                 $email->attachments($attachments);

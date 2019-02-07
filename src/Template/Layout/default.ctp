@@ -30,7 +30,15 @@ if ( $this->request->getParam('controller') == "Pages" ) {
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title><?= $cakeDescription ?></title>
 
-    <?= $this->Html->meta('icon') ?>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="apple-mobile-web-app-title" content="TDTracX">
+    <meta name="application-name" content="TDTracX">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
 
     <?php
 
