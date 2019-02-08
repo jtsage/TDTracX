@@ -33,24 +33,24 @@
                         echo $this->Html->link(
                             $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
                             ['action' => 'addtoshow', $show->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                            ['escape' => false, 'class' => 'btn btn-outline-success btn-sm d-print-none']
                         );
                         echo $this->Form->postLink(
                             $this->Pretty->iconMark($show->name),
                             ['action' => 'markshowpaid', $show->id],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm hidden-print']
+                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-outline-warning btn-sm d-print-none']
                         );
                     } else {
                         echo $this->Html->link(
                             $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
                             ['action' => 'addtoself', $show->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                            ['escape' => false, 'class' => 'btn btn-outline-success btn-sm d-print-none']
                         );
                     }
                     echo $this->Html->link(
                         $this->Pretty->iconDL($show->name . " " . __("Payroll Item")),
                         ['action' => 'viewbyshow', $show->id, 'csv'],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
+                        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm d-print-none']
                     );
                     break;
                 case "showdate":
@@ -58,19 +58,19 @@
                         echo $this->Html->link(
                             $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
                             ['action' => 'addtoshow', $show->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                            ['escape' => false, 'class' => 'btn btn-outline-success btn-sm d-print-none']
                         );
                     } else {
                         echo $this->Html->link(
                             $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
                             ['action' => 'addtoself', $show->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                            ['escape' => false, 'class' => 'btn btn-outline-success btn-sm d-print-none']
                         );
                     }
                     echo $this->Html->link(
                         $this->Pretty->iconDL($show->name . " " . __("Payroll Item")),
                         ['action' => 'viewbyshowdate', $show->id, $start_date, $end_date, 'csv'],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
+                        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm d-print-none']
                     );
                     break;
                 case "user":
@@ -78,17 +78,17 @@
                         echo $this->Html->link(
                             $this->Pretty->iconAdd($user->first . " " . $user->last . " " . __("Payroll Item")),
                             ['action' => 'addtouser', $user->id],
-                            ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                            ['escape' => false, 'class' => 'btn btn-outline-success btn-sm d-print-none']
                         );
                         echo $this->Form->postLink(
                             $this->Pretty->iconMark($user->first . " " . $user->last),
                             ['action' => 'markuserpaid', $user->id],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $user->first . " " . $user->last),  'class' => 'btn btn-warning btn-sm hidden-print']);
+                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $user->first . " " . $user->last),  'class' => 'btn btn-outline-warning btn-sm d-print-none']);
                     }
                     echo $this->Html->link(
                         $this->Pretty->iconDL($user->first . " " . $user->last . __('&#39;s Payroll Report')),
                         ['action' => 'viewbyuser', $user->id, 'csv'],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
+                        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm d-print-none']
                     );
                     break;
                 case "unpaidshow":
@@ -96,24 +96,24 @@
                     //     echo $this->Html->link(
                     //         $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
                     //         ['action' => 'addtoshow', $show->id],
-                    //         ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                    //         ['escape' => false, 'class' => 'btn btn-success btn-sm d-print-none']
                     //     );
                     //     echo $this->Form->postLink(
                     //         $this->Pretty->iconMark($show->name),
                     //         ['action' => 'markshowpaid', $show->id],
-                    //         ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm hidden-print']
+                    //         ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL paid for {0}?', $show->name),  'class' => 'btn btn-warning btn-sm d-print-none']
                     //     );
                     // } else {
                     //     echo $this->Html->link(
                     //         $this->Pretty->iconAdd($show->name . " " . __("Payroll Item")),
                     //         ['action' => 'addtoself', $show->id],
-                    //         ['escape' => false, 'class' => 'btn btn-success btn-sm hidden-print']
+                    //         ['escape' => false, 'class' => 'btn btn-success btn-sm d-print-none']
                     //     );
                     // }
                     echo $this->Html->link(
                         $this->Pretty->iconDL(__("Payroll Items By Show")),
                         ['action' => 'unpaid', 'show', 'csv'],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
+                        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm d-print-none']
                     );
                     break;
                 case "unpaiduser":
@@ -121,13 +121,13 @@
                         echo $this->Form->postLink(
                             $this->Pretty->iconMark('ALL'),
                             ['action' => 'markallpaid'],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL Payroll items paid?'),  'class' => 'btn btn-warning btn-sm hidden-print']
+                            ['escape' => false, 'confirm' => __('Are you sure you want to mark ALL Payroll items paid?'),  'class' => 'btn btn-outline-warning btn-sm d-print-none']
                         );
                     }
                     echo $this->Html->link(
                         $this->Pretty->iconDL(__('Unpaid by User Payroll Report')),
                         ['action' => 'unpaid', 'user', 'csv'],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']
+                        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm d-print-none']
                     );
                     break;
             }
@@ -175,9 +175,9 @@
             //if ( $viewMode == "unpaidshow" ) { array_unshift($headers, __("User")); }
             if ( $viewMode == "unpaiduser" ) { array_unshift($headers, __("Show")); }
             
-            //if ( $viewMode == "unpaidshow" || $viewMode == "unpaiduser" ) {
-                //$colspan = [ 5, 8 ];
-            //}
+            if ( $viewMode == "unpaiduser" ) {
+                $colspan = [ 5, 8 ];
+            }
             echo $this->Html->tableHeaders($headers);
         ?>
     </thead>
@@ -242,7 +242,7 @@
                 [ number_format($item->worked, 2), ['class' => 'text-right']],
                 [
                     ( ( $adminView && !$item->is_paid ) ?
-                        "<a href=\"#\" id=\"mark-paid-{$item->id}\" data-item=\"{$item->id}\" class=\"mark-paid-btn btn btn-warning btn-sm hidden-print\">" . $this->Pretty->iconMark($item->notes) . "</a>" : "" ) . " " .
+                        "<a href=\"#\" id=\"mark-paid-{$item->id}\" data-item=\"{$item->id}\" class=\"mark-paid-btn btn btn-outline-warning btn-sm d-print-none\">" . $this->Pretty->iconMark($item->notes) . "</a>" : "" ) . " " .
                     "<span>" . $this->Bool->prefYes($item->is_paid) . "</span>", ['class' => 'text-center']
                 ],
                 [
@@ -250,11 +250,11 @@
                         $this->Html->link(
                             $this->Pretty->iconEdit($item->notes),
                             ['action' => 'edit', $item->id, $returnTo],
-                            ['escape' => false, 'class' => 'btn btn-default btn-sm hidden-print']) .
+                            ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm d-print-none']) .
                         $this->Form->postLink(
                             $this->Pretty->iconDelete($item->notes),
                             ['action' => 'delete', $item->id, $returnTo],
-                            ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id), 'class' => 'btn btn-danger btn-sm hidden-print'])
+                            ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id), 'class' => 'btn btn-outline-danger btn-sm d-print-none'])
                         : "" ),
                     ['class' => 'text-center']
                 ]

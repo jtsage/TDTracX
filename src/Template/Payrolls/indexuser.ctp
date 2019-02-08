@@ -19,15 +19,15 @@
                 }
             }
         }
-        $class = (( $worked_owed  > 0 ) ? "yellow" : (( $worked_paid > 0 ) ? "green" : "primary" ));
+        $class = (( $worked_owed  > 0 ) ? "warning" : (( $worked_paid > 0 ) ? "success" : "primary" ));
     ?>
-    <div class="panel panel-<?= $class; ?>">
-        <div class="panel-heading">
+    <div class="card border-<?= $class; ?>">
+        <div class="card-body bg-<?= $class; ?>">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <i class="fa fa-line-chart fa-5x"></i>
                 </div>
-                <div class="col-xs-9 text-right">
+                <div class="col-sm-9 text-right">
                     <div class="huge"><?= $name ?></div>
                     <div><?= __("with {0}{2}{1} outstanding hours, and {0}{3}{1} paid hours", [
                             "<strong>",
@@ -40,14 +40,14 @@
             </div>
         </div>
         <a href="/payrolls/addtouser/<?= $id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('Add Payroll Item'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
             </div>
         </a>
         <a href="/payrolls/viewbyuser/<?= $id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('View Details'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
