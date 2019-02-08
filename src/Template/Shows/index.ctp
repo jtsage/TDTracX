@@ -2,7 +2,7 @@
     <?= (($isAdmin) ? $this->Html->link(
         $this->Pretty->iconAdd(__("Show")),
         ['action' => 'add'],
-        ['escape' => false, 'class' => 'btn btn-success btn-sm']
+        ['escape' => false, 'class' => 'btn btn-outline-success btn-sm']
     ) : "" ) ?>
 </h3>
 <div class="shows index large-10 medium-9 columns">
@@ -46,22 +46,22 @@
                     $this->Html->link(
                         $this->Pretty->iconView($show->name),
                         ['action' => 'view', $show->id],
-                        ['escape' => false,  'class' => 'btn btn-default btn-sm']
+                        ['escape' => false,  'class' => 'btn btn-outline-dark btn-sm']
                     ) .
                     (( $isAdmin ) ? $this->Html->link(
                         $this->Pretty->iconEdit($show->name),
                         ['action' => 'edit', $show->id],
-                        ['escape' => false,  'class' => 'btn btn-default btn-sm']
+                        ['escape' => false,  'class' => 'btn btn-outline-dark btn-sm']
                     ) : "" ) .
                     (( $isAdmin ) ? $this->Html->link(
                         $this->Pretty->iconPerm($show->name),
                         ['action' => 'editperm', $show->id],
-                        ['escape' => false,  'class' => 'btn btn-warning btn-sm']
+                        ['escape' => false,  'class' => 'btn btn-outline-warning btn-sm']
                     ) : "" ) .
                     (( $isAdmin ) ? $this->Form->postLink(
                         $this->Pretty->iconDelete($show->name),
                         ['action' => 'delete', $show->id],
-                        ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $show->id),  'class' => 'btn btn-danger btn-sm']
+                        ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $show->id),  'class' => 'btn btn-outline-danger btn-sm']
                     ) : "" ) .
                     '</div>',
                     ['class' => 'text-center']

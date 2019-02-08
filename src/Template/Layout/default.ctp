@@ -48,7 +48,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
       
        echo $this->Html->css('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css');
        echo $this->Html->css('bootstrap-switch.min');
-       echo $this->Html->css('https://cdn.jsdelivr.net/npm/jtsage-datebox-bootstrap4@4.4.1/jtsage-datebox.min.css');
+       echo $this->Html->css('https://cdn.jtsage.com/jtsage-datebox/4.4.1/jtsage-datebox-4.4.1.bootstrap4.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
        echo $this->Html->css('tdtracx');
 
@@ -145,7 +145,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
     echo $this->Html->script('jquery-ui.min');
     echo $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js');
     echo $this->Html->script('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js');
-    echo $this->Html->script('https://cdn.jsdelivr.net/npm/jtsage-datebox-bootstrap4@4.4.1/jtsage-datebox.min.js');
+    echo $this->Html->script('https://cdn.jtsage.com/jtsage-datebox/4.4.1/jtsage-datebox-4.4.1.bootstrap4.min.js');
     echo $this->Html->script('https://tdtrac.com/cdn/external/jquery.mousewheel.min.js');
     echo $this->Html->script('validator.min');
   ?>

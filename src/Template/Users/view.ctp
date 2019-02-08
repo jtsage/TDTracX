@@ -4,44 +4,44 @@
     <?= $this->Html->link(
         $this->Pretty->iconEdit($user->username),
         ['action' => 'edit', $user->id],
-        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm']
     ) ?>
     <?= $this->Html->link(
         $this->Pretty->iconLock($user->username),
         ['action' => 'changepass', $user->id],
-        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm']
     ) ?>
     </div>
     </h3>
     <div class="row">
         <div class="col-md-4">
-            <h4><span class="label label-primary"><?= __('Username') ?></span></h4>
+            <h4><span class="badge badge-primary"><?= __('Username') ?></span></h4>
             <p><?= h($user->username) ?></p>
-            <h4><span class="label label-primary"><?= __('Full Name') ?></span></h4>
+            <h4><span class="badge badge-primary"><?= __('Full Name') ?></span></h4>
             <p><?= h($user->first) ?> <?= h($user->last) ?></p>
-            <h4><span class="label label-info"><?= __('Phone Number') ?></span></h4>
+            <h4><span class="badge badge-info"><?= __('Phone Number') ?></span></h4>
             <p><?= $this->Pretty->phone($user->phone) ?></p>
-            <h4><span class="label label-info"><?= __('Time Zone') ?></span></h4>
+            <h4><span class="badge badge-info"><?= __('Time Zone') ?></span></h4>
             <p><?= h($user->time_zone) ?></p>
         </div>
         <div class="col-md-4">
-            <h4><span class="label label-warning"><?= __('Last Login At') ?></span></h4>
+            <h4><span class="badge badge-warning"><?= __('Last Login At') ?></span></h4>
             <p><?= $user->last_login_at->i18nFormat(null, $tz); ?></p>
-            <h4><span class="label label-warning"><?= __('User Created At') ?></span></h4>
+            <h4><span class="badge badge-warning"><?= __('User Created At') ?></span></h4>
             <p><?= $user->created_at->i18nFormat(null, $tz); ?></p>
-            <h4><span class="label label-warning"><?= __('Last Update At') ?></span></h4>
+            <h4><span class="badge badge-warning"><?= __('Last Update At') ?></span></h4>
             <p><?= $user->updated_at->i18nFormat(null, $tz); ?></p>
         </div>
         <div class="col-md-4">
-            <h4><span class="label label-success"><?= __('Active User?') ?></span></h4>
+            <h4><span class="badge badge-success"><?= __('Active User?') ?></span></h4>
             <p><?= $this->Bool->prefYes($user->is_active) ?></p>
-            <h4><span class="label label-success"><?= __('Salary Employee?') ?></span></h4>
+            <h4><span class="badge badge-success"><?= __('Salary Employee?') ?></span></h4>
             <p><?= $this->Bool->prefNo($user->is_salary) ?></p>
-            <h4><span class="label label-success"><?= __('Expired Password?') ?></span></h4>
+            <h4><span class="badge badge-success"><?= __('Expired Password?') ?></span></h4>
             <p><?= $this->Bool->prefNo($user->is_password_expired); ?></p>
-            <h4><span class="label label-success"><?= __('Notifications Active?') ?></span></h4>
+            <h4><span class="badge badge-success"><?= __('Notifications Active?') ?></span></h4>
             <p><?= $this->Bool->prefYes($user->is_notified); ?></p>
-            <h4><span class="label label-success"><?= __('Administrator?') ?></span></h4>
+            <h4><span class="badge badge-success"><?= __('Administrator?') ?></span></h4>
             <p><?= $this->Bool->prefNo($user->is_admin); ?></p>
         </div>
     </div>
@@ -53,7 +53,7 @@
     <?php if (!empty($user->show_user_perms)): ?>
     <div class="row">
         <div class="col-md-4">
-            <ul class="list-group">
+            <ul class="list-group mb-4">
             <li class="list-group-item label-info"><?= __("Budget User") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_budget) { 
@@ -65,7 +65,7 @@
             </ul>
         </div>
         <div class="col-md-4">
-            <ul class="list-group">
+            <ul class="list-group mb-4">
             <li class="list-group-item label-danger"><?= __("Payroll Admin") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_pay_admin) { 
@@ -77,7 +77,7 @@
             </ul>
         </div>
         <div class="col-md-4">
-            <ul class="list-group">
+            <ul class="list-group mb-4">
             <li class="list-group-item label-success"><?= __("Payroll User") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_paid) { 
@@ -92,7 +92,7 @@
     </div>
         <div class="row">
         <div class="col-md-4">
-            <ul class="list-group">
+            <ul class="list-group mb-4">
             <li class="list-group-item label-warning"><?= __("Task User") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_task_user) { 
@@ -104,7 +104,7 @@
             </ul>
         </div>
         <div class="col-md-4">
-            <ul class="list-group">
+            <ul class="list-group mb-4">
             <li class="list-group-item label-warning"><?= __("Task Admin") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_task_admin) { 

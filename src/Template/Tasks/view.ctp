@@ -4,7 +4,7 @@
         <?php echo $this->Html->link(
             $this->Pretty->iconAdd($show->name . " " . __("Task Item")),
             ['action' => 'add', $show->id],
-            ['escape' => false, 'class' => 'btn btn-success btn-sm']
+            ['escape' => false, 'class' => 'btn btn-outline-success btn-sm']
         ); ?>
     </div>
 
@@ -79,17 +79,17 @@
                  $this->Html->link(
                     $this->Pretty->iconView("Detail - " . $task->title),
                     ['action' => 'detail', $task->id],
-                    ['escape' => false, 'class' => 'btn btn-primary btn-sm' ] 
+                    ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm' ] 
                 ) .
                 ( $opsok ? $this->Html->link(
                     $this->Pretty->iconEdit($task->title),
                     ['action' => 'edit', $task->id],
-                    ['escape' => false, 'class' => 'btn btn-secondary btn-sm' ] 
+                    ['escape' => false, 'class' => 'btn btn-outline-secondary btn-sm' ] 
                 ) : "") .
                 ( $opsok ? $this->Form->postLink(
                     $this->Pretty->iconDelete($task->title),
                     ['action' => 'delete', $task->id],
-                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $task->id), 'class' => 'btn btn-danger btn-sm' ] 
+                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $task->id), 'class' => 'btn btn-outline-danger btn-sm' ] 
                 ) : "") . 
                 "</div>",
                 ['class' => 'text-center']
