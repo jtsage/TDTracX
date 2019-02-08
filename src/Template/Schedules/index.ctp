@@ -3,7 +3,7 @@
     <?php echo $this->Html->link(
         $this->Pretty->iconAdd(__("Scheduled Task")),
         ['action' => 'add'],
-        ['escape' => false, 'class' => 'btn btn-success btn-sm']
+        ['escape' => false, 'class' => 'btn btn-outline-success btn-sm']
     ); ?>
     </div>
 </h3>

@@ -1100,29 +1100,29 @@
     },
     {
         "name": "friendsofcake/bootstrap-ui",
-        "version": "1.4.1",
-        "version_normalized": "1.4.1.0",
+        "version": "dev-develop",
+        "version_normalized": "dev-develop",
         "source": {
             "type": "git",
             "url": "https://github.com/FriendsOfCake/bootstrap-ui.git",
-            "reference": "d61733535cad6f4ec1c966bacc6cafaef3f461c0"
+            "reference": "1dfc322c1fa4049b86f8c62ba4213ee3a159c50f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/FriendsOfCake/bootstrap-ui/zipball/d61733535cad6f4ec1c966bacc6cafaef3f461c0",
-            "reference": "d61733535cad6f4ec1c966bacc6cafaef3f461c0",
+            "url": "https://api.github.com/repos/FriendsOfCake/bootstrap-ui/zipball/1dfc322c1fa4049b86f8c62ba4213ee3a159c50f",
+            "reference": "1dfc322c1fa4049b86f8c62ba4213ee3a159c50f",
             "shasum": ""
         },
         "require": {
-            "cakephp/cakephp": "^3.5"
+            "cakephp/cakephp": "^3.7.0"
         },
         "require-dev": {
-            "cakephp/chronos": "^1.1",
+            "cakephp/bake": "^1.8",
             "phpunit/phpunit": "^5.7.14|^6.0"
         },
-        "time": "2018-12-20T17:11:21+00:00",
+        "time": "2018-12-20T18:40:28+00:00",
         "type": "cakephp-plugin",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "psr-4": {
                 "BootstrapUI\\": "src"

@@ -2,7 +2,7 @@
     <?= $this->Html->link(
         $this->Pretty->iconAdd(__("User")),
         ['action' => 'add'],
-        ['escape' => false, 'class' => 'btn btn-success btn-sm']
+        ['escape' => false, 'class' => 'btn btn-outline-success btn-sm']
     ) ?>
 </h3>
 
@@ -37,22 +37,22 @@
                     $this->Html->link(
                         $this->Pretty->iconView($user->username),
                         ['action' => 'view', $user->id],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm']
                     ) . 
                     $this->Html->link(
                         $this->Pretty->iconLock($user->username),
                         ['action' => 'changepass', $user->id],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm']
                     ) .
                     $this->Html->link(
                         $this->Pretty->iconEdit($user->username),
                         ['action' => 'edit', $user->id],
-                        ['escape' => false, 'class' => 'btn btn-default btn-sm']
+                        ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm']
                     ) .
                     $this->Form->postLink(
                         $this->Pretty->iconDelete($user->username),
                         ['action' => 'delete', $user->id],
-                        ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn btn-danger btn-sm']
+                        ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $user->id), 'class' => 'btn btn-outline-danger btn-sm']
                     ) .
                     '</div>',
                     ['class' => 'text-center']

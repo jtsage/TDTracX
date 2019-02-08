@@ -14,13 +14,13 @@
             }
         }
     ?>
-    <div class="panel panel-primary">
-        <div class="panel-heading">
+    <div class="card border-primary mb-5">
+        <div class="card-body bg-primary">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <i class="fa fa-bar-chart fa-5x"></i>
                 </div>
-                <div class="col-xs-9 text-right">
+                <div class="col-sm-9 text-right">
                     <div class="huge"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total expenditure of {0}{4}{1}", [
                         "<strong>",
@@ -33,14 +33,14 @@
             </div>
         </div>
         <a href="/budgets/add/<?= $show->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('Add Budget Item'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
             </div>
         </a>
         <a href="/budgets/view/<?= $show->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('View Details'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
@@ -73,13 +73,13 @@
             }
         }
     ?>
-    <div class="panel panel-red">
-        <div class="panel-heading">
+    <div class="card outline-danger mb-5">
+        <div class="card-body bg-danger">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <i class="fa fa-bar-chart fa-5x"></i>
                 </div>
-                <div class="col-xs-9 text-right">
+                <div class="col-sm-9 text-right">
                     <div class="huge"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1}, ended on {0}{3}{1}, with a total expenditure of {0}{4}{1}", [
                         "<strong>",
@@ -92,7 +92,7 @@
             </div>
         </div>
         <a href="/budgets/view/<?= $show->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('View Details'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>

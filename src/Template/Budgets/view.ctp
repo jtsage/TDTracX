@@ -5,12 +5,12 @@
         <?php if ( $opsok ) { echo $this->Html->link(
             $this->Pretty->iconAdd($show->name . " " . __("Budget Item")),
             ['action' => 'add', $show->id],
-            ['escape' => false, 'class' => 'btn btn-success btn-sm']
+            ['escape' => false, 'class' => 'btn btn-outline-success btn-sm']
         ); } ?>
         <?= $this->Html->link(
             $this->Pretty->iconDL($show->name . " " . __("Budget")),
             ['action' => 'viewcsv', $show->id],
-            ['escape' => false, 'class' => 'btn btn-default btn-sm']
+            ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm']
         ) ?>
         </div>
     </h3>
@@ -62,12 +62,12 @@
                             ( ($opsok) ? $this->Html->link(
                                 $this->Pretty->iconEdit($item->description),
                                 ['action' => 'edit', $item->id],
-                                ['escape' => false, 'class' => 'btn btn-default btn-sm' ] )
+                                ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm' ] )
                             : "" ) .
                             ( ($opsok) ? $this->Form->postLink(
                                 $this->Pretty->iconDelete($item->description),
                                 ['action' => 'delete', $item->id],
-                                ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id), 'class' => 'btn btn-danger btn-sm' ] )
+                                ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $item->id), 'class' => 'btn btn-outline-danger btn-sm' ] )
                             : "" ) .
                             "</div>",
                             ['class' => 'text-center']

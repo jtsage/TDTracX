@@ -4,19 +4,19 @@
         <?php echo $this->Html->link(
             $this->Pretty->iconAdd($show->name . " " . __("Task Item")),
             ['action' => 'add', $show->id],
-            ['escape' => false, 'class' => 'btn btn-success btn-sm']
+            ['escape' => false, 'class' => 'btn btn-outline-success btn-sm']
         ); ?>
     </div>
 
 </h3>
 
 <ol class="breadcrumb">
-	<li><strong>Sort By: </strong></li>
-	<li><a <?= ($sort == "due") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/due">Due Date</a></li>
-	<li><a <?= ($sort == "new") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/new">New Items</a></li>
-	<li><a <?= ($sort == "created") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/created">Created Date</a></li>
-	<li><a <?= ($sort == "updated") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/updated">Updated Date</a></li>
-	<li><a <?= ($sort == "priority") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/priority">Assigned Priority</a></li>
+	<li class="breadcrumb-item"><strong>Sort By: </strong></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "due") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/due">Due Date</a></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "new") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/new">New Items</a></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "created") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/created">Created Date</a></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "updated") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/updated">Updated Date</a></li>
+	<li class="breadcrumb-item"><a <?= ($sort == "priority") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/priority">Assigned Priority</a></li>
 </ol>
 <table class="table table-striped table-bordered">
         <thead>
@@ -79,17 +79,17 @@
                  $this->Html->link(
                     $this->Pretty->iconView("Detail - " . $task->title),
                     ['action' => 'detail', $task->id],
-                    ['escape' => false, 'class' => 'btn btn-primary btn-sm' ] 
+                    ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm' ] 
                 ) .
                 ( $opsok ? $this->Html->link(
                     $this->Pretty->iconEdit($task->title),
                     ['action' => 'edit', $task->id],
-                    ['escape' => false, 'class' => 'btn btn-default btn-sm' ] 
+                    ['escape' => false, 'class' => 'btn btn-outline-secondary btn-sm' ] 
                 ) : "") .
                 ( $opsok ? $this->Form->postLink(
                     $this->Pretty->iconDelete($task->title),
                     ['action' => 'delete', $task->id],
-                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $task->id), 'class' => 'btn btn-danger btn-sm' ] 
+                    ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $task->id), 'class' => 'btn btn-outline-danger btn-sm' ] 
                 ) : "") . 
                 "</div>",
                 ['class' => 'text-center']

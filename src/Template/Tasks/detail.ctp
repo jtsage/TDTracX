@@ -4,27 +4,27 @@
         <?php echo $this->Html->link(
             $this->Pretty->iconAdd($task->show_name . " " . __("Task Item")),
             ['action' => 'add', $task->show_id],
-            ['escape' => false, 'class' => 'btn btn-success btn-sm']
+            ['escape' => false, 'class' => 'btn btn-outline-success btn-sm']
         ); ?>
     </div>
 </h3>
 
 
 <?php 
-if ( $task->task_done ) { $panel_class = "panel-success"; }
-elseif ( $task->is_overdue ) { $panel_class = "panel-danger"; }
-elseif ( ! $task->task_accepted ) { $panel_class = "panel-info"; }
-elseif ( $task->task_accepted ) { $panel_class = "panel-warning"; }
-else { $panel_class = "panel-danger" ;}
+if ( $task->task_done ) { $panel_class = ["bg-success", "text-success", "border-success"]; }
+elseif ( $task->is_overdue ) { $panel_class = ["bg-danger", "text-danger", "border-danger"]; }
+elseif ( ! $task->task_accepted ) { $panel_class = ["bg-info", "text-info", "border-info"]; }
+elseif ( $task->task_accepted ) { $panel_class = ["bg-warning", "text-warning", "border-warning"]; }
+else { $panel_class = ["bg-danger", "text-danger", "border-danger"] ;}
 ?>
 
-<div class="panel <?= $panel_class ?>">
-	<div class="panel-heading">
+<div class="card <?= $panel_class[2] ?>">
+	<div class="card-header <?= $panel_class[0] ?>">
 		<div class="row">
-			<div class="col-xs-3">
+			<div class="col-sm-3">
 				<i class="fa fa-tasks fa-5x"></i>
 			</div>
-			<div class="col-xs-9 text-right">
+			<div class="col-sm-9 text-right">
 				<div class="huge"><?php
     				for ( $i = 1; $i <= $task->priority; $i++ ) {
     					echo '<i class="fa fa-bell" aria-hidden="true"></i>';
@@ -53,13 +53,13 @@ else { $panel_class = "panel-danger" ;}
         <?php endif; ?>
     	<tr><th colspan="2">Description</th></tr>
   	</table>
-	<div class="panel-body">
+	<div class="card-body">
 		<?= $this->Text->autoParagraph(h($task->note)); ?>
 	</div>
 
     <?php if ( $opsok || $task->created_by == $opid ) : ?>
 	<a href="/tasks/edit/<?= $task->id; ?>">
-		<div class="panel-footer">
+		<div class="card-footer">
 			<span class="pull-left"><?= __('Edit Task Item'); ?></span>
 			<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
 			<div class="clearfix"></div>
@@ -68,7 +68,7 @@ else { $panel_class = "panel-danger" ;}
     <?php endif; ?>
     <?php if ( $opsok ) {
     echo $this->Form->postLink(
-        '<div class="panel-footer"><span class="pull-left">' . __('Delete Task Item'). '</span><span class="pull-right"><i class="fa fa-trash"></i></span><div class="clearfix" ></div></div>',
+        '<div class="card-footer"><span class="pull-left">' . __('Delete Task Item'). '</span><span class="pull-right"><i class="fa fa-trash"></i></span><div class="clearfix" ></div></div>',
         ['action' => 'delete', $task->id],
         ['escape' => false, 'confirm' => __('Are you sure you want to delete {0}?', $task->title) ] );
     } ?>

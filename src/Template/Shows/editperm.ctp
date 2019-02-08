@@ -4,15 +4,15 @@
     </h3>
     <div class="row">
         <div class="col-md-6">
-            <h4><span class="label label-primary"><?= __('Name') ?></span></h4>
+            <h4><span class="badge badge-primary"><?= __('Name') ?></span></h4>
             <p><?= h($show->name) ?></p>
-            <h4><span class="label label-primary"><?= __('Location') ?></span></h4>
+            <h4><span class="badge badge-primary"><?= __('Location') ?></span></h4>
             <p><?= h($show->location) ?></p>
         </div>
         <div class="col-md-6">
-            <h4><span class="label label-success"><?= __('Active Show?') ?></span></h4>
+            <h4><span class="badge badge-success"><?= __('Active Show?') ?></span></h4>
             <p><?= $this->Bool->prefYes($show->is_active) ?></p>
-            <h4><span class="label label-success"><?= __('End Date') ?></span></h4>
+            <h4><span class="badge badge-success"><?= __('End Date') ?></span></h4>
             <p><?= $show->end_date->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'); ?></p>
         </div>
     </div>

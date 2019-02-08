@@ -23,13 +23,13 @@
             }
         }
     ?>
-    <div class="panel panel-primary">
-        <div class="panel-heading">
+    <div class="card border-primary">
+        <div class="card-body bg-primary">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <i class="fa fa-line-chart fa-5x"></i>
                 </div>
-                <div class="col-xs-9 text-right">
+                <div class="col-sm-9 text-right">
                     <div class="huge"><?= $item->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1},", [
                             "<strong>",
@@ -47,14 +47,14 @@
             </div>
         </div>
         <a href="/payrolls/addtoself/<?= $item->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('Add Payroll Item'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
             </div>
         </a>
         <a href="/payrolls/viewbyshow/<?= $item->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('View Full Payroll'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
@@ -67,7 +67,7 @@
 </div>
 
 
-<h3><?= __("Your Administrated Shows"); ?></h3>
+<h3 class="mt-5"><?= __("Your Administrated Shows"); ?></h3>
 <p><?= __("These are shows you are the payroll administrator for.") ?></p>
 
 <div class="row">
@@ -90,13 +90,13 @@
             }
         }
     ?>
-    <div class="panel panel-green">
-        <div class="panel-heading">
+    <div class="card border-success">
+        <div class="card-body bg-success">
             <div class="row">
-                <div class="col-xs-3">
+                <div class="col-sm-3">
                     <i class="fa fa-line-chart fa-5x"></i>
                 </div>
-                <div class="col-xs-9 text-right">
+                <div class="col-sm-9 text-right">
                     <div class="huge"><?= $item->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1},", [
                             "<strong>",
@@ -114,28 +114,28 @@
             </div>
         </div>
         <a href="/payrolls/addtoshow/<?= $item->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('Add Payroll Item'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
             </div>
         </a>
         <a href="/payrolls/viewbyshow/<?= $item->id; ?>">
-            <div class="panel-footer">
+            <div class="card-footer">
                 <span class="pull-left"><?= __('View Full Payroll'); ?></span>
                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                 <div class="clearfix"></div>
             </div>
         </a>
         <a href="/payrolls/viewbyshowunpaid/<?= $item->id; ?>">
-                <div class="panel-footer">
+                <div class="card-footer">
                     <span class="pull-left"><?= __('View Unpaid Payroll'); ?></span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
         </a>
         <a href="/payrolls/viewbyshowdate/<?= $item->id; ?>">
-                <div class="panel-footer">
+                <div class="card-footer">
                     <span class="pull-left"><?= __('View Payroll by Date Range'); ?></span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
@@ -149,7 +149,7 @@
 
 
 <?php if ( isset($showsAdmin) && !empty($showsAdmin) ): ?>
-    <h3><?= __("Other Shows"); ?></h3>
+    <h3 class="mt-5"><?= __("Other Shows"); ?></h3>
     <p><?= __("These are the other open shows in the system.") ?></p>
 
     <div class="row">
@@ -172,8 +172,8 @@
                 }
             }
         ?>
-        <div class="panel panel-yellow">
-            <div class="panel-heading">
+        <div class="card border-warning">
+            <div class="card-body bg-warning">
                 <div class="row">
                     <div class="col-xs-3">
                         <i class="fa fa-line-chart fa-5x"></i>
@@ -196,21 +196,21 @@
                 </div>
             </div>
             <a href="/payrolls/unpaidbyshow/<?= $item->id; ?>">
-                <div class="panel-footer">
+                <div class="card-footer">
                     <span class="pull-left"><?= __('View Unpaid Hours'); ?></span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
             </a>
             <a href="/payrolls/viewbyshow/<?= $item->id; ?>">
-                <div class="panel-footer">
+                <div class="card-footer">
                     <span class="pull-left"><?= __('View Full Payroll'); ?></span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>
                 </div>
             </a>
             <a href="/payrolls/viewbyshowunpaid/<?= $item->id; ?>">
-                <div class="panel-footer">
+                <div class="card-footer">
                     <span class="pull-left"><?= __('View Unpaid Payroll'); ?></span>
                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                     <div class="clearfix"></div>

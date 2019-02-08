@@ -36,7 +36,7 @@ class UsersController extends AppController
         ];
 
         $this->set('crumby', [
-            ["/", "Home"],
+            ["/", "Dashboard"],
             [null, "User List"]
         ]);
 
