@@ -39,12 +39,12 @@
                             <?= $this->Html->link(
                                 $this->Pretty->iconDL($file->dsc),
                                 ['action' => 'view', $file->id],
-                                ['escape' => false, 'class' => 'btn btn-default btn-sm' ] ) ?>
+                                ['escape' => false, 'class' => 'btn btn-outline-dark btn-sm' ] ) ?>
                             
                             <?= (($opsok) ? $this->Form->postLink(
                                 $this->Pretty->iconDelete($file->dsc),
                                 ['action' => 'delete', $file->id],
-                                ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $file->id), 'class' => 'btn btn-danger btn-sm' ] ) : "") ?>
+                                ['escape' => false, 'confirm' => __('Are you sure you want to delete # {0}?', $file->id), 'class' => 'btn btn-outline-danger btn-sm' ] ) : "") ?>
                             
                     </div>
                 </td>

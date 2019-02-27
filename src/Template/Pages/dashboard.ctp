@@ -2,13 +2,13 @@
 <div class="card mb-4 panel-default">
     <div class="card-body">
         <h4>You have <?= sizeof($messagesWaiting) ?> message(s) waiting.
-        <div class="btn-group"><?php
+        <?php
             echo $this->Form->postLink(
                  $this->Pretty->iconDelete("Clear All Messages"),
                  ['controller' => 'messages', 'action' => 'clear', $user->id],
-                 ['escape' => false, 'confirm' => __('Are you sure you want to clear all your messages?'), 'class' => 'btn btn-danger btn-sm']
+                 ['escape' => false, 'confirm' => __('Are you sure you want to clear all your messages?'), 'class' => 'btn btn-outline-danger btn-sm btn-inline']
             );
-        ?></div></h4>
+        ?></h4>
     </div>
     <table class="table table-bordered">
         <?php foreach ($messagesWaiting as $message) : ?>
@@ -16,7 +16,7 @@
                 echo $this->Form->postLink(
                  $this->Pretty->iconMark("Delete Message #" . $message['id']),
                  ['controller' => 'messages', 'action' => 'delete', $message['id']],
-                 ['escape' => false, 'confirm' => __('Are you sure you want to delete this message?'), 'class' => 'btn btn-warning btn-sm']
+                 ['escape' => false, 'confirm' => __('Are you sure you want to delete this message?'), 'class' => 'btn btn-outline-warning btn-sm']
             );
             ?></td>
             </tr>

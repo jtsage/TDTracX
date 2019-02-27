@@ -46,9 +46,10 @@ if ( $this->request->getParam('controller') == "Pages" ) {
        echo $this->fetch('css');
        echo $this->fetch('script');
       
-       echo $this->Html->css('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css');
+       //echo $this->Html->css('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css');
+       echo $this->Html->css('bootstrap.min.css');
        echo $this->Html->css('bootstrap-switch.min');
-       echo $this->Html->css('https://cdn.jtsage.com/jtsage-datebox/4.4.1/jtsage-datebox-4.4.1.bootstrap4.min.css');
+       echo $this->Html->css('https://cdn.jsdelivr.net/npm/jtsage-datebox-bootstrap4@4.4.2/jtsage-datebox.min.css');
        echo $this->Html->css('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
        echo $this->Html->css('tdtracx');
 
@@ -130,7 +131,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
   <footer style="padding-top: 20px; margin-top: 20px; border-top: 1px solid #e5e5e5;">
     <p class="text-center text-muted"><?= __("TDTracX: the quick time and budget tracking tool") ?><br /><small>Site Administrator Contact: <a href="mailto:<?= CINFO['adminmail'] ?>"><?= CINFO['adminname'] ?></a></small></p>
     <ul class="text-center list-inline text-muted d-print-none">
-    	<li class="list-inline-item"><?= __('Currently v1.4.0a1') ?></li>
+    	<li class="list-inline-item"><?= __('Currently v1.4.1') ?></li>
     	<li class="list-inline-item"><a href="https://github.com/jtsage/TDTracX">GitHub</a></li>
     	<li class="list-inline-item"><a href="http://tdtrac.com/"><?= __('Home Page') ?></a></li>
     	<li class="list-inline-item"><a href="http://demox.tdtrac.com"><?= __('Demo Application') ?></a></li>
@@ -145,7 +146,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
     echo $this->Html->script('jquery-ui.min');
     echo $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js');
     echo $this->Html->script('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js');
-    echo $this->Html->script('https://cdn.jtsage.com/jtsage-datebox/4.4.1/jtsage-datebox-4.4.1.bootstrap4.min.js');
+    echo $this->Html->script('https://cdn.jsdelivr.net/npm/jtsage-datebox-bootstrap4@4.4.2/jtsage-datebox.min.js');
     echo $this->Html->script('https://tdtrac.com/cdn/external/jquery.mousewheel.min.js');
     echo $this->Html->script('validator.min');
   ?>
@@ -239,6 +240,8 @@ if ( $this->request->getParam('controller') == "Pages" ) {
       newhref = window.location.protocol + "//" + window.location.host + window.location.pathname + "/" + $('#start_date').val() + "/" + $('#end_date').val();
       window.location.href = newhref;
     });
+    jQuery.extend(jQuery.jtsage.datebox.prototype.options, { flipboxLensAdjust: 0 });
+    $(document).ready(function() { $('[role="alert"].error').addClass('alert alert-warning'); });
   </script>
   </body>
 </html>
