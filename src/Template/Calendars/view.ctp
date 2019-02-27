@@ -44,7 +44,7 @@
     ?>
 </h3></div>
 
-<table class="table table-bordered">
+<table id="bigcal" class="table table-bordered">
     <thead>
         <?= $this->Html->tableHeaders([
             [__("Sunday")    => ["class" => "text-center", "style" => "width:14.28%"]],
