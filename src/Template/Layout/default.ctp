@@ -241,8 +241,23 @@ if ( $this->request->getParam('controller') == "Pages" ) {
       window.location.href = newhref;
     });
     jQuery.extend(jQuery.jtsage.datebox.prototype.options, { flipboxLensAdjust: 0 });
-    $(document).ready(function() { $('[role="alert"].error').addClass('alert alert-warning'); });
-    $('#bigcal tr[class^="bg-"]').each(function() { var color = $(this).css('backgroundColor'); var parts = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(, \d+)?\)$/);  var newColor = "rgba(" + parts[1] + "," + parts[2] + "," + parts[3] + ",0.25)"; $(this).css('backgroundColor', newColor); $(this).removeClass('bg-warning bg-success bg-default bg-dangert bg-info bg-dark bg-light bg-danger'); });
+    $(document).ready(function() { 
+    	$('[role="alert"].error').addClass('alert alert-warning'); 
+    	$('#bigcal tr[class^="bg-"]').each(function() { 
+    		var color = $(this).css('backgroundColor'),
+    			parts = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(, \d+)?\)$/),
+    			newColor = "rgba(" + parts[1] + "," + parts[2] + "," + parts[3] + ",0.25)";
+    		$(this).css('backgroundColor', newColor);
+    		$(this).removeClass('bg-primary bg-warning bg-success bg-default bg-dangert bg-info bg-dark bg-light bg-danger');
+    	});
+    	$('.card div[class^="card-body bg-"]').each(function() { 
+    		var color = $(this).css('backgroundColor'),
+    			parts = color.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)(, \d+)?\)$/),
+    			newColor = "rgba(" + parts[1] + "," + parts[2] + "," + parts[3] + ",0.5)";
+    		$(this).css('backgroundColor', newColor);
+    		$(this).removeClass('bg-primary bg-warning bg-success bg-default bg-dangert bg-info bg-dark bg-light bg-danger');
+    	});
+    });
   </script>
   </body>
 </html>

@@ -10,6 +10,15 @@
 
 </h3>
 
+<div class="card w-75 my-3 mx-auto">
+    <div class="card-body text-center">
+        <span class="text-danger"><i class="fa fa-exclamation-circle"></i>&nbsp;:&nbsp;Danger,&nbsp;Action&nbsp;is&nbsp;overdue</span>&nbsp;&nbsp;&nbsp;
+        <span class="text-warning"><i class="fa fa-exclamation-circle"></i>&nbsp;:&nbsp;Warning,&nbsp;Action&nbsp;required</span>&nbsp;&nbsp;&nbsp;
+        <span class="text-default"><i class="fa fa-times-circle"></i>&nbsp;:&nbsp;Pending</span>&nbsp;&nbsp;&nbsp;
+        <span class="text-success"><i class="fa fa-check-circle"></i>&nbsp;:&nbsp;Complete</span>
+    </div>
+</div>
+
 <ol class="breadcrumb">
 	<li class="breadcrumb-item"><strong>Sort By: </strong></li>
 	<li class="breadcrumb-item"><a <?= ($sort == "due") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/due">Due Date</a></li>

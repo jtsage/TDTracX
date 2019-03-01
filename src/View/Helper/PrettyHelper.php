@@ -87,7 +87,7 @@ class PrettyHelper extends Helper
     public function money($name, $label, $value=null) {
         $retty  = '<div class="form-group required">';
         $retty .= '<label class="control-label" for="' . $name . '">' . $label . '</label>';
-        $retty .= '<div class="input-group"><span class="input-group-addon">$</span>';
+        $retty .= '<div class="input-group"><div class="input-group-prepend"><div class="input-group-text">$</div></div>';
         $retty .= '<input type="number" ' . ((!is_null($value)) ? "value='" . number_format($value,2,'.','') . "'" : "" ) . ' name="' . $name . '" required="required" step=".01" min="0" id="price" class="form-control">';
         $retty .= "</div></div>";
         return $retty;
@@ -163,14 +163,14 @@ class PrettyHelper extends Helper
         $outtie .= '<div class="modal-dialog" role="document">';
         $outtie .= '<div class="modal-content">';
         $outtie .= '<div class="modal-header">';
-        $outtie .= '<h4 class="modal-title" id="helpMeLabel">' . $title . "</title>";
+        $outtie .= '<h5 class="modal-title" id="helpMeLabel">' . $title . "</h5>";
         $outtie .= '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
         return $outtie . '</div><div class="modal-body">';
     }
 
 
     public function helpMeEnd() {
-        return '</div><div class="modal-footer"><button type="button" class="btn btn-default" data-dismiss="modal">Close</button></div></div></div></div>';
+        return '</div><div class="modal-footer"><button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal">Close</button></div></div></div></div>';
     }
 }
 ?>

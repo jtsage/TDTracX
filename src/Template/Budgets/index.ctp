@@ -73,7 +73,7 @@
             }
         }
     ?>
-    <div class="card outline-danger mb-5">
+    <div class="card border-danger mb-5">
         <div class="card-body bg-danger">
             <div class="row">
                 <div class="col-sm-3">
