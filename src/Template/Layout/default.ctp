@@ -55,12 +55,6 @@ if ( $this->request->getParam('controller') == "Pages" ) {
 
     ?>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
   <body>
 
@@ -131,7 +125,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
   <footer style="padding-top: 20px; margin-top: 20px; border-top: 1px solid #e5e5e5;">
     <p class="text-center text-muted"><?= __("TDTracX: the quick time and budget tracking tool") ?><br /><small>Site Administrator Contact: <a href="mailto:<?= CINFO['adminmail'] ?>"><?= CINFO['adminname'] ?></a></small></p>
     <ul class="text-center list-inline text-muted d-print-none">
-    	<li class="list-inline-item"><?= __('Currently v1.4.1') ?></li>
+    	<li class="list-inline-item"><?= __('Currently v1.4.2') ?></li>
     	<li class="list-inline-item"><a href="https://github.com/jtsage/TDTracX">GitHub</a></li>
     	<li class="list-inline-item"><a href="http://tdtrac.com/"><?= __('Home Page') ?></a></li>
     	<li class="list-inline-item"><a href="http://demox.tdtrac.com"><?= __('Demo Application') ?></a></li>
@@ -140,12 +134,12 @@ if ( $this->request->getParam('controller') == "Pages" ) {
   </footer>
   
   <?php
-    echo $this->Html->script('https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js');
+    echo $this->Html->script('https://code.jquery.com/jquery-3.3.1.slim.min.js');
     echo $this->Html->script('bootstrap3-typeahead.min');
     echo $this->Html->script('bootstrap-switch.min');
     echo $this->Html->script('jquery-ui.min');
-    echo $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js');
-    echo $this->Html->script('https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js');
+    echo $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js');
+    echo $this->Html->script('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');
     echo $this->Html->script('https://cdn.jsdelivr.net/npm/jtsage-datebox-bootstrap4@4.4.2/jtsage-datebox.min.js');
     echo $this->Html->script('https://tdtrac.com/cdn/external/jquery.mousewheel.min.js');
     echo $this->Html->script('validator.min');
@@ -265,7 +259,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
           done = false;
           upper = $('#tableTop').find('tr').children('th'),
           lower = null, x = null, y = null, len = null;
-    		$(w).attr('style', "postion: 'relative'; height: " + hh + "px; top: 0; left: 0; overflow-x: scroll");
+    		$(w).attr('style', "postion: 'relative'; max-height: " + hh + "px; top: 0; left: 0; overflow-x: scroll");
 
         $(w).find('tr').each(function(){
           if ( !done && $(this).children('td').length > 3 ) {
