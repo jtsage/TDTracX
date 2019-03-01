@@ -27,7 +27,8 @@
 	<li class="breadcrumb-item"><a <?= ($sort == "updated") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/updated">Updated Date</a></li>
 	<li class="breadcrumb-item"><a <?= ($sort == "priority") ? 'class="text-success"' : '' ?> href="/tasks/view/<?= $show->id; ?>/priority">Assigned Priority</a></li>
 </ol>
-<table class="table table-striped table-bordered">
+<div id="tableTop">
+<table class="my-0 table table-striped table-bordered">
         <thead>
             <?= $this->Html->tableHeaders([
                 __("Title"),
@@ -39,6 +40,10 @@
                 [__('Actions') => ['class' => 'text-center']]
             ]); ?>
         </thead>
+</table>
+</div>
+<div id="tableBod">
+<table class="my-0 table table-striped table-bordered">
 
 
 <?php foreach ($tasks as $task) {
@@ -77,11 +82,11 @@
             $task->due->i18nFormat([\IntlDateFormatter::MEDIUM, \IntlDateFormatter::NONE], 'UTC'),
             [
                 '<i class="fa fa-2x fa-' . $cept_icon . '" aria-hidden="true"></i>',
-                ['class' => 'text-center text-' . $cept_clr]
+                ['class' => 'text-center text-' . $cept_clr, 'style' => 'width: 100px']
             ],
             [
                 '<i class="fa fa-2x fa-' . $done_icon . '" aria-hidden="true"></i>',
-                ['class' => 'text-center text-' . $done_clr]
+                ['class' => 'text-center text-' . $done_clr, 'style' => 'width: 100px']
             ],
             [
                 "<div class='btn-group'>" .
@@ -109,6 +114,7 @@
 } ?>
 
 </table>
+</div>
 <?= $this->Pretty->helpMeStart(__('View Task List by Show')); ?>
 <p><?= __("This display allows you to view task items.") ?></p>
 

@@ -23,8 +23,8 @@
     <h4 class="subheader"><?= __('User Permissions') ?></h4>
     
     <?= $this->Form->create($show) ?>
-
-    <table class="table table-bordered">
+    <div id="tableTop">
+    <table class="my-0 table table-bordered">
         <thead>
             <?= $this->Html->tableHeaders([
                 __("Full Name"),
@@ -132,6 +132,10 @@
                 ],
             ]); ?>
         </thead>
+    </table>
+</div>
+<div id="tableBod">
+    <table class="table table-bordered">
         <tbody>
         <?php
             foreach ( $users as $user ) {
@@ -216,6 +220,7 @@
         ?>
         </tbody>
     </table>
+</div>
 
     <?= $this->Form->button(__('Save'), ['class' => 'btn-default']) ?>
     <?= $this->Form->end() ?>

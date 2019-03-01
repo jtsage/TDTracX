@@ -21,7 +21,7 @@
                     <i class="fa fa-bar-chart fa-5x"></i>
                 </div>
                 <div class="col-sm-9 text-right">
-                    <div class="huge"><?= $show->name ?></div>
+                    <div class="h1"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total expenditure of {0}{4}{1}", [
                         "<strong>",
                         "</strong>",
@@ -80,7 +80,7 @@
                     <i class="fa fa-bar-chart fa-5x"></i>
                 </div>
                 <div class="col-sm-9 text-right">
-                    <div class="huge"><?= $show->name ?></div>
+                    <div class="h1"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1}, ended on {0}{3}{1}, with a total expenditure of {0}{4}{1}", [
                         "<strong>",
                         "</strong>",

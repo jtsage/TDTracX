@@ -13,7 +13,7 @@
                     <i class="fa fa-tasks fa-5x"></i>
                 </div>
                 <div class="col-sm-9 text-right">
-                    <div class="huge"><?= $show->name ?></div>
+                    <div class="h1"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}.", [
                         "<strong>",
                         "</strong>",
@@ -63,7 +63,7 @@
                     <i class="fa fa-tasks fa-5x"></i>
                 </div>
                 <div class="col-sm-9 text-right">
-                    <div class="huge"><?= $show->name ?></div>
+                    <div class="h1"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}.", [
                         "<strong>",
                         "</strong>",
@@ -115,7 +115,7 @@
                     <i class="fa fa-tasks fa-5x"></i>
                 </div>
                 <div class="col-sm-9 text-right">
-                    <div class="huge"><?= $show->name ?></div>
+                    <div class="h1"><?= $show->name ?></div>
                     <div><?= __("taking place at {0}{2}{1} and ending on {0}{3}{1}, with a current total of {0}{4}{1} tasks, ", [
                         "<strong>",
                         "</strong>",

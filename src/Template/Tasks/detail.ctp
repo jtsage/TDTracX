@@ -25,7 +25,7 @@ else { $panel_class = ["bg-danger", "text-danger", "border-danger"] ;}
 				<i class="fa fa-tasks fa-5x"></i>
 			</div>
 			<div class="col-sm-9 text-right">
-				<div class="huge"><?php
+				<div class="h1"><?php
     				for ( $i = 1; $i <= $task->priority; $i++ ) {
     					echo '<i class="fa fa-bell" aria-hidden="true"></i>';
     				} echo " " . $task->title ?></div>

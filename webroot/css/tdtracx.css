@@ -1,4 +1,4 @@
-.form-group.required .control-label:after {
+.form-group.required label:after {
   content:" *";
   color:red;
 }
@@ -7,115 +7,10 @@ tr.bold td { font-weight: 700; }
 
 fieldset { margin-top: 20px; }
 
-.list-group-item.label-warning { 
-	background-color: #f0ad4e;
-	color: #fff;
-	font-weight: 700;
-	font-size: 20px;
-}
-.list-group-item.label-danger { 
-	background-color: #d9534f;
-	color: #fff;
-	font-weight: 700;
-	font-size: 20px;
-}
-.list-group-item.label-success { 
-	background-color: #5cb85c;
-	color: #fff;
-	font-weight: 700;
-	font-size: 20px;
-}
-.list-group-item.label-primary { 
-	background-color: #337ab7;
-	color: #fff;
-	font-weight: 700;
-	font-size: 20px;
-}
-.list-group-item.label-info { 
-	background-color: #5bc0de;
-	color: #fff;
-	font-weight: 700;
-	font-size: 20px;
-}
-
 .table-striped>tbody>tr:nth-of-type(odd) {
     background-color: rgb(235,235,235);
 }
 
 .helptable tr td:first-child {
 	font-weight: 700;
-}
-
-.huge { font-size: 34px; }
-
-.panel-green {
-    border-color: #5cb85c;
-}
-
-.panel-green .panel-heading {
-    border-color: #5cb85c;
-    color: #fff;
-    background-color: #5cb85c;
-}
-
-.panel-green a {
-    color: #5cb85c;
-}
-
-.panel-green a:hover {
-    color: #3d8b3d;
-}
-
-.panel-red {
-    border-color: #d9534f;
-}
-
-.panel-red .panel-heading {
-    border-color: #d9534f;
-    color: #fff;
-    background-color: #d9534f;
-}
-
-.panel-red a {
-    color: #d9534f;
-}
-
-.panel-red a:hover {
-    color: #b52b27;
-}
-
-.panel-yellow {
-    border-color: #f0ad4e;
-}
-
-.panel-yellow .panel-heading {
-    border-color: #f0ad4e;
-    color: #fff;
-    background-color: #f0ad4e;
-}
-
-.panel-yellow a {
-    color: #f0ad4e;
-}
-
-.panel-yellow a:hover {
-    color: #df8a13;
-}
-
-.panel-purple {
-    border-color: #7a548e;
-}
-
-.panel-purple .panel-heading {
-    border-color: #7a548e;
-    color: #fff;
-    background-color: #724788;
-}
-
-.panel-purple a {
-    color: #7a548e;
-}
-
-.panel-purple a:hover {
-    color: #b94ef0;
 }

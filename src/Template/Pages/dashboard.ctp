@@ -40,7 +40,7 @@
                         <i class="fa fa-calendar fa-5x"></i>
                     </div>
                     <div class="col-sm-9 text-right">
-                        <div class="huge"><?= __("Tasks &amp; Calendars") ?></div>
+                        <div class="h1"><?= __("Tasks &amp; Calendars") ?></div>
                         <div><?= __("A listing of active system shows that you have task list or calendar access to.") ?></div>
                     </div>
                 </div>
@@ -125,7 +125,7 @@
                         <i class="fa fa-bar-chart fa-5x"></i>
                     </div>
                     <div class="col-sm-9 text-right">
-                        <div class="huge"><?= __("Budget") ?></div>
+                        <div class="h1"><?= __("Budget") ?></div>
                         <div><?= __("A listing of active system shows that you have budget access to.") ?></div>
                     </div>
                 </div>
@@ -169,7 +169,7 @@
                         <i class="fa fa-line-chart fa-5x"></i>
                     </div>
                     <div class="col-sm-9 text-right">
-                        <div class="huge"><?= __("Payroll Shows") ?></div>
+                        <div class="h1"><?= __("Payroll Shows") ?></div>
                         <div><?= __("A listing of active system shows that you have payroll access to.") ?></div>
                     </div>
                 </div>
@@ -229,7 +229,7 @@
                         <i class="fa fa-line-chart fa-5x"></i>
                     </div>
                     <div class="col-sm-9 text-right">
-                        <div class="huge"><?= __("Payroll Users") ?></div>
+                        <div class="h1"><?= __("Payroll Users") ?></div>
                         <div><?= __("A listing of active system users that you have payroll access to.") ?></div>
                     </div>
                 </div>
@@ -288,7 +288,7 @@
                         <i class="fa fa-user fa-5x"></i>
                     </div>
                     <div class="col-sm-9 text-right">
-                        <div class="huge"><?= __("Users") ?></div>
+                        <div class="h1"><?= __("Users") ?></div>
                         <div><?= __("The system wide user list.") ?></div>
                     </div>
                 </div>
@@ -321,7 +321,7 @@
                         <i class="fa fa-file fa-5x"></i>
                     </div>
                     <div class="col-sm-9 text-right">
-                        <div class="huge"><?= __("Stored Files") ?></div>
+                        <div class="h1"><?= __("Stored Files") ?></div>
                         <div><?= __("The system wide stored files.") ?></div>
                     </div>
                 </div>
@@ -354,7 +354,7 @@
                         <i class="fa fa-clock-o fa-5x"></i>
                     </div>
                     <div class="col-sm-9 text-right">
-                        <div class="huge"><?= __("Scheduled Tasks") ?></div>
+                        <div class="h1"><?= __("Scheduled Tasks") ?></div>
                         <div><?= __("The system wide scheduled tasks list.") ?></div>
                     </div>
                 </div>
@@ -388,7 +388,7 @@
                         <i class="fa fa-music fa-5x"></i>
                     </div>
                     <div class="col-sm-9 text-right">
-                        <div class="huge"><?= __("Shows") ?></div>
+                        <div class="h1"><?= __("Shows") ?></div>
                         <div><?= __("The system wide list of active shows, with an overview of permissions for each.") ?></div>
                     </div>
                 </div>

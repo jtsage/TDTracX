@@ -28,7 +28,7 @@
                     <i class="fa fa-line-chart fa-5x"></i>
                 </div>
                 <div class="col-sm-9 text-right">
-                    <div class="huge"><?= $name ?></div>
+                    <div class="h1"><?= $name ?></div>
                     <div><?= __("with {0}{2}{1} outstanding hours, and {0}{3}{1} paid hours", [
                             "<strong>",
                             "</strong>",

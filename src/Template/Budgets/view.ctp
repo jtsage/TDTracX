@@ -14,8 +14,9 @@
         ) ?>
         </div>
     </h3>
-    <table class="table table-striped table-bordered">
-        <thead>
+    <div id="tableTop">
+    <table class="table table-striped table-bordered my-0">
+        <thead style="position: sticky">
             <?= $this->Html->tableHeaders([
                 __('Date'),
                 __('Vendor'),
@@ -24,6 +25,10 @@
                 [__('Actions') => ['class' => 'text-center']]
             ]); ?>
         </thead>
+    </table>
+    </div>
+    <div id="tableBod">
+    <table class="table table-striped table-bordered">
         <tbody>
         <?php
             $lastcat = "";
@@ -97,6 +102,7 @@
         ?>
         </tbody>
     </table>
+    </div>
 </div>
 
 <?= $this->Pretty->helpMeStart(__('View Detailed Budget')); ?>

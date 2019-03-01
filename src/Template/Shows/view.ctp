@@ -44,7 +44,7 @@
     <div class="row">
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-info"><?= __("Budget Users") ?></li>
+            <li class="list-group-item h4 text-white bg-info"><?= __("Budget Users") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_budget && $showUserPerms->user->is_active) { 
                     echo "<li class='list-group-item'>";
@@ -56,7 +56,7 @@
         </div>
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-danger"><?= __("Payroll Admins") ?></li>
+            <li class="list-group-item h4 text-white bg-danger"><?= __("Payroll Admins") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_pay_admin && $showUserPerms->user->is_active) { 
                     echo "<li class='list-group-item'>";
@@ -68,7 +68,7 @@
         </div>
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-success"><?= __("Payroll Users") ?></li>
+            <li class="list-group-item h4 text-white bg-success"><?= __("Payroll Users") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_paid && $showUserPerms->user->is_active) { 
                     echo "<li class='list-group-item'>";
@@ -84,7 +84,7 @@
         <div class="row">
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-warning"><?= __("Task Admins") ?></li>
+            <li class="list-group-item h4 text-white bg-warning"><?= __("Task Admins") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_task_admin && $showUserPerms->user->is_active) { 
                     echo "<li class='list-group-item'>";
@@ -96,7 +96,7 @@
         </div>
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-warning"><?= __("Task Users") ?></li>
+            <li class="list-group-item h4 text-white bg-warning"><?= __("Task Users") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_task_user && $showUserPerms->user->is_active) { 
                     echo "<li class='list-group-item'>";
@@ -108,7 +108,7 @@
         </div>
          <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-success"><?= __("Calendar Users") ?></li>
+            <li class="list-group-item h4 text-white bg-success"><?= __("Calendar Users") ?></li>
             <?php foreach ($show->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_cal && $showUserPerms->user->is_active) { 
                     echo "<li class='list-group-item'>";

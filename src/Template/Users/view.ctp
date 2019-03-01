@@ -54,7 +54,7 @@
     <div class="row">
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-info"><?= __("Budget User") ?></li>
+            <li class="list-group-item h4 text-white bg-info"><?= __("Budget User") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_budget) { 
                     echo "<li class='list-group-item'>";
@@ -66,7 +66,7 @@
         </div>
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-danger"><?= __("Payroll Admin") ?></li>
+            <li class="list-group-item h4 text-white bg-danger"><?= __("Payroll Admin") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_pay_admin) { 
                     echo "<li class='list-group-item'>";
@@ -78,7 +78,7 @@
         </div>
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-success"><?= __("Payroll User") ?></li>
+            <li class="list-group-item h4 text-white bg-success"><?= __("Payroll User") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_paid) { 
                     echo "<li class='list-group-item'>";
@@ -93,7 +93,7 @@
         <div class="row">
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-warning"><?= __("Task User") ?></li>
+            <li class="list-group-item h4 text-white bg-warning"><?= __("Task User") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_task_user) { 
                     echo "<li class='list-group-item'>";
@@ -105,7 +105,7 @@
         </div>
         <div class="col-md-4">
             <ul class="list-group mb-4">
-            <li class="list-group-item label-warning"><?= __("Task Admin") ?></li>
+            <li class="list-group-item h4 text-white bg-warning"><?= __("Task Admin") ?></li>
             <?php foreach ($user->show_user_perms as $showUserPerms) {
                 if ($showUserPerms->is_task_admin) { 
                     echo "<li class='list-group-item'>";

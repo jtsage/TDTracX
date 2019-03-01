@@ -159,7 +159,8 @@
 </div>
 <?php endif; ?>
 
-<table class="table table-striped table-bordered">
+<div id="tableTop">
+<table class="my-0 table table-striped table-bordered">
     <thead>
         <?php 
             $colspan = [ 4, 7 ];
@@ -181,6 +182,10 @@
             echo $this->Html->tableHeaders($headers);
         ?>
     </thead>
+</table>
+</div>
+<div id="tableBod">
+<table class="my-0 table table-striped table-bordered">
     <tbody>
         <?php 
 
@@ -307,7 +312,7 @@
         ?>
     </tbody>
 </table>
-
+</div>
 
 <?= $this->Pretty->helpMeStart($helpTitle); ?>
 <p>

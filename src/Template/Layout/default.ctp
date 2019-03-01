@@ -257,7 +257,28 @@ if ( $this->request->getParam('controller') == "Pages" ) {
     		$(this).css('backgroundColor', newColor);
     		$(this).removeClass('bg-primary bg-warning bg-success bg-default bg-dangert bg-info bg-dark bg-light bg-danger');
     	});
+
+    	$('#tableBod').each(function() {
+    		var w = this,
+    			h = Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
+    			hh = .75 * h,
+          done = false;
+          upper = $('#tableTop').find('tr').children('th'),
+          lower = null, x = null, y = null, len = null;
+    		$(w).attr('style', "postion: 'relative'; height: " + hh + "px; top: 0; left: 0; overflow-x: scroll");
+
+        $(w).find('tr').each(function(){
+          if ( !done && $(this).children('td').length > 3 ) {
+            lower = $(this).children('td');
+            len = lower.length;
+            done = true;
+          }
+        });
+        
+        for (i = 0; i < len; i++) { $(upper[i]).width($(lower[i]).width()); }
+    	});
     });
   </script>
+  
   </body>
 </html>
