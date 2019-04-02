@@ -105,7 +105,7 @@ class PrettyHelper extends Helper
 
         $retty  = '<div class="form-group required">';
         $retty .= '<label class="control-label">' . $label . '</label>';
-        $retty .= '<input type="text" data-role="datebox" data-datebox-mode="timeflipbox" id="' . $name . '-dbox" class="form-control" value="' . $pretval . '" data-options=\'{"linkedField": "#' . $name . '", "overrideTimeFormat": 12, "overrideTimeOutput": "%-I:%M %p", "linkedFieldFormat": "%H:%M", "minuteStep": 15 }\'>';
+        $retty .= '<input type="text" data-role="datebox" data-datebox-mode="timebox" id="' . $name . '-dbox" class="form-control" value="' . $pretval . '" data-options=\'{"linkedField": "#' . $name . '", "overrideTimeFormat": 12, "overrideTimeOutput": "%-I:%M %p", "linkedFieldFormat": "%H:%M", "minuteStep": 15 }\'>';
         $retty .= '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $val . '" /></div>';
         return $retty;
     }
