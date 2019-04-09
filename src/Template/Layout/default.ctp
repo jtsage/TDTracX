@@ -138,7 +138,7 @@ if ( $this->request->getParam('controller') == "Pages" ) {
     echo $this->Html->script('bootstrap-switch.min');
     echo $this->Html->script('https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js');
     echo $this->Html->script('https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js');
-    echo $this->Html->script('https://cdn.jsdelivr.net/npm/jtsage-datebox-bootstrap4@5.0.0/jtsage-datebox.min.js');
+    echo $this->Html->script('https://cdn.jsdelivr.net/npm/jtsage-datebox-bootstrap4@5.1.0/jtsage-datebox.min.js');
     echo $this->Html->script('validator.min');
   ?>
 
