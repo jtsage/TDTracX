@@ -30,7 +30,6 @@ use RuntimeException;
  */
 class Oauth
 {
-
     /**
      * Add headers for Oauth authorization.
      *
@@ -48,6 +47,8 @@ class Oauth
             $credentials['method'] = 'hmac-sha1';
         }
         $credentials['method'] = strtoupper($credentials['method']);
+
+        $value = null;
         switch ($credentials['method']) {
             case 'HMAC-SHA1':
                 $hasKeys = isset(

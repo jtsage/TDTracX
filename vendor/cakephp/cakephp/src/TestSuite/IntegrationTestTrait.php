@@ -56,6 +56,7 @@ use Cake\View\Helper\SecureFieldTokenTrait;
 use Exception;
 use LogicException;
 use PHPUnit\Exception as PhpunitException;
+use Zend\Diactoros\Uri;
 
 /**
  * A trait intended to make integration tests of your controllers easier.
@@ -183,15 +184,22 @@ trait IntegrationTestTrait
     /**
      * Stored flash messages before render
      *
-     * @var null|array
+     * @var array|null
      */
     protected $_flashMessages;
 
     /**
      *
-     * @var null|string
+     * @var string|null
      */
     protected $_cookieEncryptionKey;
+
+    /**
+     * List of fields that are excluded from field validation.
+     *
+     * @var string[]
+     */
+    protected $_unlockedFields = [];
 
     /**
      * Auto-detect if the HTTP middleware stack should be used.
@@ -267,6 +275,17 @@ trait IntegrationTestTrait
     public function enableSecurityToken()
     {
         $this->_securityToken = true;
+    }
+
+    /**
+     * Set list of fields that are excluded from field validation.
+     *
+     * @param string[] $unlockedFields List of fields that are excluded from field validation.
+     * @return void
+     */
+    public function setUnlockedFields(array $unlockedFields = [])
+    {
+        $this->_unlockedFields = $unlockedFields;
     }
 
     /**
@@ -610,7 +629,7 @@ trait IntegrationTestTrait
         ];
         $session = Session::create($sessionConfig);
         $session->write($this->_session);
-        list($url, $query) = $this->_url($url);
+        list($url, $query, $hostInfo) = $this->_url($url);
         $tokenUrl = $url;
 
         if ($query) {
@@ -638,6 +657,12 @@ trait IntegrationTestTrait
             'QUERY_STRING' => $query,
             'REQUEST_URI' => $url,
         ];
+        if (!empty($hostInfo['ssl'])) {
+            $env['HTTPS'] = 'on';
+        }
+        if (isset($hostInfo['host'])) {
+            $env['HTTP_HOST'] = $hostInfo['host'];
+        }
         if (isset($this->_request['headers'])) {
             foreach ($this->_request['headers'] as $k => $v) {
                 $name = strtoupper(str_replace('-', '_', $k));
@@ -664,10 +689,14 @@ trait IntegrationTestTrait
     protected function _addTokens($url, $data)
     {
         if ($this->_securityToken === true) {
+            $fields = array_diff_key($data, array_flip($this->_unlockedFields));
+
             $keys = array_map(function ($field) {
                 return preg_replace('/(\.\d+)+$/', '', $field);
-            }, array_keys(Hash::flatten($data)));
-            $tokenData = $this->_buildFieldToken($url, array_unique($keys));
+            }, array_keys(Hash::flatten($fields)));
+
+            $tokenData = $this->_buildFieldToken($url, array_unique($keys), $this->_unlockedFields);
+
             $data['_Token'] = $tokenData;
             $data['_Token']['debug'] = 'SecurityComponent debug data would be added here';
         }
@@ -717,23 +746,23 @@ trait IntegrationTestTrait
      * Creates a valid request url and parameter array more like Request::_url()
      *
      * @param string|array $url The URL
-     * @return array Qualified URL and the query parameters
+     * @return array Qualified URL, the query parameters, and host data
      */
     protected function _url($url)
     {
-        // re-create URL in ServerRequest's context so
-        // query strings are encoded as expected
-        $request = new ServerRequest(['url' => $url]);
-        $url = $request->getRequestTarget();
+        $uri = new Uri($url);
+        $path = $uri->getPath();
+        $query = $uri->getQuery();
 
-        $query = '';
-
-        $path = parse_url($url, PHP_URL_PATH);
-        if (strpos($url, '?') !== false) {
-            $query = parse_url($url, PHP_URL_QUERY);
+        $hostData = [];
+        if ($uri->getHost()) {
+            $hostData['host'] = $uri->getHost();
+        }
+        if ($uri->getScheme()) {
+            $hostData['ssl'] = $uri->getScheme() === 'https';
         }
 
-        return [$path, $query];
+        return [$path, $query, $hostData];
     }
 
     /**
@@ -829,7 +858,7 @@ trait IntegrationTestTrait
     }
 
     /**
-     * Asserts that the Location header is correct.
+     * Asserts that the Location header is correct. Comparison is made against a full URL.
      *
      * @param string|array|null $url The URL you expected the client to go to. This
      *   can either be a string URL or an array compatible with Router::url(). Use null to
@@ -844,6 +873,25 @@ trait IntegrationTestTrait
 
         if ($url) {
             $this->assertThat(Router::url($url, ['_full' => true]), new HeaderEquals($this->_response, 'Location'), $verboseMessage);
+        }
+    }
+
+    /**
+     * Asserts that the Location header is correct. Comparison is made against exactly the URL provided.
+     *
+     * @param string|array|null $url The URL you expected the client to go to. This
+     *   can either be a string URL or an array compatible with Router::url(). Use null to
+     *   simply check for the existence of this header.
+     * @param string $message The failure message that will be appended to the generated message.
+     * @return void
+     */
+    public function assertRedirectEquals($url = null, $message = '')
+    {
+        $verboseMessage = $this->extractVerboseMessage($message);
+        $this->assertThat(null, new HeaderSet($this->_response, 'Location'), $verboseMessage);
+
+        if ($url) {
+            $this->assertThat(Router::url($url), new HeaderEquals($this->_response, 'Location'), $verboseMessage);
         }
     }
 
@@ -1215,7 +1263,7 @@ trait IntegrationTestTrait
     /**
      * Asserts that a file with the given name was sent in the response
      *
-     * @param string $expected The file name that should be sent in the response
+     * @param string $expected The absolute file path that should be sent in the response.
      * @param string $message The failure message that will be appended to the generated message.
      * @return void
      */
@@ -1230,7 +1278,7 @@ trait IntegrationTestTrait
      * Inspect controller to extract possible causes of the failed assertion
      *
      * @param string $message Original message to use as a base
-     * @return null|string
+     * @return string|null
      */
     protected function extractVerboseMessage($message = null)
     {

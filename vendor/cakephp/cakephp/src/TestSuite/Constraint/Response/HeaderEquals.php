@@ -33,7 +33,7 @@ class HeaderEquals extends ResponseBase
      * @param Response $response Response
      * @param string $headerName Header name
      */
-    public function __construct(Response $response, $headerName)
+    public function __construct($response, $headerName)
     {
         parent::__construct($response);
 
@@ -58,6 +58,8 @@ class HeaderEquals extends ResponseBase
      */
     public function toString()
     {
-        return sprintf('equals content in header \'%s\'', $this->headerName);
+        $responseHeader = $this->response->getHeaderLine($this->headerName);
+
+        return sprintf('equals content in header \'%s\' (`%s`)', $this->headerName, $responseHeader);
     }
 }

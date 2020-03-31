@@ -26,7 +26,6 @@ use PDOException;
  */
 class Collection
 {
-
     /**
      * Connection object
      *
@@ -55,7 +54,7 @@ class Collection
     /**
      * Get the list of tables available in the current connection.
      *
-     * @return array The list of tables in the connected database/schema.
+     * @return string[] The list of tables in the connected database/schema.
      */
     public function listTables()
     {
@@ -72,6 +71,8 @@ class Collection
 
     /**
      * Get the column metadata for a table.
+     *
+     * The name can include a database schema name in the form 'schema.table'.
      *
      * Caching will be applied if `cacheMetadata` key is present in the Connection
      * configuration options. Defaults to _cake_model_ when true.

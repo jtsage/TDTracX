@@ -44,18 +44,20 @@ use RuntimeException;
  * In general all Cache operations are supported by all cache engines.
  * However, Cache::increment() and Cache::decrement() are not supported by File caching.
  *
- * There are 6 built-in caching engines:
+ * There are 7 built-in caching engines:
  *
+ * - `ApcuEngine` - Uses the APCu object cache, one of the fastest caching engines.
+ * - `ArrayEngine` - Uses only memory to store all data, not actually a persistent engine.
+ *    Can be useful in test or CLI environment.
  * - `FileEngine` - Uses simple files to store content. Poor performance, but good for
  *    storing large objects, or things that are not IO sensitive. Well suited to development
  *    as it is an easy cache to inspect and manually flush.
- * - `ApcuEngine` - Uses the APCu object cache, one of the fastest caching engines.
  * - `MemcacheEngine` - Uses the PECL::Memcache extension and Memcached for storage.
  *    Fast reads/writes, and benefits from memcache being distributed.
- * - `XcacheEngine` - Uses the Xcache extension, an alternative to APCu.
+ * - `RedisEngine` - Uses redis and php-redis extension to store cache data.
  * - `WincacheEngine` - Uses Windows Cache Extension for PHP. Supports wincache 1.1.0 and higher.
  *    This engine is recommended to people deploying on windows with IIS.
- * - `RedisEngine` - Uses redis and php-redis extension to store cache data.
+ * - `XcacheEngine` - Uses the Xcache extension, an alternative to APCu.
  *
  * See Cache engine documentation for expected configuration keys.
  *
@@ -63,16 +65,16 @@ use RuntimeException;
  */
 class Cache
 {
-
     use StaticConfigTrait;
 
     /**
      * An array mapping url schemes to fully qualified caching engine
      * class names.
      *
-     * @var array
+     * @var string[]
      */
     protected static $_dsnClassMap = [
+        'array' => 'Cake\Cache\Engine\ArrayEngine',
         'apc' => 'Cake\Cache\Engine\ApcuEngine', // @deprecated Since 3.6. Use apcu instead.
         'apcu' => 'Cake\Cache\Engine\ApcuEngine',
         'file' => 'Cake\Cache\Engine\FileEngine',
@@ -414,7 +416,7 @@ class Cache
      * @param string $key Identifier for the data
      * @param int $offset How much to add
      * @param string $config Optional string configuration name. Defaults to 'default'
-     * @return mixed new value, or false if the data doesn't exist, is not integer,
+     * @return int|false New value, or false if the data doesn't exist, is not integer,
      *    or if there was an error fetching it.
      */
     public static function increment($key, $offset = 1, $config = 'default')
@@ -433,7 +435,7 @@ class Cache
      * @param string $key Identifier for the data
      * @param int $offset How much to subtract
      * @param string $config Optional string configuration name. Defaults to 'default'
-     * @return mixed new value, or false if the data doesn't exist, is not integer,
+     * @return int|false New value, or false if the data doesn't exist, is not integer,
      *   or if there was an error fetching it
      */
     public static function decrement($key, $offset = 1, $config = 'default')
@@ -493,14 +495,19 @@ class Cache
      *
      * @param array $keys Array of cache keys to be deleted
      * @param string $config name of the configuration to use. Defaults to 'default'
-     * @return array of boolean values that are true if the value was successfully deleted, false if it didn't exist or
-     * couldn't be removed
+     * @return array of boolean values that are true if the value was successfully deleted,
+     * false if it didn't exist or couldn't be removed.
      */
     public static function deleteMany($keys, $config = 'default')
     {
         $backend = static::pool($config);
 
-        return $backend->deleteMultiple($keys);
+        $return = [];
+        foreach ($keys as $key) {
+            $return[$key] = $backend->delete($key);
+        }
+
+        return $return;
     }
 
     /**

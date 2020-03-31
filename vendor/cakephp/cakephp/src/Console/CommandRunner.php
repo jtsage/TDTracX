@@ -16,11 +16,7 @@ namespace Cake\Console;
 
 use Cake\Command\HelpCommand;
 use Cake\Command\VersionCommand;
-use Cake\Console\CommandCollection;
-use Cake\Console\CommandCollectionAwareInterface;
-use Cake\Console\ConsoleIo;
 use Cake\Console\Exception\StopException;
-use Cake\Console\Shell;
 use Cake\Core\ConsoleApplicationInterface;
 use Cake\Core\HttpApplicationInterface;
 use Cake\Core\PluginApplicationInterface;
@@ -106,7 +102,7 @@ class CommandRunner implements EventDispatcherInterface
      * $runner->setAliases(['--version' => 'version']);
      * ```
      *
-     * @param array $aliases The map of aliases to replace.
+     * @param string[] $aliases The map of aliases to replace.
      * @return $this
      */
     public function setAliases(array $aliases)
@@ -160,23 +156,23 @@ class CommandRunner implements EventDispatcherInterface
         list($name, $argv) = $this->longestCommandName($commands, $argv);
         $name = $this->resolveName($commands, $io, $name);
 
-        $result = Shell::CODE_ERROR;
+        $result = Command::CODE_ERROR;
         $shell = $this->getShell($io, $commands, $name);
         if ($shell instanceof Shell) {
             $result = $this->runShell($shell, $argv);
         }
         if ($shell instanceof Command) {
-            $result = $shell->run($argv, $io);
+            $result = $this->runCommand($shell, $argv, $io);
         }
 
         if ($result === null || $result === true) {
-            return Shell::CODE_SUCCESS;
+            return Command::CODE_SUCCESS;
         }
-        if (is_int($result)) {
+        if (is_int($result) && $result >= 0 && $result <= 255) {
             return $result;
         }
 
-        return Shell::CODE_ERROR;
+        return Command::CODE_ERROR;
     }
 
     /**
@@ -333,6 +329,7 @@ class CommandRunner implements EventDispatcherInterface
      * @param \Cake\Console\ConsoleIo $io ConsoleIo object for errors.
      * @param string $name The name
      * @return string The resolved class name
+     * @throws \RuntimeException
      */
     protected function resolveName($commands, $io, $name)
     {
@@ -354,6 +351,23 @@ class CommandRunner implements EventDispatcherInterface
         }
 
         return $name;
+    }
+
+    /**
+     * Execute a Command class.
+     *
+     * @param \Cake\Console\Command $command The command to run.
+     * @param array $argv The CLI arguments to invoke.
+     * @param \Cake\Console\ConsoleIo $io The console io
+     * @return int Exit code
+     */
+    protected function runCommand(Command $command, array $argv, ConsoleIo $io)
+    {
+        try {
+            return $command->run($argv, $io);
+        } catch (StopException $e) {
+            return $e->getCode();
+        }
     }
 
     /**

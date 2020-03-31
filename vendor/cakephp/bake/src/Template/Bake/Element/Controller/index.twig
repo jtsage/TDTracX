@@ -13,18 +13,17 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 #}
-
     /**
      * Index method
      *
-     * @return \Cake\Http\Response|void
+     * @return \Cake\Http\Response|null
      */
     public function index()
     {
 {% set belongsTo = Bake.aliasExtractor(modelObj, 'BelongsTo') %}
 {% if belongsTo %}
         $this->paginate = [
-            'contain' => [{{ Bake.stringifyList(belongsTo, {'indent': false})|raw }}]
+            'contain' => [{{ Bake.stringifyList(belongsTo, {'indent': false})|raw }}],
         ];
 {% endif %}
         ${{ pluralName }} = $this->paginate($this->{{ currentModelName }});
